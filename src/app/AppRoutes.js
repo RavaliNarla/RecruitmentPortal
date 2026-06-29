@@ -47,6 +47,11 @@ import PrivilegeRoute from "./PrivilegeRoute";
 import AuthCallback from "../modules/auth/pages/AuthCallback";
 import { getDefaultRoute } from "../shared/utils/user-validations";
 import ExamRequest from "../modules/Approvals/pages/ExamRequest";
+import {
+  getLoginPath,
+  getOrganizationPath,
+  getSavedLoginOrganization,
+} from "../modules/auth/services/organizationContextService";
 // Lazy loaded components
 const Layout = React.lazy(() => import("../shared/components/Layout"));
 
@@ -62,9 +67,309 @@ const Loading = () => (
   </div>
 );
 
+const protectedRoutes = (
+   <>
+  <Route element={<Tokenexp />}>
+    <Route element={<PrivateRoute />}>
+      <Route element={<Layout />}>
+        <Route
+          path="dashboard"
+          element={
+            <PrivilegeRoute privilege="JobPostings">
+              <DashboardPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="users"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <UserPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="department"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <DepartmentPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="location"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <LocationPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="jobgrade"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <JobGradePage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="position"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <PositionPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="category"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <CategoryPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="certification"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <CertificationPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="document"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <DocumentPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="generic-or-annexures"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <GenericOrAnnexuresPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="education-qualification"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <EducationModal />
+            </PrivilegeRoute>
+          }
+        />
+        <Route
+          path="state-languages"
+          element={
+            <PrivilegeRoute privilege="Admin">
+              <StatesLanguagesPage />
+            </PrivilegeRoute>
+          }
+        />
+        <Route
+          path="job-posting"
+          element={
+            <PrivilegeRoute privilege="JobPostings">
+              <JobPostingsList />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="job-posting/edit-requisition"
+          element={
+            <PrivilegeRoute privilege="JobPostings">
+              <JobPostingsList />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="job-posting/create-requisition"
+          element={
+            <PrivilegeRoute privilegesRequired={["JobPostings", "View Position"]}>
+              <CreateRequisition />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="job-posting/:requisitionId/add-position"
+          element={
+            <PrivilegeRoute privilegesRequired={["JobPostings", "View Position"]}>
+              <AddPosition />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="candidate-preview"
+          element={
+            <PrivilegeRoute
+              privilegesRequired={[
+                "Candidate Pool",
+                "Verification",
+                "Interview",
+                "Compensation Pool",
+              ]}
+            >
+              <CandidatePreviewPage />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="candidate-workflow"
+          element={
+            <PrivilegeRoute
+              privilegesRequired={["Candidate Pool", "Compensation Pool"]}
+            >
+              <CandidateScreening />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="candidate-verification"
+          element={
+            <PrivilegeRoute privilege="Verification">
+              <CandidateVerification />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="candidate-interviewer"
+          element={
+            <PrivilegeRoute privilege="Interview">
+              <InterviewerSchedule />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="ExaminationCutoffConfiguration"
+          element={
+            <PrivilegeRoute privilegesRequired={["ExaminationCutoffConfiguration"]}>
+              <ExaminationCutoffConfiguration />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="interviewpanel"
+          element={
+            <PrivilegeRoute privilege="Committee Management">
+              <InterviewPanel />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="messages"
+          element={
+            <PrivilegeRoute privilege="Messages">
+              <Messages />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="schedule-interviews"
+          element={
+            <PrivilegeRoute privilege="Interview Pool">
+              <ScheduleInterviews />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="requisition-requests"
+          element={
+            <PrivilegeRoute privilegesRequired={["L1 Approval", "L2 Approval"]}>
+              <Approvals />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="extension-requests"
+          element={
+            <PrivilegeRoute privilegesRequired={["L1 Approval", "L2 Approval"]}>
+              <ExtensionsRequests />
+            </PrivilegeRoute>
+          }
+        />
+
+        <Route
+          path="committee-requests"
+          element={
+            <PrivilegeRoute privilegesRequired={["L1 Approval", "L2 Approval"]}>
+              <CommitteeRequests />
+            </PrivilegeRoute>
+          }
+        />
+        <Route
+          path="interview-requests"
+          element={
+            <PrivilegeRoute privilegesRequired={["L1 Approval", "L2 Approval"]}>
+              <InterviewRequests />
+            </PrivilegeRoute>
+          }
+        />
+        <Route
+          path="exam-requests"
+          element={
+            <PrivilegeRoute privilegesRequired={["L1 Approval", "L2 Approval"]}>
+              <ExamRequest />
+            </PrivilegeRoute>
+          }
+        />
+      </Route>
+      <Route
+        path="offerletter-requests"
+        element={
+          <PrivilegeRoute privilegesRequired={["L1 Approval", "L2 Approval"]}>
+            <OfferLetterRequestApproval />
+          </PrivilegeRoute>
+        }
+      />
+    </Route>
+  </Route>
+  </>
+);
+
+const LegacyOrgRedirect = () => {
+  const location = useLocation();
+  return (
+    <Navigate
+      to={getOrganizationPath(
+        `${location.pathname}${location.search}`,
+        getSavedLoginOrganization()
+      )}
+      replace
+    />
+  );
+};
+
 const AppRoutes = () => {
   // Check if user is authenticated from Redux
   const authUser = useSelector((state) => state.user?.authUser);
+  const savedLoginPath = getLoginPath(getSavedLoginOrganization());
+  const organizationRoute = (path) =>
+    getOrganizationPath(path, getSavedLoginOrganization());
 
   const privileges = useSelector((state) => state.user?.privileges);
   // const location = useLocation();
@@ -81,6 +386,7 @@ const AppRoutes = () => {
         {/* Public */}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/login/:orgSlug" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
 
@@ -88,318 +394,28 @@ const AppRoutes = () => {
           path="/"
           element={
             authUser ? (
-              <Navigate to={getDefaultRoute(privileges)} replace />
+              <Navigate
+                to={organizationRoute(getDefaultRoute(privileges))}
+                replace
+              />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate to={savedLoginPath} replace />
             )
           }
         />
         {/* Protected routes */}
-        <Route element={<Tokenexp />}>
-          <Route element={<PrivateRoute />}>
-            <Route element={<Layout />}>
-              <Route
-                path="/dashboard"
-                element={
-                  <PrivilegeRoute privilege="JobPostings">
-                    <DashboardPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/users"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <UserPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/department"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <DepartmentPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/location"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <LocationPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/jobgrade"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <JobGradePage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/position"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <PositionPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/category"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <CategoryPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/certification"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <CertificationPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/document"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <DocumentPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/generic-or-annexures"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <GenericOrAnnexuresPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/education-qualification"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <EducationModal />
-                  </PrivilegeRoute>
-                }
-              />
-              <Route
-                path="/state-languages"
-                element={
-                  <PrivilegeRoute privilege="Admin">
-                    <StatesLanguagesPage />
-                  </PrivilegeRoute>
-                }
-              />
-              {/* ---------- NON-ADMIN ONLY ROUTES ---------- */}
-              <Route
-                path="/job-posting"
-                element={
-                  <PrivilegeRoute privilege="JobPostings">
-                    <JobPostingsList />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/job-posting/edit-requisition"
-                element={
-                  <PrivilegeRoute privilege="JobPostings">
-                    <JobPostingsList />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/job-posting/create-requisition"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["JobPostings", "View Position"]}
-                  >
-                    <CreateRequisition />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/job-posting/:requisitionId/add-position"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["JobPostings", "View Position"]}
-                  >
-                    <AddPosition />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/candidate-preview"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={[
-                      "Candidate Pool",
-                      "Verification",
-                      "Interview",
-                      "Compensation Pool",
-                    ]}
-                  >
-                    <CandidatePreviewPage />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/candidate-workflow"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["Candidate Pool", "Compensation Pool"]}
-                  >
-                    <CandidateScreening />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/candidate-verification"
-                element={
-                  <PrivilegeRoute privilege="Verification">
-                    <CandidateVerification />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/candidate-interviewer"
-                element={
-                  <PrivilegeRoute privilege="Interview">
-                    <InterviewerSchedule />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/ExaminationCutoffConfiguration"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["ExaminationCutoffConfiguration"]}
-                  >
-                    <ExaminationCutoffConfiguration />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/interviewpanel"
-                element={
-                  <PrivilegeRoute privilege="Committee Management">
-                    <InterviewPanel />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/messages"
-                element={
-                  <PrivilegeRoute privilege="Messages">
-                    <Messages />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/schedule-interviews"
-                element={
-                  <PrivilegeRoute privilege="Interview Pool">
-                    <ScheduleInterviews />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/requisition-requests"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["L1 Approval", "L2 Approval"]}
-                  >
-                    <Approvals />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/extension-requests"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["L1 Approval", "L2 Approval"]}
-                  >
-                    <ExtensionsRequests />
-                  </PrivilegeRoute>
-                }
-              />
-
-              <Route
-                path="/committee-requests"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["L1 Approval", "L2 Approval"]}
-                  >
-                    <CommitteeRequests />
-                  </PrivilegeRoute>
-                }
-              />
-              <Route
-                path="/interview-requests"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["L1 Approval", "L2 Approval"]}
-                  >
-                    <InterviewRequests />
-                  </PrivilegeRoute>
-                }
-              />
-              <Route
-                path="/exam-requests"
-                element={
-                  <PrivilegeRoute
-                    privilegesRequired={["L1 Approval", "L2 Approval"]}
-                  >
-                    <ExamRequest />
-                  </PrivilegeRoute>
-                }
-              />
-            </Route>
-            <Route
-              path="/offerletter-requests"
-              element={
-                <PrivilegeRoute
-                  privilegesRequired={["L1 Approval", "L2 Approval"]}
-                >
-                  <OfferLetterRequestApproval />
-                </PrivilegeRoute>
-              }
-            />
-          </Route>
+        <Route path="/:orgSlug">
+          {protectedRoutes}
         </Route>
+        <Route path="/*" element={<LegacyOrgRedirect />} />
 
         {/* Catch-all → login */}
         {/* <Route path="*" element={<NotFound />} /> */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to={savedLoginPath} replace />} />
       </Routes>
     </Suspense>
   );
 };
 
 export default AppRoutes;
+ 

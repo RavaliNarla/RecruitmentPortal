@@ -344,15 +344,18 @@ body.modal-open {
   padding: 0.5rem 1.25rem;
   font-weight: 500;
 }
-
 .btn-primary {
-  background-color: #f26522;
-  border: none;
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
+  color: #fff !important;
 }
 
-.btn-primary:hover {
-  background-color: #f26522 !important;
-  color: #fff;
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
+  color: #fff !important;
 }
 
 /* Danger text */

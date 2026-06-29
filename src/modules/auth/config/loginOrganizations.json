@@ -1,0 +1,41 @@
+{
+  "default": {
+    "organizationName": "Bank of Baroda",
+    "appTitle": "Recruitment Tracking System",
+    "loginType": "entra",
+    "primaryColor": "#ff6a00",
+    "secondaryColor": "#162b75",
+    "linkColor": "#ff6a00",
+    "focusColor": "rgba(255, 106, 0, 0.12)",
+    "logoAlt": "Bank of Baroda logo",
+    "allowedPrivileges": null,
+     "logo": "bob"
+  },
+  "bob": {
+    "organizationName": "Bank of Baroda",
+    "appTitle": "Recruitment Tracking System",
+    "loginType": "entra",
+    "primaryColor": "#ff6a00",
+    "secondaryColor": "#162b75",
+    "linkColor": "#ff6a00",
+    "focusColor": "rgba(255, 106, 0, 0.12)",
+    "logoAlt": "Bank of Baroda logo",
+    "allowedPrivileges": null,
+    "logo": "bob"
+  },
+  "pnb": {
+    "organizationName": "Punjab National Bank",
+    "appTitle": "PNB Recruitment Tracking System",
+    "logo": "pnb",
+    "loginType": "entra",
+    "primaryColor": "#a20e37",
+    "secondaryColor": "#f6b21a",
+    "linkColor": "#a20e37",
+    "focusColor": "rgba(162, 14, 55, 0.16)",
+    "logoAlt": "Punjab National Bank logo",
+    "allowedPrivileges": {
+      "JobPostings": true
+    }
+ 
+   }
+}

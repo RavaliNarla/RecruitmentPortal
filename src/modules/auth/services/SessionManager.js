@@ -4,6 +4,10 @@ import { useDispatch } from "react-redux";
 import { clearUser } from "../../../app/providers/userSlice";
 import { persistor } from "../../../store";
 import { Modal, Button } from "react-bootstrap";
+import {
+  getLoginPath,
+  getSavedLoginOrganization,
+} from "./organizationContextService";
 
 const IDLE_TIMEOUT = 15 * 60 * 1000; // 2 minutes
 const WARNING_TIME = 14 * 60 * 1000; // show modal at 1 minute
@@ -31,7 +35,7 @@ const SessionManager = ({ children }) => {
     setTimeout(async () => {
       dispatch(clearUser());
       await persistor.purge();
-      navigate("/login");
+      navigate(getLoginPath(getSavedLoginOrganization()));
     }, 200);
   };
 

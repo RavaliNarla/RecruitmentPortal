@@ -14,7 +14,13 @@ import { NavLink } from "react-router-dom";
 import "../../style/css/header-pill.css";
 import { setRankEnabled } from "../providers/rankSlice";
 import { useMsal } from "@azure/msal-react";
-
+import {
+  getLoginPath,
+  getOrganizationPath,
+  getSavedLoginOrganization,
+} from "../../modules/auth/services/organizationContextService";
+import BobLogo from "../../assets/bob-logo1.jpg";
+import PnbLogo from "../../assets/pnb-logo.png";
 const Header = () => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
@@ -25,6 +31,16 @@ const Header = () => {
 
   /* ===================== USER FROM REDUX ===================== */
   const userSlice = useSelector((state) => state.user);
+  const organizationTheme = useSelector(
+  (state) => state.user.organizationTheme
+);
+const organizationLogos = {
+  "Bank of Baroda": BobLogo,
+  "Punjab National Bank": PnbLogo,
+};
+
+const currentLogo =
+  organizationLogos[organizationTheme?.organizationName] || BobLogo;
   const user = userSlice?.user;
 
   /* ===================== USER DROPDOWN STATE ===================== */
@@ -67,7 +83,9 @@ const Header = () => {
       instance.getActiveAccount() || instance.getAllAccounts()[0];
     await instance.logoutRedirect({
       account: activeAccount,
-      postLogoutRedirectUri: `${window.location.origin}/login`,
+      postLogoutRedirectUri: `${window.location.origin}${getLoginPath(
+        getSavedLoginOrganization()
+      )}`,
     });
   };
   //Privileges
@@ -106,6 +124,8 @@ const Header = () => {
   }, []);
 
   const location = useLocation();
+  const orgRoute = (path) =>
+    getOrganizationPath(path, getSavedLoginOrganization());
 
   const formatRole = (role) => {
     if (!role) return "-";
@@ -141,8 +161,8 @@ const Header = () => {
           {/* Logo */}
           <div className="d-flex align-items-center">
             <Image
-              src={logo}
-              alt="Bank of Baroda"
+              src={currentLogo}
+  alt={organizationTheme?.logoAlt}
               width={155}
               className="me-2 imgbob"
             />
@@ -267,13 +287,13 @@ const Header = () => {
           <Navbar.Collapse id="main-navbar-nav">
             <Nav className="me-auto">
               {canDashboard && (
-                <Nav.Link as={NavLink} to="/dashboard" onClick={closeMenu}>
+                <Nav.Link as={NavLink} to={orgRoute("/dashboard")} onClick={closeMenu}>
                   {t("dashboard")}
                 </Nav.Link>
               )}
 
               {canJobPost && (
-                <Nav.Link as={NavLink} to="/job-posting" onClick={closeMenu}>
+                <Nav.Link as={NavLink} to={orgRoute("/job-posting")} onClick={closeMenu}>
                   {t("job_postings")}
                 </Nav.Link>
               )}
@@ -281,7 +301,7 @@ const Header = () => {
               {canCandidateWorkflow && (
                 <Nav.Link
                   as={NavLink}
-                  to="/candidate-workflow"
+                  to={orgRoute("/candidate-workflow")}
                   onClick={closeMenu}
                 >
                   {t("candidate_workflow")}
@@ -291,7 +311,7 @@ const Header = () => {
               {canExaminationCutoffConfiguration && (
                 <Nav.Link
                   as={NavLink}
-                  to="/ExaminationCutoffConfiguration"
+                  to={orgRoute("/ExaminationCutoffConfiguration")}
                   onClick={closeMenu}
                 >
                   {t("ExaminationCutoffConfiguration")}
@@ -301,7 +321,7 @@ const Header = () => {
               {canInterview && (
                 <Nav.Link
                   as={NavLink}
-                  to="/candidate-interviewer"
+                  to={orgRoute("/candidate-interviewer")}
                   onClick={closeMenu}
                 >
                   {t("interview")}
@@ -311,7 +331,7 @@ const Header = () => {
               {canVerification && (
                 <Nav.Link
                   as={NavLink}
-                  to="/candidate-verification"
+                  to={orgRoute("/candidate-verification")}
                   onClick={closeMenu}
                 >
                   {t("verification")}
@@ -319,12 +339,12 @@ const Header = () => {
               )}
 
               {canCommittee && (
-                <Nav.Link as={NavLink} to="/interviewpanel" onClick={closeMenu}>
+                <Nav.Link as={NavLink} to={orgRoute("/interviewpanel")} onClick={closeMenu}>
                   {t("committee_management")}
                 </Nav.Link>
               )}
               {canMessages && (
-                <Nav.Link as={NavLink} to="/messages" onClick={closeMenu}>
+                <Nav.Link as={NavLink} to={orgRoute("/messages")} onClick={closeMenu}>
                   {t("messages")}
                 </Nav.Link>
               )}
@@ -354,7 +374,7 @@ const Header = () => {
                 >
                   <NavDropdown.Item
                     as={NavLink}
-                    to="/requisition-requests"
+                    to={orgRoute("/requisition-requests")}
                     onClick={closeMenu}
                   >
                     {t("requisition_requests")}
@@ -362,7 +382,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={NavLink}
-                    to="/extension-requests"
+                    to={orgRoute("/extension-requests")}
                     onClick={closeMenu}
                   >
                     {canL2
@@ -372,7 +392,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={NavLink}
-                    to="/committee-requests"
+                    to={orgRoute("/committee-requests")}
                     onClick={closeMenu}
                   >
                     {t("committee_requests")}
@@ -389,7 +409,7 @@ const Header = () => {
                   {!canL2 && (
                     <NavDropdown.Item
                       as={NavLink}
-                      to="/interview-requests"
+                      to={orgRoute("/interview-requests")}
                       onClick={closeMenu}
                     >
                       {t("interview_requests")}
@@ -397,7 +417,7 @@ const Header = () => {
                   )}
                   <NavDropdown.Item
                     as={NavLink}
-                    to="/offerletter-requests"
+                    to={orgRoute("/offerletter-requests")}
                     onClick={closeMenu}
                   >
                  {t("offer_letter_request")}
@@ -420,13 +440,13 @@ const Header = () => {
                     </>
                   }
                 >
-                  <NavDropdown.Item as={Link} to="/users" onClick={closeMenu}>
+                  <NavDropdown.Item as={Link} to={orgRoute("/users")} onClick={closeMenu}>
                     {t("users")}
                   </NavDropdown.Item>
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/department"
+                    to={orgRoute("/department")}
                     onClick={closeMenu}
                   >
                     {t("department")}
@@ -434,7 +454,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/jobgrade"
+                    to={orgRoute("/jobgrade")}
                     onClick={closeMenu}
                   >
                     {t("job_grade")}
@@ -442,7 +462,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/position"
+                    to={orgRoute("/position")}
                     onClick={closeMenu}
                   >
                     {t("position")}
@@ -450,7 +470,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/category"
+                    to={orgRoute("/category")}
                     onClick={closeMenu}
                   >
                     {t("category")}
@@ -458,7 +478,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/certification"
+                    to={orgRoute("/certification")}
                     onClick={closeMenu}
                   >
                     {t("certification")}
@@ -466,7 +486,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/document"
+                    to={orgRoute("/document")}
                     onClick={closeMenu}
                   >
                     {t("document")}
@@ -474,7 +494,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/generic-or-annexures"
+                    to={orgRoute("/generic-or-annexures")}
                     onClick={closeMenu}
                   >
                     {t("generic_or_annexures")}
@@ -482,7 +502,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/education-qualification"
+                    to={orgRoute("/education-qualification")}
                     onClick={closeMenu}
                   >
                     {t("education_qualification")}
@@ -490,7 +510,7 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={Link}
-                    to="/state-languages"
+                    to={orgRoute("/state-languages")}
                     onClick={closeMenu}
                   >
                     {t("stateLanguages")}

@@ -3,6 +3,10 @@ import axios from "axios";
 import { store } from "../../store";
 import { clearUser } from "../../app/providers/userSlice";
 import { loginRequest } from "../../modules/auth/services/msalConfig";
+import {
+  getLoginPath,
+  getSavedLoginOrganization,
+} from "../../modules/auth/services/organizationContextService";
 import { msalInstance } from "../..";
 
 const REFRESH_PATH = "/recruiter-auth/recruiter-refresh-token";
@@ -78,7 +82,11 @@ const addAuthHeader = async (config) => {
 
 const redirectToLogin = () => {
   store.dispatch(clearUser());
-  msalInstance.logoutRedirect();
+  msalInstance.logoutRedirect({
+    postLogoutRedirectUri: `${window.location.origin}${getLoginPath(
+      getSavedLoginOrganization()
+    )}`,
+  });
 };
 
 const api = axios.create({
@@ -108,6 +116,11 @@ const nodeApi = axios.create({
   baseURL: NODE_API_URL,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
+});
+
+const publicNodeApi = axios.create({
+  baseURL: NODE_API_URL,
+  headers: { "Content-Type": "application/json" },
 });
 
 const masterDropdownApi = axios.create({
@@ -179,4 +192,12 @@ masterDropdownApi.interceptors.response.use(
     throw err;
   }
 );
-export { api, formDataApi, apis, candidateApi, nodeApi, masterDropdownApi };
+export {
+  api,
+  formDataApi,
+  apis,
+  candidateApi,
+  nodeApi,
+  publicNodeApi,
+  masterDropdownApi,
+};

@@ -1,6 +1,7 @@
 // src/App.js
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -21,10 +22,33 @@ import AppRoutes from "./AppRoutes";
 
 function AppWrapper() {
   const location = useLocation();
+  const organizationTheme = useSelector(
+    (state) => state.user?.organizationTheme
+  );
   const hideHeaderFor = ["/login", "/forgot-password", "/verify-otp"];
   const shouldHideHeader = hideHeaderFor.some((p) =>
     location.pathname.toLowerCase().startsWith(p)
   );
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty(
+      "--app-primary-color",
+      organizationTheme?.primaryColor || "#ff6a00"
+    );
+    root.style.setProperty(
+      "--app-secondary-color",
+      organizationTheme?.secondaryColor || "#162b75"
+    );
+    root.style.setProperty(
+      "--app-link-color",
+      organizationTheme?.linkColor || "#ff6a00"
+    );
+    root.style.setProperty(
+      "--app-focus-color",
+      organizationTheme?.focusColor || "rgba(255, 106, 0, 0.12)"
+    );
+  }, [organizationTheme]);
 
   return (
     <>

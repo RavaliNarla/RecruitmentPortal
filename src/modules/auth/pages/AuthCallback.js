@@ -6,9 +6,16 @@ import {
   setUser,
   setAuthUser,
   setPrivileges,
+  setOrganizationTheme,
 } from "../../../app/providers/userSlice";
 import { getDefaultRoute } from "../../../shared/utils/user-validations";
 import loginApi from "../services/loginService";
+import {
+  getLoginPath,
+  getOrganizationPath,
+  getOrganizationConfig,
+  getSavedLoginOrganization,
+} from "../services/organizationContextService";
 
 export default function AuthCallback() {
   const { instance, accounts, inProgress } = useMsal();
@@ -17,7 +24,12 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const initAuth = async () => {
+      const organizationKey = getSavedLoginOrganization();
+      const loginPath = getLoginPath(organizationKey);
+
       try {
+        dispatch(setOrganizationTheme(getOrganizationConfig(organizationKey)));
+
         // Get active account directly from instance (may be loaded before accounts array)
         let account = instance.getActiveAccount();
 
@@ -40,7 +52,7 @@ export default function AuthCallback() {
           const hasAuthCode = params.has("code");
 
           if (!hasAuthCode) {
-            navigate("/login", { replace: true });
+            navigate(loginPath, { replace: true });
             return;
           }
 
@@ -97,13 +109,15 @@ export default function AuthCallback() {
         // Navigate to appropriate page
         const defaultRoute = getDefaultRoute(privileges);
 
-        navigate(defaultRoute, { replace: true });
+        navigate(getOrganizationPath(defaultRoute, organizationKey), {
+          replace: true,
+        });
       } catch (error) {
         // console.error("❌ Authentication error:", error.message);
         if (error.message.includes("Backend")) {
           navigate("/unauthorized", { replace: true });
         } else {
-          navigate("/login", { replace: true });
+          navigate(loginPath, { replace: true });
         }
       }
     };

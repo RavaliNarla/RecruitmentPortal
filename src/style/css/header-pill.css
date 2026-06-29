@@ -13,7 +13,7 @@
 
   font-size: 13px;
   font-weight: 500;
-  color: #1f3b82;
+  color: var(--app-secondary-color);
 
   cursor: pointer;
   position: relative;
@@ -34,7 +34,7 @@
 /* arrow */
 .lang-caret {
   font-size: 12px;
-  color: #1f3b82;
+  color: var(--app-secondary-color);
   margin-left: 8px;
   flex-shrink: 0;
 }
@@ -59,7 +59,7 @@
 .lang-item {
   padding: 8px 14px;
   font-size: 13px;
-  color: #1f3b82;
+  color: var(--app-secondary-color);
   cursor: pointer;
 }
 
