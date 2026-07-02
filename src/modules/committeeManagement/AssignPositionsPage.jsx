@@ -618,7 +618,7 @@ const AssignPositionsPage = ({ refreshPanels }) => {
         className="modaleditcustom"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Panel</Modal.Title>
+       <Modal.Title>{t("edit_panel")}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>

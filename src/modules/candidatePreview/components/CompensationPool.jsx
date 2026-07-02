@@ -752,21 +752,21 @@ export default function CompensationPool({
               ))}
             </select>
 
-            <button
-              className="btn btn-sm btn-outline-secondary"
-              disabled={page === 0}
-              onClick={() => onPageChange(page - 1)}
-            >
-              Prev
-            </button>
+        <button
+  className="btn btn-sm btn-outline-secondary"
+  disabled={page === 0}
+  onClick={() => onPageChange(page - 1)}
+>
+  {t("previous")}
+</button>
 
-            <button
-              className="btn btn-sm btn-outline-secondary"
-              disabled={(page + 1) * pageSize >= totalElements}
-              onClick={() => onPageChange(page + 1)}
-            >
-              Next
-            </button>
+<button
+  className="btn btn-sm btn-outline-secondary"
+  disabled={(page + 1) * pageSize >= totalElements}
+  onClick={() => onPageChange(page + 1)}
+>
+  {t("next")}
+</button>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import locationHi from "../i18n/json/location.hi.json";
 import positionEn from "../i18n/json/position.en.json";
 import positionHi from "../i18n/json/position.hi.json";
 
+
 import categoryEn from "../i18n/json/category.en.json";
 import categoryHi from "../i18n/json/category.hi.json";
 
@@ -76,6 +77,9 @@ import verificationHi from "../i18n/verificationJson/verification.hi.json";
 import educationEn from "../i18n/json/education.en.json";
 import educationHi from "../i18n/json/education.hi.json";
 
+import dashboardEn from "../i18n/DashboardJson/dashboard.en.json";
+import dashboardHi from "../i18n/DashboardJson/dashboard.hi.json";
+
 import ApprovalEn from "../i18n/ApprovalJson/approvalhistory.en.json";
 import ApprovalHi from "../i18n/ApprovalJson/approvalhistory.hi.json";
 import messagesEn from "../i18n/Messages/messages.en.json";
@@ -137,6 +141,7 @@ i18n.use(initReactI18next).init({
       examRequest: examRequestEn,
       interviewRequest: interviewRequestEn,
       offerLetterRequest: offerLetterRequestEn,
+        dashboard: dashboardEn,
     },
     hi: {
       common: commonHi,
@@ -173,6 +178,7 @@ i18n.use(initReactI18next).init({
       examRequest: examRequestHi,
       interviewRequest: interviewRequestHi,
       offerLetterRequest: offerLetterRequestHi,
+       dashboard: dashboardHi,  
     },
   },
   lng: "en",

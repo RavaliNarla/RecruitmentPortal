@@ -60,6 +60,8 @@
 	color: #000;
 	font-weight: 500;
 }
-.dashboard-page .fs-17{
-    font-size: 1.2rem;
+.dashboard-page .fs-17 {
+	font-weight: 600 !important;
+	color: #162b75;
+	font-size: 1em;
 }

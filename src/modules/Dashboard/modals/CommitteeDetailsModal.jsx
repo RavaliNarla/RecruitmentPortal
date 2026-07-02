@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { FiDownload, FiX } from "react-icons/fi";
 import "../../../style/css/Dashboard/MetricDetailsModal.css";
+import { useTranslation } from "react-i18next";
 import useDashboardDownload from "../hooks/useDashboardDownload";
 
 const CommitteeDetailsModal = ({
@@ -12,6 +13,8 @@ const CommitteeDetailsModal = ({
   filters = {},
 }) => {
   const { downloadReport, downloading } = useDashboardDownload();
+
+  const { t } = useTranslation("dashboard");
 
   if (!metric) return null;
   const reportScreenMap = {
@@ -26,32 +29,44 @@ const committeeMap = {
   compensationPanel: "Compensation",
 };
   const modalConfig = {
-    interviewPanel: {
-      title: "Interview Panel",
-      color: "#003B95",
-      headerBg: "#EEF5FF",
-      subtitle: "Interview panel member details",
-      columns: ["Name", "Total No Of Position Assigned", "No of Days"],
-      data: committeeData?.interviewPanels || [],
-    },
+  interviewPanel: {
+  title: t("interview_panel"),
+  color: "#003B95",
+  headerBg: "#EEF5FF",
+  subtitle: t("interview_panel_member_details"),
+  columns: [
+    t("name"),
+    t("total_positions_assigned"),
+    t("number_of_days"),
+  ],
+  data: committeeData?.interviewPanels || [],
+},
 
-    screeningPanel: {
-      title: "Screening Panel",
-      color: "#d90429",
-      headerBg: "#FFF5F6",
-      subtitle: "Screening panel member details",
-      columns: ["Name", "Total No Of Position Assigned", "No of Days"],
-      data: committeeData?.screeningPanels || [],
-    },
+ screeningPanel: {
+  title: t("screening_panel"),
+  color: "#d90429",
+  headerBg: "#FFF5F6",
+  subtitle: t("screening_panel_member_details"),
+  columns: [
+    t("name"),
+    t("total_positions_assigned"),
+    t("number_of_days"),
+  ],
+  data: committeeData?.screeningPanels || [],
+},
 
-    compensationPanel: {
-      title: "Compensation Panel",
-      color: "#059669",
-      headerBg: "#F0FDF4",
-      subtitle: "Compensation panel member details",
-      columns: ["Name", "Total No Of Position Assigned", "No of Days"],
-      data: committeeData?.compensationPanels || [],
-    },
+  compensationPanel: {
+  title: t("compensation_panel"),
+  color: "#059669",
+  headerBg: "#F0FDF4",
+  subtitle: t("compensation_panel_member_details"),
+  columns: [
+    t("name"),
+    t("total_positions_assigned"),
+    t("number_of_days"),
+  ],
+  data: committeeData?.compensationPanels || [],
+},
   };
 
   const config = modalConfig[metric];
@@ -107,7 +122,7 @@ const committeeMap = {
             >
               <FiDownload />
               <span className="ms-2">
-                {downloading ? "Downloading..." : "Export Pdf"}
+               {downloading ? t("downloading") : t("export_pdf")}
               </span>
             </button>
 
@@ -131,7 +146,7 @@ const committeeMap = {
             >
               <FiDownload />
               <span className="ms-2">
-                {downloading ? "Downloading..." : "Export Excel"}
+                {downloading ? t("downloading") : t("export_excel")}
               </span>
             </button>
 
@@ -163,7 +178,7 @@ const committeeMap = {
                     colSpan={config.columns.length}
                     className="text-center py-4"
                   >
-                    No records found
+                   {t("no_records_found")}
                   </td>
                 </tr>
               ) : (

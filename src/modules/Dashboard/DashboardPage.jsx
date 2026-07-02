@@ -16,6 +16,7 @@ import Committee from "./components/Committee";
 import CandidateRegistrationOverview from "./components/CandidateRegistrationOverview";
 import CommitteeDetailsModal from "./modals/CommitteeDetailsModal";
 import RecruiterPerformanceTable from "./components/RecruiterPerformanceTable";
+import { useTranslation } from "react-i18next";
 import useDashboardFilters from "./hooks/useDashboardFilters";
 import useDashboardDetails from "./hooks/useDashboardDetails";
 const DashboardPage = () => {
@@ -25,6 +26,7 @@ const DashboardPage = () => {
   const { filters, loading } = useDashboardFilters();
   const { dashboardData, refreshDashboard } = useDashboardDetails();
   const [appliedFilters, setAppliedFilters] = useState({});
+  const { t } = useTranslation("dashboard");
 
   const handleApplyFilters = (payload) => {
     setAppliedFilters(payload);

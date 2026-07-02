@@ -1,6 +1,7 @@
 import React from "react";
 import { FiDownload, FiGrid } from "react-icons/fi";
 import "./../../../style/css/Dashboard/StateWiseDistribution.css";
+import { useTranslation } from "react-i18next";
 import useDashboardDownload from "../hooks/useDashboardDownload";
 
 const StateWiseDistribution = ({
@@ -15,6 +16,8 @@ const StateWiseDistribution = ({
     (sum, row) => sum + row.total,
     0
   );
+
+  const { t } = useTranslation("dashboard");
 
   const totalFilled = stateVacancyDistribution.reduce(
     (sum, row) => sum + row.filled,
@@ -37,8 +40,8 @@ const StateWiseDistribution = ({
           </div>
 
           <div>
-            <h3>State Wise Distribution</h3>
-            <p>Vacancies distributed by state and city</p>
+           <h3>{t("state_distribution")}</h3>
+<p>{t("vacancies_distributed_by_state_city")}</p>
           </div>
         </div>
 
@@ -57,7 +60,7 @@ const StateWiseDistribution = ({
           >
             <FiDownload />
             <span className="ms-2">
-              {downloading ? "Downloading..." : "Export Pdf"}
+            {downloading ? t("downloading") : t("export_pdf")}
             </span>
           </button>
 
@@ -75,7 +78,7 @@ const StateWiseDistribution = ({
           >
             <FiDownload />
             <span className="ms-2">
-              {downloading ? "Downloading..." : "Export Excel"}
+              {downloading ? t("downloading") : t("export_excel")}
             </span>
           </button>
         </div>
@@ -85,12 +88,12 @@ const StateWiseDistribution = ({
         <table className="state-table">
           <thead>
             <tr>
-              <th>State</th>
-              <th>City</th>
-              <th>Total Vacancies</th>
-              <th>Filled Vacancies</th>
-              <th>Unfilled Vacancies</th>
-              <th>Fill Rate</th>
+             <th>{t("state")}</th>
+              <th>{t("city")}</th>
+             <th>{t("total_vacancies")}</th>
+             <th>{t("filled_vacancies")}</th>
+             <th>{t("unfilled_vacancies")}</th>
+             <th>{t("fill_rate")}</th>
             </tr>
           </thead>
 
@@ -98,7 +101,7 @@ const StateWiseDistribution = ({
             {stateVacancyDistribution.length === 0 ? (
               <tr>
                 <td colSpan="6" className="text-center py-4">
-                  No Records Found
+                  {t("no_records_found")}
                 </td>
               </tr>
             ) : (
@@ -140,8 +143,8 @@ const StateWiseDistribution = ({
           <table className="state-total-table">
             <tbody>
               <tr className="total-row">
-                <td>Total</td>
-                <td className="city-name">All States</td>
+               <td>{t("total")}</td>
+               <td className="city-name">{t("all_states")}</td>
                 <td className="total">{totalVacancies}</td>
                 <td className="filled">{totalFilled}</td>
                 <td className="unfilled">{totalUnfilled}</td>

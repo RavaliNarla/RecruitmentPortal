@@ -197,6 +197,7 @@ export const mapAddPositionToCreateDto = ({
     rolesResponsibilities: formData.responsibilities,
 
     isMedicalRequired: formData.medicalRequired === "yes",
+    isIntermediateRequired: formData.isIntermediateRequired,
 
     // Root level field
     isProficientInLocalLanguage:

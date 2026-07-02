@@ -82,6 +82,7 @@
   "available_panels": "Available Panels",
   "selected_panels": "Selected Panels",
   "no_panels_selected": "No panels selected",
+  "edit_panel": "Edit Panel",
   "start_date_label": "START DATE",
   "end_date_label": "END DATE",
   "add_button": "Add",

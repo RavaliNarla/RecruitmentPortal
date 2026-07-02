@@ -94,7 +94,7 @@
   "upload_rank_list": "Upload Rank List",
   "upload_assigned_list": "Upload Assigned Location List",
   "import_rank_list_for_selected_position": "Import rank list for selected position",
-
+"reschedule" : "Reschedule",
   "upload_assigned_list_for_selected_position": "Import Assigned Location List for selected position",
   "upload_file": "Upload File",
   "support_xlsx_format": "Support for XLSX format",
@@ -248,5 +248,42 @@
   "close": "Close",
   "Submit Before" : "Submit Before",
     "rankPositionsSummary": "Rank Positions Summary",
-  "viewAndManagePositionRankings": "View and manage position rankings"
+  "viewAndManagePositionRankings": "View and manage position rankings",
+   "shortlisted": "Shortlisted",
+  "applied": "Applied",
+  "rejected": "Rejected",
+  "discrepancy": "Discrepancy",
+  "pending": "Pending",
+  "eligible": "Eligible",
+  "interview_scheduled": "Interview Scheduled",
+
+  "scheduled": "Scheduled",
+  "qualified": "Qualified",
+  "disqualified": "Disqualified",
+  "provisionally_approved": "Provisionally Approved",
+  "zonal_rejected": "Zonal Rejected",
+  "zonal_absent": "Zonal Absent",
+  "interview_absent": "Interview Absent",
+  "rescheduled": "Rescheduled",
+
+  "l1_pending": "L1 Pending",
+  "l2_pending": "L2 Pending",
+
+  "approved": "Approved",
+  "new": "New",
+  "submitted": "Submitted",
+  "renegotiate": "Renegotiate",
+
+  "offer_awaited": "Offer Awaited",
+  "offer_sent": "Offer Sent",
+  "offer_rejected": "Offer Rejected",
+  "offer_accepted": "Offer Accepted",
+
+
+    "viewAndManagePositionRankings": "View and manage position rankings",
+  "l1_pending": "L1 Pending",
+  "l2_pending": "L2 Pending",
+  "l1_rejected": "L1 Rejected",
+  "l2_rejected": "L2 Rejected",
+  "offer_generated":"Offer Generated"
 }

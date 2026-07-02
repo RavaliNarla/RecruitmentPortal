@@ -15,6 +15,7 @@
   "clear_all": "Clear all",
   "all_statuses": "All Statuses",
   "candidate_resume": "Candidate Resume",
+  
 
   "status_pending": "Pending",
   "status_verified": "Verified",
@@ -29,5 +30,12 @@
   "no_changes_to_save": "No changes to save",
   "absent_status_updated": "Absent status updated",
   "save_failed": "Save failed",
-  "loading_candidates": "Loading candidates..."
+  "loading_candidates": "Loading candidates...",
+
+    "verified": "Verified",
+  "pending": "Pending",
+  "rejected": "Rejected",
+  "provisionally_approved": "Provisionally Approved",
+  "zonal_absent": "Zonal Absent",
+  "zonal_rejected": "Zonal Rejected"
 }

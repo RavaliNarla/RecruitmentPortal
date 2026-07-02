@@ -2,12 +2,16 @@ import React from "react";
 import { FaLayerGroup, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import "../../../style/css/Dashboard/Vacancies.css";
 import useDashboardDownload from "../hooks/useDashboardDownload";
+import { useTranslation } from "react-i18next";
 import { FiDownload, FiX } from "react-icons/fi";
 const Vacancies = ({ summary, filters = {}, onClose }) => {
   const { downloadReport } = useDashboardDownload();
   const totalVacancies = summary?.totalVacancies ?? 0;
   const filledVacancies = summary?.filledVacancies ?? 0;
   const unfilledVacancies = summary?.unfilledVacancies ?? 0;
+  
+  const { t } = useTranslation("dashboard");
+
 
   const fillRate =
     totalVacancies > 0
@@ -17,8 +21,11 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
     <div className="vacancy-widget">
       <div className="vacancy-header-wrapper">
         <div>
-          <div className="vacancy-title">Vacancies</div>
-          <div className="vacancy-subtitle">Vacancy fill-rate overview</div>
+         <div className="vacancy-title">{t("vacancies")}</div>
+
+<div className="vacancy-subtitle">
+  {t("vacancy_fill_rate_overview")}
+</div>
         </div>
 
         <div className="d-flex align-items-center gap-3">
@@ -28,7 +35,7 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
               data-bs-toggle="dropdown"
             >
               <FiDownload className="me-2" />
-              Export
+              {t("export")}
             </button>
 
             <ul className="dropdown-menu dropdown-menu-end">
@@ -45,7 +52,7 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
                   }
                 >
                   <FiDownload size={14} />
-                  Total Vacancies PDF Report
+                  {t("total_vacancies_pdf_report")}
                 </button>
               </li>
 
@@ -62,7 +69,8 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
                   }
                 >
                   <FiDownload size={14} />
-                  Total Vacancies Excel Report
+                 
+                 {t("total_vacancies_excel_report")}
                 </button>
               </li>
 
@@ -83,7 +91,7 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
                   }
                 >
                   <FiDownload size={14} />
-                  Ongoing Vacancies PDF Report
+                {t("ongoing_vacancies_pdf_report")}
                 </button>
               </li>
 
@@ -100,7 +108,7 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
                   }
                 >
                   <FiDownload size={14} />
-                  Ongoing Vacancies Excel Report
+                  {t("ongoing_vacancies_excel_report")}
                 </button>
               </li>
             </ul>
@@ -118,7 +126,7 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
             {" "}
             {(summary?.totalVacancies ?? 0).toLocaleString("en-IN")}
           </div>
-          <div className="stat-label">Total Vacancies</div>
+          <div className="stat-label">{t("total_vacancies")}</div>
         </div>
 
         <div className="vacancy-stat-card vacancy-filled">
@@ -130,7 +138,7 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
             {" "}
             {(summary?.filledVacancies ?? 0).toLocaleString("en-IN")}
           </div>
-          <div className="stat-label">Filled Vacancies</div>
+          <div className="stat-label">{t("filled_vacancies")}</div>
         </div>
 
         <div className="vacancy-stat-card vacancy-unfilled">
@@ -141,13 +149,13 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
           <div className="stat-value">
             {(summary?.unfilledVacancies ?? 0).toLocaleString("en-IN")}
           </div>
-          <div className="stat-label">Unfilled Vacancies</div>
+          <div className="stat-label">{t("unfilled_vacancies")}</div>
         </div>
       </div>
 
       <div className="fill-rate-section">
         <div className="fill-rate-header">
-          <span>Fill Rate</span>
+          <span>{t("fill_rate")}</span>
           <span>{fillRate}%</span>
         </div>
 
@@ -159,8 +167,8 @@ const Vacancies = ({ summary, filters = {}, onClose }) => {
         </div>
 
         <div className="fill-rate-footer">
-          <span>{filledVacancies} filled</span>
-          <span>{unfilledVacancies} remaining</span>
+          <span>{filledVacancies} {t("filled")}</span>
+          <span>{unfilledVacancies} {t("remaining")}</span>
         </div>
       </div>
     </div>

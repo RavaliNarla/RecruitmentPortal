@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Select from "react-select";
 import "../../../style/css/OfferLetterRequestApproval.css";
 import ApprovalCommentModal from "../components/ApprovalCommentModal";
@@ -336,19 +336,32 @@ const OfferLetterRequestApproval = () => {
                   </td>
                   <td>
                     <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-sm btn-outline-secondary border-0"
-                        style={{ backgroundColor: "#eff6ff" }}
-                        onClick={() =>
-                          handleCandidateOfferPreview(candidate.offerFileUrl)
+                      <OverlayTrigger
+                        placement="bottom"
+                        overlay={
+                          <Tooltip id={`offer-preview-${candidate.id}`}>
+                            Preview Offer Letter
+                          </Tooltip>
                         }
-                        disabled={!candidate.offerFileUrl}
                       >
-                        <i
-                          className="bi bi-file-text"
-                          style={{ color: "black" }}
-                        />
-                      </button>
+                        <span className="d-inline-block">
+                          <button
+                            className="btn btn-sm btn-outline-secondary border-0"
+                            style={{ backgroundColor: "#eff6ff" }}
+                            onClick={() =>
+                              handleCandidateOfferPreview(
+                                candidate.offerFileUrl
+                              )
+                            }
+                            disabled={!candidate.offerFileUrl}
+                          >
+                            <i
+                              className="bi bi-file-text"
+                              style={{ color: "black" }}
+                            />
+                          </button>
+                        </span>
+                      </OverlayTrigger>
                     </div>
                   </td>
                 </tr>

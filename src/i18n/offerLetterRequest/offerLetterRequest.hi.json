@@ -1,14 +1,14 @@
 {
-    "offer_letter_requests": "ऑफ़र लेटर अनुरोध",
-    "review_offer_letter_requests": "ऑफ़र लेटर अनुरोधों की समीक्षा करें तथा स्वीकृत या अस्वीकृत करें",
-    "select_at_least_one_candidate": "कृपया कम से कम एक उम्मीदवार चुनें",
-    "failed_to_preview_file": "फ़ाइल का पूर्वावलोकन करने में विफल",
-    "candidate_name": "उम्मीदवार का नाम",
-    "application_number": "आवेदन संख्या",
-    "joining_date": "कार्यग्रहण तिथि",
-    "offer_release_date": "ऑफ़र जारी करने की तिथि",
-    "accept_before": "स्वीकृति की अंतिम तिथि",
-    "no_candidates_found": "कोई उम्मीदवार नहीं मिला",
-    "no_preview_available": "कोई पूर्वावलोकन उपलब्ध नहीं है",
-    "pdf_preview": "पीडीएफ पूर्वावलोकन"
+  "offer_letter_requests": "ऑफ़र लेटर अनुरोध",
+  "review_offer_letter_requests": "ऑफर लेटर अनुरोधों की समीक्षा करें तथा उन्हें स्वीकृत या अस्वीकृत करें",
+  "select_at_least_one_candidate": "कृपया कम से कम एक उम्मीदवार चुनें",
+  "failed_to_preview_file": "फ़ाइल का पूर्वावलोकन करने में विफल",
+  "candidate_name": "उम्मीदवार का नाम",
+  "application_number": "आवेदन संख्या",
+  "joining_date": "कार्यग्रहण तिथि",
+  "offer_release_date": "ऑफ़र जारी करने की तिथि",
+  "accept_before": "स्वीकृति की अंतिम तिथि",
+  "no_candidates_found": "कोई उम्मीदवार नहीं मिला",
+  "no_preview_available": "कोई पूर्वावलोकन उपलब्ध नहीं है",
+  "pdf_preview": "पीडीएफ पूर्वावलोकन"
 }

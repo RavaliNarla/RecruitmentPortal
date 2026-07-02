@@ -179,7 +179,7 @@ export const mapAddPositionToUpdateDto = ({
   // ✅ ADD THESE
   isAgeRelRiotVictimFamily,
   isAgeRelWdsWomen,
-    jobPositionExclusion = [],
+  jobPositionExclusion = [],
 }) => {
   const dto = {
     // positionId,
@@ -214,7 +214,7 @@ export const mapAddPositionToUpdateDto = ({
 
     mandatoryExperience: formData.mandatoryExperience.description,
     preferredExperience: formData.preferredExperience.description,
-
+    isIntermediateRequired: formData.isIntermediateRequired,
     // Education Level Experiences
     mandatoryExpMonthsEduWise:
       formData.mandatoryExperience.educationLevelExperiences?.reduce(
@@ -270,7 +270,7 @@ export const mapAddPositionToUpdateDto = ({
     // IMPORTANT
     positionCategoryNationalDistributions: [],
     positionStateDistributions: [],
-      jobPositionExclusion,
+    jobPositionExclusion,
   };
 
   // NATIONAL
@@ -280,7 +280,6 @@ export const mapAddPositionToUpdateDto = ({
         reservationCategoryId: cat.id,
         vacancyCount: Number(nationalCategories[cat.code] || 0),
         isDisability: false,
-        
       });
     });
 

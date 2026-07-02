@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { FiMapPin, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import "../../../style/css/Dashboard/ZonalRecruitmentHeatmap.css";
 
 const ZonalRecruitmentHeatmap = ({ zonalHeatmap = [] }) => {
+
+  const { t } = useTranslation("dashboard");
+
   const cardsPerView = 6;
 
   const [startIndex, setStartIndex] = useState(0);
@@ -47,8 +51,8 @@ const ZonalRecruitmentHeatmap = ({ zonalHeatmap = [] }) => {
         </div>
 
         <div>
-          <h3>Zonal Recruitment Heatmap</h3>
-          <p>Recruitment activity by zone</p>
+        <h3>{t("zonal_heatmap")}</h3>
+<p>{t("recruitment_activity_by_zone")}</p>
         </div>
       </div>
 
@@ -61,7 +65,7 @@ const ZonalRecruitmentHeatmap = ({ zonalHeatmap = [] }) => {
 
         <div className="zone-grid">
           {visibleZones.length === 0 ? (
-            <div className="no-data">No Data Found</div>
+          <div className="no-data">{t("no_data_found")}</div>
           ) : (
             visibleZones.map((zone) => (
               <div
@@ -84,17 +88,17 @@ const ZonalRecruitmentHeatmap = ({ zonalHeatmap = [] }) => {
 
                 <div className="zone-stats">
                   <div>
-                    <span>Candidates</span>
+                    <span>{t("candidates")}</span>
                     <strong>{zone.candidates}</strong>
                   </div>
 
                   <div>
-                    <span>Offered</span>
+                  <span>{t("offered")}</span>
                     <strong>{zone.offered}</strong>
                   </div>
 
                   <div>
-                    <span>Rejected</span>
+                   <span>{t("rejected")}</span>
                     <strong>{zone.rejected}</strong>
                   </div>
                 </div>
@@ -113,22 +117,22 @@ const ZonalRecruitmentHeatmap = ({ zonalHeatmap = [] }) => {
       <div className="heatmap-summary">
         <div>
           <h2>{zonalHeatmap.length}</h2>
-          <p>Total Zones</p>
+         <p>{t("total_zones")}</p>
         </div>
 
         <div>
           <h2 className="candidate">{totalCandidates}</h2>
-          <p>Total Candidates</p>
+        <p>{t("total_candidates")}</p>
         </div>
 
         <div>
           <h2 className="offered">{totalOffered}</h2>
-          <p>Total Offered</p>
+         <p>{t("total_offered")}</p>
         </div>
 
         <div>
           <h2 className="rejected">{totalRejected}</h2>
-          <p>Total Rejected</p>
+          <p>{t("total_rejected")}</p>
         </div>
       </div>
     </div>

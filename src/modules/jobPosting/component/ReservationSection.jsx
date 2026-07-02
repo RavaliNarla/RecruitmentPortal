@@ -104,7 +104,7 @@ const ReservationSection = ({
 
 
       <Col xs={12} className="mt-3">
-        <Form.Label>Exclusions:</Form.Label>
+        <Form.Label>{t("exclusions")}:</Form.Label>
 
         <div className="ms-2">
           {exclusions?.map((item) => (

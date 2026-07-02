@@ -29,5 +29,11 @@
   "no_changes_to_save": "सहेजने के लिए कोई परिवर्तन नहीं",
   "absent_status_updated": "अनुपस्थिति स्थिति अपडेट हो गई",
   "save_failed": "सहेजना विफल हुआ",
-  "loading_candidates": "उम्मीदवार लोड हो रहे हैं..."
+  "loading_candidates": "उम्मीदवार लोड हो रहे हैं...",
+  "verified": "सत्यापित",
+  "pending": "लंबित",
+  "rejected": "अस्वीकृत",
+  "provisionally_approved": "अस्थायी रूप से स्वीकृत",
+  "zonal_absent": "क्षेत्रीय स्तर पर अनुपस्थित",
+  "zonal_rejected": "क्षेत्रीय स्तर पर अस्वीकृत"
 }

@@ -8,6 +8,7 @@ import {
   Button,
 } from "react-bootstrap";
 import { FiSearch, FiGrid, FiDownload } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 import "../../../style/css/Dashboard/RecruiterPerformanceTable.css";
 import useDashboardDownload from "../hooks/useDashboardDownload";
@@ -18,6 +19,7 @@ const RecruiterPerformanceTable = ({
   recruiterPerformance = [],
   filters = {},
 }) => {
+  const { t } = useTranslation("dashboard");
   const { downloadReport, downloading } = useDashboardDownload();
 
   const REPORT_SCREEN = "RECRUITER_PERFORMANCE_TABLE";
@@ -80,8 +82,9 @@ const RecruiterPerformanceTable = ({
             </div>
 
             <div>
-              <h4>Recruiter Performance Table</h4>
-              <p>Detailed requisition-wise recruitment metrics</p>
+             <h4>{t("recruiter_performance")}</h4>
+
+<p>{t("recruitment_metrics")}</p>
             </div>
           </div>
 
@@ -92,7 +95,7 @@ const RecruiterPerformanceTable = ({
               <input
                 type="text"
                 className="search-input"
-                placeholder="Search..."
+                placeholder={t("search")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -113,7 +116,7 @@ const RecruiterPerformanceTable = ({
               >
                 <FiDownload />
                 <span className="ms-2">
-                  {downloading ? "Downloading..." : "Export Pdf"}
+                  {downloading ? t("downloading") : t("export_pdf")}
                 </span>
               </button>
 
@@ -131,7 +134,7 @@ const RecruiterPerformanceTable = ({
               >
                 <FiDownload />
                 <span className="ms-2">
-                  {downloading ? "Downloading..." : "Export Excel"}
+                  {downloading ? t("downloading") : t("export_excel")}
                 </span>
               </button>
             </div>
@@ -142,21 +145,35 @@ const RecruiterPerformanceTable = ({
           <Table className="recruiter-table">
             <thead>
               <tr>
-                <th>Requisition</th>
-                <th>Position</th>
-                <th>Vacancy</th>
-                <th>Applied</th>
-                <th>Shortlisted</th>
-                <th>Interview</th>
-                <th>Qualified</th>
-                <th>Offer Sent</th>
-                <th>Offer Accepted</th>
-                <th>Joined</th>
-                <th>Extension</th>
-                <th>Cancelled</th>
-                <th>Offer Rejected</th>
-                <th>Waitlist</th>
-                <th>Status</th>
+                <th>{t("requisition")}</th>
+
+<th>{t("position")}</th>
+
+<th>{t("vacancy")}</th>
+
+<th>{t("applied")}</th>
+
+<th>{t("shortlisted")}</th>
+
+<th>{t("interview")}</th>
+
+<th>{t("qualified")}</th>
+
+<th>{t("offer_sent")}</th>
+
+<th>{t("offer_accepted")}</th>
+
+<th>{t("joined")}</th>
+
+<th>{t("extension")}</th>
+
+<th>{t("cancelled")}</th>
+
+<th>{t("offer_rejected")}</th>
+
+<th>{t("waitlist")}</th>
+
+<th>{t("status")}</th>
               </tr>
             </thead>
 
@@ -164,7 +181,7 @@ const RecruiterPerformanceTable = ({
               {paginatedData.length === 0 ? (
                 <tr>
                   <td colSpan="15" className="text-center py-4">
-                    No Records Found
+                   {t("no_records_found")}
                   </td>
                 </tr>
               ) : (
@@ -220,7 +237,7 @@ const RecruiterPerformanceTable = ({
 
         <div className="pagination-wrapper">
           <span>
-            Showing {paginatedData.length} of {filteredData.length} requisitions
+           {t("showing")} {paginatedData.length} {t("of")} {filteredData.length} {t("requisitions")}
           </span>
 
           <Pagination className="custom-pagination">

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ResponsiveContainer,
   BarChart,
@@ -13,7 +14,16 @@ import {
 import { FiBarChart2 } from "react-icons/fi";
 import "../../../style/css/Dashboard/ApplicationsByDepartment.css";
 
+
+const ApplicationsByDepartment = ({ applicationsByDepartment = [] }) => {
+
+  const { t } = useTranslation("dashboard");
+
+
+  
 const CustomTooltip = ({ active, payload }) => {
+  const { t } = useTranslation("dashboard");
+
   if (active && payload && payload.length) {
     const item = payload[0].payload;
 
@@ -21,15 +31,15 @@ const CustomTooltip = ({ active, payload }) => {
       <div className="applications-tooltip">
         <div className="tooltip-title">{item.department}</div>
 
-        <div className="tooltip-value">{item.value} applications</div>
+        <div className="tooltip-value">
+          {item.value} {t("applications")}
+        </div>
       </div>
     );
   }
 
   return null;
 };
-
-const ApplicationsByDepartment = ({ applicationsByDepartment = [] }) => {
   return (
     <div className="applications-card mb-4">
       <div className="applications-header">
@@ -38,17 +48,18 @@ const ApplicationsByDepartment = ({ applicationsByDepartment = [] }) => {
         </div>
 
         <div>
-          <h2>Applications by Department</h2>
-          <p>Current recruitment cycle</p>
+         <h2>{t("applications_by_department")}</h2>
+
+<p>{t("current_recruitment_cycle")}</p>
         </div>
       </div>
 
       <div className="applications-chart">
         {applicationsByDepartment.length === 0 ? (
           <div className="chart-no-data">
-            <FiBarChart2 className="no-data-icon" />
-            No Data Found
-          </div>
+  <FiBarChart2 className="no-data-icon" />
+  {t("no_data_found")}
+</div>
         ) : (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={applicationsByDepartment}>

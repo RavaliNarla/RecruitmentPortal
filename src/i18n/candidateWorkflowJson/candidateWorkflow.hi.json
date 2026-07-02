@@ -47,6 +47,11 @@
   "view_resume": "रिज़्यूमे देखें",
   "showing": "दिखा रहे हैं",
   "of": "में से",
+  "reschedule": "पुनर्निर्धारित करें",
+  "upload_assigned_list": "असाइन की गई स्थान सूची अपलोड करें",
+  "import_rank_list_for_selected_position": "चयनित पद के लिए रैंक सूची आयात करें",
+  "upload_assigned_list_for_selected_position": "चयनित पद के लिए असाइन की गई स्थान सूची आयात करें",
+
   "prev": "पिछला",
   "next": "अगला",
   "status_applied": "आवेदन किया गया",
@@ -248,5 +253,39 @@
   "close": "बंद करें",
   "Submit Before" : "अंतिम तिथि",
    "rankPositionsSummary": "रैंक पदों का सारांश",
-  "viewAndManagePositionRankings": "पदों की रैंकिंग देखें और प्रबंधित करें"
+  "viewAndManagePositionRankings": "पदों की रैंकिंग देखें और प्रबंधित करें",
+   "shortlisted": "शॉर्टलिस्ट किया गया",
+  "applied": "आवेदन किया गया",
+  "rejected": "अस्वीकृत",
+  "discrepancy": "विसंगति",
+  "pending": "लंबित",
+  "eligible": "पात्र",
+  "interview_scheduled": "साक्षात्कार निर्धारित",
+
+  "scheduled": "निर्धारित",
+  "qualified": "योग्य",
+  "disqualified": "अयोग्य",
+  "provisionally_approved": "अस्थायी रूप से स्वीकृत",
+  "zonal_rejected": "क्षेत्रीय स्तर पर अस्वीकृत",
+  "zonal_absent": "क्षेत्रीय स्तर पर अनुपस्थित",
+  "interview_absent": "साक्षात्कार में अनुपस्थित",
+  "rescheduled": "पुनर्निर्धारित",
+
+  "l1_pending": "एल1 लंबित",
+  "l2_pending": "एल2 लंबित",
+
+  "approved": "स्वीकृत",
+  "new": "नया",
+  "submitted": "प्रस्तुत",
+  "renegotiate": "पुनः वार्ता",
+
+  "offer_awaited": "ऑफ़र की प्रतीक्षा",
+  "offer_sent": "ऑफ़र भेजा गया",
+  "offer_rejected": "ऑफ़र अस्वीकार किया गया",
+  "offer_accepted": "ऑफ़र स्वीकार किया गया",
+    "viewAndManagePositionRankings": "पदों की रैंकिंग देखें और प्रबंधित करें",
+   "l1_pending": "L1 लंबित",
+  "l2_pending": "L2 लंबित",
+  "l1_rejected": "L1 अस्वीकृत",
+  "l2_rejected": "L2 अस्वीकृत"
 }

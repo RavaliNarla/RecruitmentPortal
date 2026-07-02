@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { FiDownload, FiX } from "react-icons/fi";
 import "../../../style/css/Dashboard/MetricDetailsModal.css";
+import { useTranslation } from "react-i18next";
 import useDashboardDownload from "../hooks/useDashboardDownload";
 const CandidateMetricDetailsModal = ({
   show,
@@ -11,6 +12,8 @@ const CandidateMetricDetailsModal = ({
   filters = {},
 }) => {
   const { downloadReport, downloading } = useDashboardDownload();
+
+  const { t } = useTranslation("dashboard");
 
   if (!metric) return null;
   const reportScreenMap = {
@@ -30,99 +33,161 @@ const CandidateMetricDetailsModal = ({
 
   const modalConfig = {
     totalVacancies: {
-      title: "Total Vacancies",
+    title: t("total_vacancies"),
       color: "#E11D48",
       headerBg: "#FFF8FA",
-      subtitle: "Detailed vacancy breakdown",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("detailed_vacancy_breakdown"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     applicationsReceived: {
-      title: "Applications Received",
+    title: t("applications_received"),
       color: "#F97316",
       headerBg: "#FFF8F2",
-      subtitle: "Application details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+      subtitle: t("application_details"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     shortlistedCandidates: {
-      title: "Shortlisted Candidates",
+     title: t("shortlisted_candidates"),
+
       color: "#2563EB",
       headerBg: "#F5F9FF",
-      subtitle: "Shortlisted candidate details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("shortlisted_candidate_details"),
+
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     rejectedCandidates: {
-      title: "Rejected Candidates",
+      title: t("rejected_candidates"),
       color: "#EF4444",
       headerBg: "#FFF7F7",
-      subtitle: "Rejected candidate details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+      subtitle: t("rejected_candidate_details"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     pendingCandidates: {
-      title: "Pending Candidates",
+     title: t("pending_candidates"),
       color: "#F59E0B",
       headerBg: "#FFFDF5",
-      subtitle: "Pending applications",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+      subtitle: t("pending_applications"),
+      columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     interviewsScheduled: {
-      title: "Interviews Scheduled",
+     title: t("interviews_scheduled"),
       color: "#8B5CF6",
       headerBg: "#FAF8FF",
-      subtitle: "Interview schedule details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("interview_schedule_details"),
+    columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     interviewsCompleted: {
-      title: "Interviews Completed",
+     title: t("interviews_completed"),
       color: "#10B981",
       headerBg: "#F7FCF9",
-      subtitle: "Completed interviews",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("completed_interviews"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     qualified: {
-      title: "Qualified Candidates",
+      title: t("qualified_candidates"),
       color: "#0891B2",
       headerBg: "#F5FCFF",
-      subtitle: "Qualified candidate details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+      subtitle: t("qualified_candidate_details"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     offersSent: {
-      title: "Offers Sent",
+     title: t("offers_sent"), 
       color: "#0891B2",
       headerBg: "#F5FCFF",
-      subtitle: "Offer details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+      subtitle: t("offer_details"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     offerAccepted: {
-      title: "Offer Accepted",
+     title: t("offer_accepted"),
       color: "#10B981",
       headerBg: "#F7FCF9",
-      subtitle: "Accepted offers",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("accepted_offers"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     offerRejected: {
-      title: "Offer Rejected",
+    title: t("offer_rejected"),
       color: "#EF4444",
       headerBg: "#FFF8F8",
-      subtitle: "Rejected offers",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("rejected_offers"),
+      columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
 
     joined: {
-      title: "Joined Candidates",
+      title: t("joined_candidates"),
       color: "#10B981",
       headerBg: "#F7FCF9",
-      subtitle: "Employee joining details",
-      columns: ["Requisition ID", "Department", "Position", "Count"],
+     subtitle: t("employee_joining_details"),
+      columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("count"),
+],
     },
   };
   const metricFieldMap = {
@@ -201,7 +266,7 @@ const CandidateMetricDetailsModal = ({
             >
               <FiDownload />
               <span className="ms-2">
-                {downloading ? "Downloading..." : "Export Pdf"}
+              {downloading ? t("downloading") : t("export_pdf")}
               </span>
             </button>
 
@@ -223,7 +288,7 @@ const CandidateMetricDetailsModal = ({
             >
               <FiDownload />
               <span className="ms-2">
-                {downloading ? "Downloading..." : "Export Excel"}
+              {downloading ? t("downloading") : t("export_excel")}
               </span>
             </button>
 
@@ -261,7 +326,7 @@ const CandidateMetricDetailsModal = ({
               ) : (
                 <tr>
                   <td colSpan={4} className="text-center py-4">
-                    No records found
+                   {t("no_records_found")}
                   </td>
                 </tr>
               )}

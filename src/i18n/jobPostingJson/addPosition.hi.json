@@ -48,6 +48,7 @@
   "enter_preferred_education": "वांछित शिक्षा दर्ज करें",
   "view_salary_range": "वेतन सीमा देखें",
   "category_wise_reservation": "श्रेणीवार आरक्षण",
+  "exclusions": "अपवर्जन",
   "enable_state_distribution_help": "राज्यों में रिक्तियों का वितरण सक्षम करें",
   "category": "श्रेणी",
   "disability": "दिव्यांगता",
@@ -109,5 +110,6 @@
   "persons_affected_by_1984_riots": "1984 के दंगों से प्रभावित व्यक्ति",
   "widowed_divorced_separated_women": "विधवा, तलाकशुदा, या न्यायिक रूप से अलग महिलाएं (जो पुनर्विवाह नहीं करती हैं)",
   "state_wise_reservation": "राज्यवार आरक्षण",
-  "Exclusions" : "अपवर्जन"
+  "Exclusions" : "अपवर्जन",
+  "is_intermediate_required": "क्या इंटरमीडिएट / आईसीएसई (+2) / सीबीएसई (+2) / डिप्लोमा आवश्यक है?"
 }

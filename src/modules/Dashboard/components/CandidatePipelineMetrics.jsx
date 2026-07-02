@@ -15,78 +15,92 @@ import {
   FiDownload,
 } from "react-icons/fi";
 
+import { useTranslation } from "react-i18next";
+
 import "../../../style/css/Dashboard/CandidatePipelineMetrics.css";
 import useDashboardDownload from "../hooks/useDashboardDownload";
+
+
+
+
+const CandidatePipelineMetrics = ({
+  candidatePipeline = {},
+  onCardClick,
+  filters = {},
+}) => {
+  const { downloadReport } = useDashboardDownload();
+const { t } = useTranslation("dashboard");
+
 const metricConfig = [
   {
     key: "totalVacancies",
-    label: "Total Vacancies",
+    label: t("total_vacancies"),
     icon: <FiBriefcase />,
     color: "red",
   },
   {
     key: "applicationsReceived",
-    label: "Applications Received",
+    label: t("applications_received"),
     icon: <FiFileText />,
     color: "orange",
   },
   {
     key: "shortlistedCandidates",
-    label: "Shortlisted Candidates",
+    label: t("shortlisted_candidates"),
     icon: <FiUserPlus />,
     color: "blue",
   },
   {
     key: "rejectedCandidates",
-    label: "Rejected Candidates",
+    label: t("rejected_candidates"),
     icon: <FiUserX />,
     color: "red",
   },
   {
     key: "pendingCandidates",
-    label: "Pending Candidates",
+    label: t("pending_candidates"),
     icon: <FiClock />,
     color: "yellow",
   },
   {
     key: "interviewsScheduled",
-    label: "Interviews Scheduled",
+    label: t("interviews_scheduled"),
     icon: <FiCalendar />,
     color: "purple",
   },
   {
     key: "interviewsCompleted",
-    label: "Interviews Completed",
+    label: t("interviews_completed"),
     icon: <FiCheckCircle />,
     color: "green",
   },
   {
     key: "qualified",
-    label: "Qualified",
+    label: t("qualified"),
     icon: <FiAward />,
     color: "cyan",
   },
   {
     key: "offersSent",
-    label: "Offers Sent",
+    label: t("offers_sent"),
     icon: <FiSend />,
     color: "cyan",
   },
   {
     key: "offerAccepted",
-    label: "Offer Accepted",
+    label: t("offer_accepted"),
     icon: <FiThumbsUp />,
     color: "green",
   },
   {
     key: "offerRejected",
-    label: "Offer Rejected",
+    label: t("offer_rejected"),
     icon: <FiXCircle />,
     color: "red",
   },
   {
     key: "joined",
-    label: "Joined",
+    label: t("joined"),
     icon: <FiUsers />,
     color: "green",
   },
@@ -100,13 +114,6 @@ const colorMap = {
   green: "rgb(16, 185, 129)",
   cyan: "rgb(8, 145, 178)",
 };
-
-const CandidatePipelineMetrics = ({
-  candidatePipeline = {},
-  onCardClick,
-  filters = {},
-}) => {
-  const { downloadReport } = useDashboardDownload();
 
   return (
     <div className="pipeline-wrapper mb-4">
@@ -213,8 +220,9 @@ const CandidatePipelineMetrics = ({
           </div>
 
           <div>
-            <h2>Candidate Pipeline Metrics</h2>
-            <p>Comprehensive candidate journey statistics</p>
+<h2>{t("candidate_pipeline_metrics")}</h2>
+
+<p>{t("candidate_journey_statistics")}</p>
           </div>
         </div>
 
@@ -225,7 +233,7 @@ const CandidatePipelineMetrics = ({
               data-bs-toggle="dropdown"
             >
               <FiDownload className="me-2" />
-              Export
+             {t("export")}
             </button>
 
             {/* dropdown menu */}
@@ -243,7 +251,7 @@ const CandidatePipelineMetrics = ({
                   }
                 >
                   <FiDownload size={14} />
-                  Total Candidate Joined PDF Report
+                 {t("total_candidate_joined_pdf_report")}
                 </button>
               </li>
 
@@ -260,7 +268,7 @@ const CandidatePipelineMetrics = ({
                   }
                 >
                   <FiDownload size={14} />
-                  Total Candidate Joined Excel Report
+                 {t("total_candidate_joined_excel_report")}
                 </button>
               </li>
 
@@ -281,7 +289,7 @@ const CandidatePipelineMetrics = ({
                   }
                 >
                   <FiDownload size={14} />
-                  Total Offer PDF Report
+                 {t("total_offer_pdf_report")}
                 </button>
               </li>
 
@@ -298,7 +306,7 @@ const CandidatePipelineMetrics = ({
                   }
                 >
                   <FiDownload size={14} />
-                  Total Offer Excel Report
+                {t("total_offer_excel_report")}
                 </button>
               </li>
             </ul>
@@ -324,7 +332,7 @@ const CandidatePipelineMetrics = ({
               }}
               onClick={() => onCardClick(item.key)}
             >
-              Details →
+             {t("details")} →
             </div>
           </div>
         ))}

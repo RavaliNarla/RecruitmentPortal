@@ -20,17 +20,27 @@ import { FiCalendar } from "react-icons/fi";
 
 /* ================= STATUS MAP ================= */
 
-const STAGE_STATUS_MAP = {
-  PENDING: "Pending",
-  VERIFIED: "Verified",
-  REJECTED: "Rejected",
-  PROVISIONALLY_APPROVED: "Provisionally Approved",
-  ZONAL_ABSENT: "Zonal Absent",
-  ZONAL_REJECTED: "Zonal Rejected",
-};
+// const STAGE_STATUS_MAP = {
+//   PENDING: "Pending",
+//   VERIFIED: "Verified",
+//   REJECTED: "Rejected",
+//   PROVISIONALLY_APPROVED: "Provisionally Approved",
+//   ZONAL_ABSENT: "Zonal Absent",
+//   ZONAL_REJECTED: "Zonal Rejected",
+// };
 
 export default function CandidateVerification() {
   const { t } = useTranslation(["verification", "common"]);
+
+
+  const STAGE_STATUS_MAP = {
+  PENDING: t("pending"),
+  VERIFIED: t("verified"),
+  REJECTED: t("rejected"),
+  PROVISIONALLY_APPROVED: t("provisionally_approved"),
+  ZONAL_ABSENT: t("zonal_absent"),
+  ZONAL_REJECTED: t("zonal_rejected"),
+};
 
   // const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeStage, setActiveStage] = useState(null);

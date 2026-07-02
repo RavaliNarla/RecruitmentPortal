@@ -52,17 +52,19 @@ import useCommitteeRequests from "../Approvals/hooks/useCommitteeRequests";
 import SchedulePoolTable from "../interviews/components/SchedulePoolTable";
 import ScheduleApprovalModal from "../candidatePreview/components/ScheduleApprovalModal";
 import ScheduleErrorModal from "../interviews/components/ScheduleErrorModal";
+import { BsFileEarmarkPlus } from "react-icons/bs";
+import DigitalSignatureModal from "./modal/DigitalSignatureModal";
 export default function CandidateScreening({ selectedJob }) {
   const { t } = useTranslation(["candidateWorkflow", "common"]);
 
   const STATUS_LABEL_MAP = {
-    SHORTLISTED: "Shortlisted",
-    APPLIED: "Applied",
-    REJECTED: "Rejected",
-    DISCREPANCY: "Discrepancy",
-    PENDING: "Pending",
-    INTERVIEW_SCHEDULED: "Interview Scheduled",
-    ELIGIBLE: "Eligible",
+    SHORTLISTED: t("candidateWorkflow:shortlisted"),
+    APPLIED: t("candidateWorkflow:applied"),
+    REJECTED: t("candidateWorkflow:rejected"),
+    DISCREPANCY: t("candidateWorkflow:discrepancy"),
+    PENDING: t("candidateWorkflow:pending"),
+    INTERVIEW_SCHEDULED: t("candidateWorkflow:interview_scheduled"),
+    ELIGIBLE: t("candidateWorkflow:eligible"),
   };
 
   const user = useSelector((state) => state.user.user);
@@ -99,12 +101,12 @@ export default function CandidateScreening({ selectedJob }) {
       : ["NEW", "SUBMITTED", "PENDING", "APPROVED", "REJECTED", "RENEGOTIATE"];
 
   const COMPENSATION_STATUS_LABEL_MAP = {
-    NEW: "New",
-    SUBMITTED: "Submitted",
-    PENDING: "Pending",
-    APPROVED: "Approved",
-    REJECTED: "Rejected",
-    RENEGOTIATE: "Renegotiate",
+    NEW: t("candidateWorkflow:new"),
+    SUBMITTED: t("candidateWorkflow:submitted"),
+    PENDING: t("candidateWorkflow:pending"),
+    APPROVED: t("candidateWorkflow:approved"),
+    REJECTED: t("candidateWorkflow:rejected"),
+    RENEGOTIATE: t("candidateWorkflow:renegotiate"),
   };
 
   const [pendingExamOpen, setPendingExamOpen] = useState(false);
@@ -144,36 +146,47 @@ export default function CandidateScreening({ selectedJob }) {
   const isCommitteeMember = role === "committee_member";
 
   const INTERVIEW_STATUS_LABEL_MAP = {
-    SCHEDULED: "Scheduled",
-    QUALIFIED: "Qualified",
-    DISQUALIFIED: "Disqualified",
-    PROVISIONALLY_APPROVED: "Provisionally Approved",
-    PENDING: "Pending",
-    ZONAL_REJECTED: "Zonal Rejected",
-    ZONAL_ABSENT: "Zonal Absent",
-    INTERVIEW_ABSENT: "Interview Absent",
-    RESCHEDULED: "Rescheduled",
+    SCHEDULED: t("candidateWorkflow:scheduled"),
+    QUALIFIED: t("candidateWorkflow:qualified"),
+    DISQUALIFIED: t("candidateWorkflow:disqualified"),
+    PROVISIONALLY_APPROVED: t("candidateWorkflow:provisionally_approved"),
+    PENDING: t("candidateWorkflow:pending"),
+    ZONAL_REJECTED: t("candidateWorkflow:zonal_rejected"),
+    ZONAL_ABSENT: t("candidateWorkflow:zonal_absent"),
+    INTERVIEW_ABSENT: t("candidateWorkflow:interview_absent"),
+    RESCHEDULED: t("candidateWorkflow:rescheduled"),
   };
   const SCHEDULE_POOL_STATUS_LABEL_MAP = {
-    L1_PENDING: "L1 Pending",
-    L2_PENDING: "L2 Pending",
-    APPROVED: "Approved",
-    REJECTED: "Rejected",
-    PENDING: "Pending",
+    L1_PENDING: t("candidateWorkflow:l1_pending"),
+    L2_PENDING: t("candidateWorkflow:l2_pending"),
+    APPROVED: t("candidateWorkflow:approved"),
+    REJECTED: t("candidateWorkflow:rejected"),
+    PENDING: t("candidateWorkflow:pending"),
   };
+
   const OFFER_POOL_STATUSES = [
     "OFFER_AWAITED",
     "OFFER_SENT",
     "OFFER_REJECTED",
     "OFFER_ACCEPTED",
+    "L1_PENDING",
+    "L2_PENDING",
+    "L1_REJECTED",
+    "L2_REJECTED",
+    "OFFER_GENERATED",
   ];
   const SCHEDULE_POOL_STATUSES = ["L1_PENDING", "PENDING", "REJECTED"];
- const OFFER_STATUS_LABEL_MAP = {
-  OFFER_AWAITED: t("candidateWorkflow:offer_awaited"),
-  OFFER_SENT: t("candidateWorkflow:offer_sent"),
-  OFFER_REJECTED: t("candidateWorkflow:offer_rejected"),
-  OFFER_ACCEPTED: t("candidateWorkflow:offer_accepted"),
-};
+  const OFFER_STATUS_LABEL_MAP = {
+    OFFER_AWAITED: t("candidateWorkflow:offer_awaited"),
+    OFFER_SENT: t("candidateWorkflow:offer_sent"),
+    OFFER_REJECTED: t("candidateWorkflow:offer_rejected"),
+    OFFER_ACCEPTED: t("candidateWorkflow:offer_accepted"),
+    L1_PENDING: t("candidateWorkflow:l1_pending"),
+    L1_REJECTED: t("candidateWorkflow:l1_rejected"),
+    L2_PENDING: t("candidateWorkflow:l2_pending"),
+    L2_REJECTED: t("candidateWorkflow:l2_rejected"),
+    OFFER_GENERATED: t("candidateWorkflow:offer_generated"),
+  };
   const [interviewPage, setInterviewPage] = useState(0);
   const [interviewPageSize, setInterviewPageSize] = useState(10);
   const location = useLocation();
@@ -526,8 +539,11 @@ export default function CandidateScreening({ selectedJob }) {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [selectedFeedback, setSelectedFeedback] = useState([]);
   const [showRankListModal, setShowRankListModal] = useState(false);
+  const [showDigitalSignatureModal, setShowDigitalSignatureModal] =
+    useState(false);
   const [offerSelectedIds, setOfferSelectedIds] = useState([]);
   const [offerRefreshKey, setOfferRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [offerTemplateId, setOfferTemplateId] = useState("");
   const [joiningDate, setJoiningDate] = useState("");
   const [acceptBeforeDate, setAcceptBeforeDate] = useState("");
@@ -536,6 +552,8 @@ export default function CandidateScreening({ selectedJob }) {
     acceptBeforeDate: "",
     joiningDate: "",
   });
+  const [signatory, setSignatory] = useState("");
+  const [signatoryDesignation, setSignatoryDesignation] = useState("");
   const dispatch = useDispatch();
   const [templates, setTemplates] = useState([]);
 
@@ -1386,6 +1404,9 @@ export default function CandidateScreening({ selectedJob }) {
     if (activeTab === "COMPENSATION_POOL") {
       return COMPENSATION_STATUS_LABEL_MAP[status] || status; //  ADD THIS
     }
+    if (activeTab === "OFFER_POOL") {
+      return OFFER_STATUS_LABEL_MAP[status] || status; //  ADD THIS
+    }
 
     return STATUS_LABEL_MAP[status] || status;
   };
@@ -1958,7 +1979,8 @@ export default function CandidateScreening({ selectedJob }) {
 
       if (response?.data?.success === false) {
         toast.error(
-          response?.data?.message || t("candidateWorkflow:failed_send_offer_approval")
+          response?.data?.message ||
+            t("candidateWorkflow:failed_send_offer_approval")
         );
         return;
       }
@@ -2057,6 +2079,8 @@ export default function CandidateScreening({ selectedJob }) {
       setOfferTemplateId("");
       setAcceptBeforeDate("");
       setJoiningDate("");
+      setSignatory("");
+      setSignatoryDesignation("");
       setFormErrors({
         acceptBeforeDate: "",
         joiningDate: "",
@@ -2206,6 +2230,66 @@ export default function CandidateScreening({ selectedJob }) {
       setShowPreview(true);
     } catch (err) {
       console.error("Preview failed", err);
+    }
+  };
+  const handleGenerateOffer = async () => {
+    if (offerSelectedIds.length === 0) {
+      toast.error("Please select at least one candidate");
+      return;
+    }
+
+    if (!offerTemplateId) {
+      toast.error("Please select an offer template");
+      return;
+    }
+
+    if (!joiningDate || !acceptBeforeDate) {
+      toast.error("Please select the dates");
+      return;
+    }
+
+    if (!signatory.trim()) {
+      toast.error("Please enter signatory");
+      return;
+    }
+
+    if (!signatoryDesignation.trim()) {
+      toast.error("Please enter designation");
+      return;
+    }
+    const selectedOffers = offerData.filter((offer) =>
+      offerSelectedIds.includes(offer.id)
+    );
+
+    const invalidLocationOffers = selectedOffers.filter(
+      (offer) => !offer.state || !offer.location
+    );
+
+    if (invalidLocationOffers.length > 0) {
+      toast.error("State and City are mandatory to generate the offer.");
+      return;
+    }
+
+    try {
+      const payload = {
+        offerTemplateId,
+        joiningDate,
+        acceptBeforeDate,
+        designationId: null, // Selected designation ID
+        offerIds: offerSelectedIds,
+        signatoryName: signatory,
+        signatoryDesignation: signatoryDesignation,
+      };
+
+      const res = await jobPositionApiService.generateOffers(payload);
+
+      toast.success("Offer generated successfully");
+      setOfferRefreshKey((prev) => prev + 1);
+
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.response?.data?.message || "Failed to generate offers");
     }
   };
 
@@ -2593,164 +2677,160 @@ export default function CandidateScreening({ selectedJob }) {
           </ul>
 
           {/* Filters */}
-          {activeTab !== "OFFER_POOL" && (
-            <div className="row g-2 mt-1 px-2 py-1 align-items-center">
-              <div className="col-md-2 col-6 d-flex align-items-center gap-2">
-                <p className="text-muted fs-14 mb-1">
-                  {" "}
-                  {t("candidateWorkflow:filter_by")}:
-                </p>
-                <button
-                  className="btn fs-14 mb-1 error-text"
-                  onClick={() =>
-                    setFilters({
-                      status: [],
-                      stateId: "",
-                      categoryId: "",
-                      searchText: "",
-                    })
-                  }
-                >
-                  {t("common:clear_all")}
-                </button>
-              </div>
+
+          <div className="row g-2 mt-1 px-2 py-1 align-items-center">
+            <div className="col-md-2 col-6 d-flex align-items-center gap-2">
+              <p className="text-muted fs-14 mb-1">
+                {" "}
+                {t("candidateWorkflow:filter_by")}:
+              </p>
+              <button
+                className="btn fs-14 mb-1 error-text"
+                onClick={() =>
+                  setFilters({
+                    status: [],
+                    stateId: "",
+                    categoryId: "",
+                    searchText: "",
+                  })
+                }
+              >
+                {t("common:clear_all")}
+              </button>
+            </div>
+            <div className="col-md-2 col-6 mt-0">
+              <select
+                className="form-select fs-14 py-1 mt-0"
+                value={filters?.status[0] || ""}
+                onChange={(e) => handleStatusChange(e.target.value)}
+              >
+                <option value="">{t("candidateWorkflow:all_statuses")}</option>
+
+                {availableStatuses.map((status) => (
+                  <option key={status} value={status}>
+                    {getStatusLabel(status)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {activeTab === "CANDIDATE_POOL" && hasLocationData && (
               <div className="col-md-2 col-6 mt-0">
                 <select
                   className="form-select fs-14 py-1 mt-0"
-                  value={filters?.status[0] || ""}
-                  onChange={(e) => handleStatusChange(e.target.value)}
+                  value={filters?.stateId}
+                  onChange={(e) => {
+                    setPage(0);
+                    setFilters((prev) => ({
+                      ...prev,
+                      stateId: e.target.value,
+                    }));
+                  }}
                 >
                   <option value="">
-                    {t("candidateWorkflow:all_statuses")}
+                    {t("candidateWorkflow:all_locations")}
                   </option>
-
-                  {availableStatuses.map((status) => (
-                    <option key={status} value={status}>
-                      {getStatusLabel(status)}
+                  {availableLocations?.map((loc) => (
+                    <option key={loc.id} value={loc.id}>
+                      {loc.name}
                     </option>
                   ))}
                 </select>
               </div>
+            )}
 
-              {activeTab === "CANDIDATE_POOL" && hasLocationData && (
-                <div className="col-md-2 col-6 mt-0">
-                  <select
-                    className="form-select fs-14 py-1 mt-0"
-                    value={filters?.stateId}
-                    onChange={(e) => {
-                      setPage(0);
-                      setFilters((prev) => ({
-                        ...prev,
-                        stateId: e.target.value,
-                      }));
-                    }}
-                  >
-                    <option value="">
-                      {t("candidateWorkflow:all_locations")}
-                    </option>
-                    {availableLocations?.map((loc) => (
-                      <option key={loc.id} value={loc.id}>
-                        {loc.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+            {activeTab === "CANDIDATE_POOL" && (
+              <div className="col-md-2 col-6 mt-0">
+                <select
+                  className="form-select fs-14 py-1 mt-0"
+                  value={filters.categoryId}
+                  onChange={(e) => {
+                    setPage(0);
 
-              {activeTab === "CANDIDATE_POOL" && (
-                <div className="col-md-2 col-6 mt-0">
-                  <select
-                    className="form-select fs-14 py-1 mt-0"
-                    value={filters.categoryId}
-                    onChange={(e) => {
-                      setPage(0);
-
-                      setFilters((prev) => ({
-                        ...prev,
-                        categoryId: e.target.value,
-                      }));
-                    }}
-                  >
-                    <option value="">
-                      {t("candidateWorkflow:all_categories")}
-                    </option>
-                    {availableCategories?.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* 👇 spacer ONLY for Interview Pool */}
-              {(activeTab === "INTERVIEW_POOL" ||
-                activeTab === "COMPENSATION_POOL" ||
-                activeTab === "SCHEDULE_POOL") && (
-                <div className="col-md-4 d-none d-md-block" />
-              )}
-
-              {selectedPositionId.length > 0 && selectedRequisitionId && (
-                <div
-                  className={`col-12 text-md-end mt-2 mt-md-0 ${
-                    activeTab === "CANDIDATE_POOL" && hasLocationData
-                      ? "col-md-4"
-                      : activeTab === "CANDIDATE_POOL"
-                        ? "col-md-6"
-                        : "col-md-4"
-                  }`}
+                    setFilters((prev) => ({
+                      ...prev,
+                      categoryId: e.target.value,
+                    }));
+                  }}
                 >
-                  {activeTab === "CANDIDATE_POOL" && (
+                  <option value="">
+                    {t("candidateWorkflow:all_categories")}
+                  </option>
+                  {availableCategories?.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* 👇 spacer ONLY for Interview Pool */}
+            {(activeTab === "INTERVIEW_POOL" ||
+              activeTab === "COMPENSATION_POOL" ||
+              activeTab === "SCHEDULE_POOL" ||
+              activeTab === "OFFER_POOL") && (
+              <div className="col-md-4 d-none d-md-block" />
+            )}
+
+            {selectedPositionId.length > 0 && selectedRequisitionId && (
+              <div
+                className={`col-12 text-md-end mt-2 mt-md-0 ${
+                  activeTab === "CANDIDATE_POOL" && hasLocationData
+                    ? "col-md-4"
+                    : activeTab === "CANDIDATE_POOL"
+                      ? "col-md-6"
+                      : "col-md-4"
+                }`}
+              >
+                {activeTab === "CANDIDATE_POOL" && (
+                  <button
+                    className="rank-btn fs-14"
+                    onClick={() => {
+                      dispatch(setRankEnabled(true)); //  ONLY TRUE
+
+                      setPage(0);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faListOl} className="rank-icon" />{" "}
+                    {t("candidateWorkflow:rank")}
+                  </button>
+                )}
+
+                <>
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip>{t("candidateWorkflow:download_pdf")}</Tooltip>
+                    }
+                  >
                     <button
-                      className="rank-btn fs-14"
-                      onClick={() => {
-                        dispatch(setRankEnabled(true)); //  ONLY TRUE
-
-                        setPage(0);
-                      }}
+                      className="btn fs-14 me-3 blue-color blue-border"
+                      onClick={() => handleDownload("pdf")}
                     >
-                      <FontAwesomeIcon icon={faListOl} className="rank-icon" />{" "}
-                      {t("candidateWorkflow:rank")}
+                      <img alt="pdf" src={pdfIcon} width={20} />
                     </button>
-                  )}
+                  </OverlayTrigger>
 
-                  <>
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip>{t("candidateWorkflow:download_pdf")}</Tooltip>
-                      }
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip>{t("candidateWorkflow:download_excel")}</Tooltip>
+                    }
+                  >
+                    <button
+                      className="btn fs-14 blue-color blue-border"
+                      onClick={() => handleDownload("xlsx")}
                     >
-                      <button
-                        className="btn fs-14 me-3 blue-color blue-border"
-                        onClick={() => handleDownload("pdf")}
-                      >
-                        <img alt="pdf" src={pdfIcon} width={20} />
-                      </button>
-                    </OverlayTrigger>
+                      <img alt="excel" src={excelIcon} width={20} />
+                    </button>
+                  </OverlayTrigger>
+                </>
+              </div>
+            )}
+          </div>
 
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip>
-                          {t("candidateWorkflow:download_excel")}
-                        </Tooltip>
-                      }
-                    >
-                      <button
-                        className="btn fs-14 blue-color blue-border"
-                        onClick={() => handleDownload("xlsx")}
-                      >
-                        <img alt="excel" src={excelIcon} width={20} />
-                      </button>
-                    </OverlayTrigger>
-                  </>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === "OFFER_POOL" && (
+          {/* {activeTab === "OFFER_POOL" && (
             <div className="row g-2 mt-1 px-3 py-1 align-items-center border-bottom">
               <div className="col-md-2 col-6 d-flex align-items-center gap-2">
                 <p className="text-muted fs-14 mb-1">
@@ -2790,7 +2870,7 @@ export default function CandidateScreening({ selectedJob }) {
                 })}
               </div>
             </div>
-          )}
+          )} */}
 
           {activeTab === "OFFER_POOL" && (
             <div className="row g-2 mt-1 px-3 py-2 align-items-center">
@@ -2857,7 +2937,7 @@ export default function CandidateScreening({ selectedJob }) {
                               textDecoration: "underline",
                             }}
                           >
-                          {t("candidateWorkflow:template_preview")}
+                            {t("candidateWorkflow:template_preview")}
                           </span>
                         ) : (
                           <small className="d-block invisible">
@@ -2916,9 +2996,73 @@ export default function CandidateScreening({ selectedJob }) {
                         {formErrors.joiningDate || "placeholder"}
                       </small>
                     </div>
-
+                    {/* Signatory */}
                     <div>
-                       <button
+                      <p className="mb-1 fw-normal fs-13 blue-color">
+                        Signatory
+                      </p>
+
+                      <input
+                        type="text"
+                        className="form-control fs-13 py-1"
+                        style={{ width: "100px" }}
+                        placeholder="Signatory"
+                        value={signatory}
+                        onChange={(e) => setSignatory(e.target.value)}
+                      />
+                      <small className="d-block mt-1 fs-12 invisible">
+                        placeholder
+                      </small>
+                    </div>
+
+                    {/* Designation */}
+                    <div>
+                      <p className="mb-1 fw-normal fs-13 blue-color">
+                        Designation
+                      </p>
+
+                      <input
+                        type="text"
+                        className="form-control fs-13 py-1"
+                        style={{ width: "110px" }}
+                        placeholder="Designation"
+                        value={signatoryDesignation}
+                        onChange={(e) =>
+                          setSignatoryDesignation(e.target.value)
+                        }
+                      />
+
+                      <small className="d-block mt-1 fs-12 invisible">
+                        placeholder
+                      </small>
+                    </div>
+                    {/* Generate Offer */}
+                    <div>
+                      <p className="mb-1 fw-normal fs-13 blue-color invisible">
+                        Generate
+                      </p>
+
+                      <OverlayTrigger
+                        placement="bottom"
+                        overlay={<Tooltip>Generate Offer</Tooltip>}
+                      >
+                        <button
+                          type="button"
+                          className="btn orange-bg text-white"
+                          onClick={handleGenerateOffer}
+                          disabled={offerSelectedIds.length === 0}
+                        >
+                          <i className="bi bi-file-earmark-plus"></i>
+                        </button>
+                      </OverlayTrigger>
+
+                      <small className="d-block mt-1 fs-12 invisible">
+                        {"\u00A0"}
+                      </small>
+                    </div>
+
+                    {/* <div>
+                      <button
                         className={`form-select fs-13 px-3 py-1 orange-bg text-white ${
                           isSendOfferEnabled ? "" : "disabled_button"
                         }`}
@@ -2937,36 +3081,53 @@ export default function CandidateScreening({ selectedJob }) {
                         ) : (
                           t("candidateWorkflow:send_for_approval")
                         )}
-                        </button>
+                      </button>
 
-                      {/* Reserve equal space like other fields */}
                       <small className="d-block mt-1 fs-12 invisible">
                         {"\u00A0"}
                       </small>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
 
               {/* RIGHT SECTION */}
               <div className="col-md-4 col-12">
-                <div className="d-flex justify-content-end gap-2 align-items-center">
+                <div className="d-flex justify-content-end align-items-end gap-3">
+                  {/* Digital Signature */}
+                  <div className="d-flex flex-column align-items-center">
+                    {/* <label className="fs-13 blue-color mb-1">
+                      Digital Signature
+                    </label> */}
+
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={<Tooltip>Upload Digital Signature</Tooltip>}
+                    >
+                      <button
+                        type="button"
+                        className="btn orange-bg text-white"
+                        onClick={() => setShowDigitalSignatureModal(true)}
+                      >
+                        <i className="bi bi-pen"></i>
+                      </button>
+                    </OverlayTrigger>
+                  </div>
+
+                  {/* Merit List */}
                   <button
                     className="btn blue-border blue-color fs-13 px-3 py-1"
                     style={{ minHeight: "39px" }}
                     onClick={handleGenerateRankList}
                   >
-                    {/* <img
-                      alt="excel"
-                      src={excelIcon}
-                      className="me-1"
-                      width={18}
-                    /> */}
                     {t("candidateWorkflow:rank_list")}
                   </button>
 
+                  {/* Assign Locations */}
                   <button
-                    className={`btn fs-13 px-3 py-1 orange-bg text-white ${!rankListGenerated ? "disabled_button" : ""}`}
+                    className={`btn fs-13 px-3 py-1 orange-bg text-white ${
+                      !rankListGenerated ? "disabled_button" : ""
+                    }`}
                     style={{ minHeight: "39px" }}
                     onClick={() => setShowRankListModal(true)}
                     disabled={!rankListGenerated}
@@ -2981,13 +3142,16 @@ export default function CandidateScreening({ selectedJob }) {
                     {t("candidateWorkflow:assign_locations")}
                   </button>
 
+                  {/* Download */}
                   <button
-                    className={`btn fs-13 px-3 py-1 orange-bg text-white ${!rankListGenerated ? "disabled_button" : ""}`}
+                    className={`btn fs-13 px-3 py-1 orange-bg text-white ${
+                      !rankListGenerated ? "disabled_button" : ""
+                    }`}
                     style={{ minHeight: "39px" }}
                     onClick={handleDownloadRankList}
                     disabled={!rankListGenerated}
                   >
-                    <i className="bi bi-download me-1"></i>
+                    <i className="bi bi-download"></i>
                   </button>
                 </div>
               </div>
@@ -3024,32 +3188,32 @@ export default function CandidateScreening({ selectedJob }) {
                   <div>
                     {activeTab === "CANDIDATE_POOL" && (
                       <div className="selected-count-chip">
-  {selectedCandidateIds.length}{" "}
-  {selectedCandidateIds.length === 1
-    ? t("candidateWorkflow:candidate")
-    : t("candidateWorkflow:candidates")}{" "}
-  {t("candidateWorkflow:selected")}
-</div>
+                        {selectedCandidateIds.length}{" "}
+                        {selectedCandidateIds.length === 1
+                          ? t("candidateWorkflow:candidate")
+                          : t("candidateWorkflow:candidates")}{" "}
+                        {t("candidateWorkflow:selected")}
+                      </div>
                     )}
 
                     {activeTab === "INTERVIEW_POOL" && (
-                     <div className="selected-count-chip">
-  {selectedInterviewCandidateIds.length}{" "}
-  {selectedInterviewCandidateIds.length === 1
-    ? t("candidateWorkflow:candidate")
-    : t("candidateWorkflow:candidates")}{" "}
-  {t("candidateWorkflow:selected")}
-</div>
+                      <div className="selected-count-chip">
+                        {selectedInterviewCandidateIds.length}{" "}
+                        {selectedInterviewCandidateIds.length === 1
+                          ? t("candidateWorkflow:candidate")
+                          : t("candidateWorkflow:candidates")}{" "}
+                        {t("candidateWorkflow:selected")}
+                      </div>
                     )}
 
                     {activeTab === "COMPENSATION_POOL" && (
-                     <div className="selected-count-chip">
-  {selectedCompensationIds.length}{" "}
-  {selectedCompensationIds.length === 1
-    ? t("candidateWorkflow:candidate")
-    : t("candidateWorkflow:candidates")}{" "}
-  {t("candidateWorkflow:selected")}
-</div>
+                      <div className="selected-count-chip">
+                        {selectedCompensationIds.length}{" "}
+                        {selectedCompensationIds.length === 1
+                          ? t("candidateWorkflow:candidate")
+                          : t("candidateWorkflow:candidates")}{" "}
+                        {t("candidateWorkflow:selected")}
+                      </div>
                     )}
                   </div>
 
@@ -3072,7 +3236,7 @@ export default function CandidateScreening({ selectedJob }) {
                           {/*  Submit Before Date */}
                           <div className="d-flex align-items-center gap-2">
                             <span className="fs-14">
-                          {t("submit_before")}{" "}
+                              {t("submit_before")}{" "}
                               <span className="text-danger">*</span>
                             </span>
                             <input
@@ -3336,6 +3500,17 @@ export default function CandidateScreening({ selectedJob }) {
         setSelectedIds={setOfferSelectedIds}
         onUploadSuccess={() => setOfferRefreshKey((prev) => prev + 1)}
         positionId={selectedPositionId?.[0]}
+      />
+      <DigitalSignatureModal
+        showDigitalSignatureModal={showDigitalSignatureModal}
+        setShowDigitalSignatureModal={setShowDigitalSignatureModal}
+        selectedIds={offerSelectedIds}
+        setSelectedIds={setOfferSelectedIds}
+        offerData={offerData}
+        onUploadSuccess={() => {
+          console.log("Incrementing refreshKey");
+          setOfferRefreshKey((prev) => prev + 1);
+        }}
       />
       {/* <Modal show={showPreview}
         onHide={() => setShowPreview(false)} size="lg">

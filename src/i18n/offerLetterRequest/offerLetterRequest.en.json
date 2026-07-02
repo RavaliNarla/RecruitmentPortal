@@ -1,6 +1,6 @@
 {
   "offer_letter_requests": "Offer Letter Requests",
-  "review_offer_letter_requests": "Review and approve offer letter requests",
+  "review_offer_letter_requests": "Review and approve or reject offer letter requests",
   "select_at_least_one_candidate": "Please select at least one candidate",
   "failed_to_preview_file": "Failed to preview file",
   "candidate_name": "Candidate Name",

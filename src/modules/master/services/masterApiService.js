@@ -342,6 +342,7 @@ const masterApiService = {
     }),
 
   getRequestTypes: () => apis.get("/master-dd-data/get/request-types"),
+  getSignatory: () => apis.get("/user-signatry/all"),
 };
 
 export default masterApiService;

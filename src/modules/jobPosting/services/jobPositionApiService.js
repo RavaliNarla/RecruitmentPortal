@@ -46,25 +46,22 @@ const jobPositionApiService = {
     );
   },
 
-
   deleteExamSection(sectionId) {
-  return api.delete(
-    `/recruiter/examination-config/delete-section/${sectionId}`,
-    {
-      headers: {
-        "X-Client": "AzureAD",
-      },
-    }
-  );
-},
-
+    return api.delete(
+      `/recruiter/examination-config/delete-section/${sectionId}`,
+      {
+        headers: {
+          "X-Client": "AzureAD",
+        },
+      }
+    );
+  },
 
   validateExamConfiguration(positionId) {
-  return api.get(
-    `recruiter/examination-config/validate-exam-configuration?positionId=${positionId}`
-  );
-},
-
+    return api.get(
+      `recruiter/examination-config/validate-exam-configuration?positionId=${positionId}`
+    );
+  },
 
   finalizeExamConfiguration: (payload) => {
     return api.post(
@@ -383,17 +380,37 @@ const jobPositionApiService = {
     });
   },
 
-downloadAssignLocationExcel: (positionId) => {
-  return api.get(
-    `/recruiter/candidate-offer/download-assign-locations-excel/${positionId}`,
-    {
-      headers: {
-        "X-Client": "AzureAD",
-      },
+  downloadAssignLocationExcel: (positionId) => {
+    return api.get(
+      `/recruiter/candidate-offer/download-assign-locations-excel/${positionId}`,
+      {
+        headers: {
+          "X-Client": "AzureAD",
+        },
+        responseType: "blob",
+      }
+    );
+  },
+
+  downloadOffersZip(payload) {
+    return api.post("/recruiter/candidate-offer/download-offers/zip", payload, {
       responseType: "blob",
-    }
-  );
-},
+    });
+  },
+  uploadSignedOffers(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return api.post(
+      "/recruiter/candidate-offer/upload-signed-offers",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  },
 
   uploadRanksExcel: (file) => {
     const formData = new FormData();
@@ -414,11 +431,16 @@ downloadAssignLocationExcel: (positionId) => {
     return api.post("/recruiter/candidate-offer/send-offer", payload);
   },
 
-   sendOfferApproval(payload) {
-    return api.post("/recruiter/candidate-offer/send-offer/for-approval", payload);
+  sendOfferApproval(payload) {
+    return api.post(
+      "/recruiter/candidate-offer/send-offer/for-approval",
+      payload
+    );
   },
 
- 
+  generateOffers(payload) {
+    return api.post("/recruiter/candidate-offer/generate-offers", payload);
+  },
 
   getScreeningComments(applicationId) {
     return api.get(`/recruiter/screening-comments/${applicationId}`, {
@@ -437,26 +459,24 @@ downloadAssignLocationExcel: (positionId) => {
   },
 
   getVacancyBreakdownByRequisition: (requisitionId) =>
-  api.get(
-    `/recruiter/job-positions/vacancy-breakdown/by-requisition/${requisitionId}`,
-    {
-      headers: {
-        "X-Client": "AzureAD",
-      },
-    }
-  ),
+    api.get(
+      `/recruiter/job-positions/vacancy-breakdown/by-requisition/${requisitionId}`,
+      {
+        headers: {
+          "X-Client": "AzureAD",
+        },
+      }
+    ),
 
-  
-  
-getVacancyBreakdownByPosition: (positionId) =>
-  api.get(
-    `/recruiter/job-positions/vacancy-breakdown/by-position/${positionId}`,
-    {
-      headers: {
-        "X-Client": "AzureAD",
-      },
-    }
-  ),
+  getVacancyBreakdownByPosition: (positionId) =>
+    api.get(
+      `/recruiter/job-positions/vacancy-breakdown/by-position/${positionId}`,
+      {
+        headers: {
+          "X-Client": "AzureAD",
+        },
+      }
+    ),
 };
 
 export default jobPositionApiService;

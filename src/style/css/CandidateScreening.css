@@ -530,3 +530,6 @@ candidate-screening-tabs-header ul {
 .fixcomp{
     color: #6c757d;
 }
+.orange-bg:disabled {
+  opacity: 0.5 !important;
+}

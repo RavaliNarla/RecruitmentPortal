@@ -5,43 +5,45 @@ import {
   FiCheckCircle,
   FiBriefcase,
 } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import "../../../style/css/Dashboard/CandidateRegistrationOverview.css";
 
 const CandidateRegistrationOverview = ({ data }) => {
-  const steps = [
-    {
-      value: data?.totalCandidates ?? 0,
-      label: "Total Candidates",
-      color: "#0f3b96",
-      border: "#bfd7ff",
-      bg: "#eef4ff",
-      icon: <FiUsers />,
-    },
-    {
-      value: data?.registeredOnly ?? 0,
-      label: "Registered Only",
-      color: "#7c3aed",
-      border: "#e7d8ff",
-      bg: "#f5f0ff",
-      icon: <FiUserCheck />,
-    },
-    {
-      value: data?.profileCompleted ?? 0,
-      label: "Profile Completed",
-      color: "#059669",
-      border: "#c7f0dd",
-      bg: "#edfdf5",
-      icon: <FiCheckCircle />,
-    },
-    {
-      value: data?.appliedCandidates ?? 0,
-      label: "Applied Candidates",
-      color: "#d90429",
-      border: "#ffd1d8",
-      bg: "#fff1f3",
-      icon: <FiBriefcase />,
-    },
-  ];
+  const { t } = useTranslation("dashboard");
+const steps = [
+  {
+    value: data?.totalCandidates ?? 0,
+    label: t("total_candidates"),
+    color: "#0f3b96",
+    border: "#bfd7ff",
+    bg: "#eef4ff",
+    icon: <FiUsers />,
+  },
+  {
+    value: data?.registeredOnly ?? 0,
+    label: t("registered_only"),
+    color: "#7c3aed",
+    border: "#e7d8ff",
+    bg: "#f5f0ff",
+    icon: <FiUserCheck />,
+  },
+  {
+    value: data?.profileCompleted ?? 0,
+    label: t("profile_completed"),
+    color: "#059669",
+    border: "#c7f0dd",
+    bg: "#edfdf5",
+    icon: <FiCheckCircle />,
+  },
+  {
+    value: data?.appliedCandidates ?? 0,
+    label: t("applied_candidates"),
+    color: "#d90429",
+    border: "#ffd1d8",
+    bg: "#fff1f3",
+    icon: <FiBriefcase />,
+  },
+];
 
   return (
     <div className="candidate-overview-card">
@@ -51,8 +53,9 @@ const CandidateRegistrationOverview = ({ data }) => {
         </div>
 
         <div>
-          <h3>Candidate Registration Overview</h3>
-          <p>Candidate funnel & progression</p>
+         <h3>{t("candidate_registration_overview")}</h3>
+
+<p>{t("candidate_funnel")}</p>
         </div>
       </div>
 

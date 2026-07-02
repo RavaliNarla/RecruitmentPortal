@@ -108,7 +108,7 @@ export default function InterviewPool({
       {canReschedule && (
         <div className="d-flex justify-content-end px-3 pt-3">
           <button className="btn btn-primary fs-14" onClick={onReschedule}>
-            Reschedule
+           {t("candidateWorkflow:reschedule")}
           </button>
         </div>
       )}

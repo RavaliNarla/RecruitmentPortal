@@ -620,3 +620,10 @@
 .selectindent .bluecol {
   color: #162b75 !important;
 }
+#hide-school-degrees{
+  width: 15px;
+  height: 15px;
+}
+.mancheck{
+  font-size: 0.75rem;
+}

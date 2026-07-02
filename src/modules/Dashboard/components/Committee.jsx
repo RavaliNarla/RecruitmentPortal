@@ -1,40 +1,42 @@
 import React from "react";
 import { FiUsers, FiUserCheck, FiClipboard } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import "../../../style/css/Dashboard/Committee.css";
 
 const Committee = ({ committeeOverview, onCardClick }) => {
-  const committeeData = [
-    {
-      key: "interviewPanel",
-      title: "Interview Panel",
-      value: committeeOverview?.interviewPanel || 0,
-      label: "Total Panelists",
-      className: "blue",
-      color: "#003B95",
-      icon: <FiUsers />,
-      bg: "#eef4ff",
-    },
-    {
-      key: "screeningPanel",
-      title: "Screening Panel",
-      value: committeeOverview?.screeningPanel || 0,
-      label: "Total Panelists",
-      className: "red",
-      color: "#d90429",
-      icon: <FiClipboard />,
-      bg: "#fff1f3",
-    },
-    {
-      key: "compensationPanel",
-      title: "Compensation Panel",
-      value: committeeOverview?.compensationPanel || 0,
-      label: "Total Panelists",
-      className: "green",
-      color: "#059669",
-      icon: <FiUserCheck />,
-      bg: "#ecfdf5",
-    },
-  ];
+  const { t } = useTranslation("dashboard");
+ const committeeData = [
+  {
+    key: "interviewPanel",
+    title: t("interview_panel"),
+    value: committeeOverview?.interviewPanel || 0,
+    label: t("total_panelists"),
+    className: "blue",
+    color: "#003B95",
+    icon: <FiUsers />,
+    bg: "#eef4ff",
+  },
+  {
+    key: "screeningPanel",
+    title: t("screening_panel"),
+    value: committeeOverview?.screeningPanel || 0,
+    label: t("total_panelists"),
+    className: "red",
+    color: "#d90429",
+    icon: <FiClipboard />,
+    bg: "#fff1f3",
+  },
+  {
+    key: "compensationPanel",
+    title: t("compensation_panel"),
+    value: committeeOverview?.compensationPanel || 0,
+    label: t("total_panelists"),
+    className: "green",
+    color: "#059669",
+    icon: <FiUserCheck />,
+    bg: "#ecfdf5",
+  },
+];
 
   return (
     <div className="committee-card mb-4">
@@ -44,8 +46,9 @@ const Committee = ({ committeeOverview, onCardClick }) => {
         </div>
 
         <div>
-          <h3>Committee</h3>
-          <p>Panel Management & Overview</p>
+         <h3>{t("committee")}</h3>
+
+<p>{t("panel_management")}</p>
         </div>
       </div>
 
@@ -71,10 +74,12 @@ const Committee = ({ committeeOverview, onCardClick }) => {
             <span>{item.label}</span>
             <div className="committee-footer">
               <span
-                style={{ color: item.color }}
+                style={{ color: item.color,
+                  cursor: "pointer",
+                 }}
                 onClick={() => onCardClick(item.key)}
               >
-                View Details
+               {t("view_details")}
               </span>
               <span>→</span>
             </div>

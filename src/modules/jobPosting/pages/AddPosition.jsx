@@ -46,7 +46,7 @@ const AddPosition = () => {
 
   console.log("Exclusions@@@@@@@@@@@@@@@@@@:", exclusions);
   const [selectedExclusions, setSelectedExclusions] = useState([]);
-  
+
   const isViewMode = !!positionId && mode === "view";
   const isEditMode = !!positionId && mode !== "view";
   const isDraft = location.state?.isDraft === true;
@@ -137,6 +137,7 @@ const AddPosition = () => {
     enableStateDistribution: false,
     useMandatoryEducationLevelExperience: false,
     usePreferredEducationLevelExperience: false,
+    isIntermediateRequired: true,
   });
   const [isAgeRelRiotVictimFamily, setIsAgeRelRiotVictimFamily] =
     useState(false);
@@ -181,30 +182,26 @@ const AddPosition = () => {
 
     setIsAgeRelRiotVictimFamily(
       existingPosition?.isAgeRelRiotVictimFamily === true ||
-      existingPosition?.isAgeRelRiotVictimFamily === "true" ||
-      existingPosition?.isAgeRelRiotVictimFamily === 1
+        existingPosition?.isAgeRelRiotVictimFamily === "true" ||
+        existingPosition?.isAgeRelRiotVictimFamily === 1
     );
 
     setIsAgeRelWdsWomen(
       existingPosition?.isAgeRelWdsWomen === true ||
-      existingPosition?.isAgeRelWdsWomen === "true" ||
-      existingPosition?.isAgeRelWdsWomen === 1
+        existingPosition?.isAgeRelWdsWomen === "true" ||
+        existingPosition?.isAgeRelWdsWomen === 1
     );
   }, [existingPosition]);
 
-
-
-
-
-useEffect(() => {
-  if (existingPosition?.jobPositionExclusion?.length) {
-    setSelectedExclusions(
-      existingPosition.jobPositionExclusion
-        .filter((e) => e.isExcluded)
-        .map((e) => e.exclusionId)
-    );
-  }
-}, [existingPosition]);
+  useEffect(() => {
+    if (existingPosition?.jobPositionExclusion?.length) {
+      setSelectedExclusions(
+        existingPosition.jobPositionExclusion
+          .filter((e) => e.isExcluded)
+          .map((e) => e.exclusionId)
+      );
+    }
+  }, [existingPosition]);
 
   useEffect(() => {
     const loadExclusions = async () => {
@@ -311,6 +308,7 @@ useEffect(() => {
         existingPosition.isMandatoryExpMonthsEduWise || false,
       usePreferredEducationLevelExperience:
         existingPosition.isPreferredExpMonthsEduWise || false,
+      isIntermediateRequired: existingPosition.isIntermediateRequired,
     });
     setApprovedBy(existingPosition.approvedBy || "");
     setIndentOthers(existingPosition.indentOthers || "");
@@ -859,6 +857,7 @@ useEffect(() => {
     if (submitRef.current) return;
     submitRef.current = true;
     setSubmitting(true);
+    const reqKey = `${isDraft ? parentRequisitionId : requisitionId}_${isDraft}`;
     const validationErrors = validateAddPosition({
       isEditMode,
       formData,
@@ -871,7 +870,8 @@ useEffect(() => {
       nationalCategories,
       nationalDisabilities,
       stateDistributions,
-      existingPositions: positionsByReq[requisitionId] || [],
+     // existingPositions: positionsByReq[requisitionId] || [],
+      existingPositions: positionsByReq[reqKey] || [],
       positionId,
       isContractEmployment,
     });
@@ -888,21 +888,17 @@ useEffect(() => {
 
     console.log("Selected Exclusions:", selectedExclusions);
     console.log(
-  "existingPosition exclusions",
-  existingPosition?.jobPositionExclusions
-);
+      "existingPosition exclusions",
+      existingPosition?.jobPositionExclusions
+    );
 
+    console.log("positionId from URL =", positionId);
+    console.log("existingPosition =", existingPosition);
+    console.log("existingPosition.positionId =", existingPosition?.positionId);
 
+    const currentPositionId =
+      existingPosition?.positionId || positionId || null;
 
-
-
-console.log("positionId from URL =", positionId);
-console.log("existingPosition =", existingPosition);
-console.log("existingPosition.positionId =", existingPosition?.positionId);
-
-const currentPositionId =
-  existingPosition?.positionId || positionId || null;
-  
     const payload = {
       formData,
       educationData,
@@ -924,21 +920,18 @@ const currentPositionId =
       isAgeRelRiotVictimFamily,
       isAgeRelWdsWomen,
 
+      jobPositionExclusion: exclusions.map((item) => {
+        const existingExclusion = existingPosition?.jobPositionExclusions?.find(
+          (e) => e.exclusionId === item.exclusionId
+        );
 
-jobPositionExclusion: exclusions.map((item) => {
-  const existingExclusion =
-    existingPosition?.jobPositionExclusions?.find(
-      (e) => e.exclusionId === item.exclusionId
-    );
-
-  return {
-    jobPositionId: currentPositionId,
-    exclusionId: item.exclusionId,
-    isExcluded: selectedExclusions.includes(item.exclusionId),
-    id: existingExclusion?.id || null,
-  };
-}),
-
+        return {
+          jobPositionId: currentPositionId,
+          exclusionId: item.exclusionId,
+          isExcluded: selectedExclusions.includes(item.exclusionId),
+          id: existingExclusion?.id || null,
+        };
+      }),
     };
     console.log("Payload to be submitted:", payload);
     try {
@@ -961,8 +954,7 @@ jobPositionExclusion: exclusions.map((item) => {
       navigate(-1);
     } catch (err) {
       toast.error(err.message || t("operation_failed"));
-    }
-    finally {
+    } finally {
       submitRef.current = false;
       setSubmitting(false);
     }
@@ -977,15 +969,15 @@ jobPositionExclusion: exclusions.map((item) => {
   ).reduce((a, b) => a + Number(b || 0), 0);
   const filteredLanguages = currentState.state
     ? stateLanguages
-      .filter((sl) => String(sl.stateId) === String(currentState.state))
-      .map((sl) => {
-        const lang = languages.find(
-          (l) => String(l.id) === String(sl.languageId)
-        );
+        .filter((sl) => String(sl.stateId) === String(currentState.state))
+        .map((sl) => {
+          const lang = languages.find(
+            (l) => String(l.id) === String(sl.languageId)
+          );
 
-        return lang ? { id: lang.id, name: lang.name } : null;
-      })
-      .filter(Boolean)
+          return lang ? { id: lang.id, name: lang.name } : null;
+        })
+        .filter(Boolean)
     : [];
 
   return (
@@ -1151,6 +1143,7 @@ jobPositionExclusion: exclusions.map((item) => {
         key={`${eduMode}-${showEduModal}`}
         show={showEduModal}
         mode={eduMode}
+        isIntermediateRequired={formData.isIntermediateRequired}
         initialData={educationData[eduMode]}
         educationTypes={educationTypes}
         qualifications={qualifications}

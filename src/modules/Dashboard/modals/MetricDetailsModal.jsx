@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { FiDownload, FiX } from "react-icons/fi";
 import "../../../style/css/Dashboard/MetricDetailsModal.css";
+import { useTranslation } from "react-i18next";
 import useDashboardDownload from "../hooks/useDashboardDownload";
 const MetricDetailsModal = ({
   show,
@@ -11,6 +12,8 @@ const MetricDetailsModal = ({
   filters = {},
 }) => {
   const { downloadReport, downloading } = useDashboardDownload();
+
+  const { t } = useTranslation("dashboard");
 
   if (!metric) return null;
 
@@ -27,84 +30,114 @@ const MetricDetailsModal = ({
 
   const modalConfig = {
     vacancies: {
-      title: "Total Vacancies",
+      title: t("total_vacancies"),
       color: "#7C3AED",
       headerBg: "#FBF8FF",
       iconBg: "#F3EEFF",
-      subtitle: "Detailed breakdown and metrics",
-      columns: ["Requisition ID", "Department", "Position", "Vacancies"],
+      subtitle: t("detailed_breakdown_metrics"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("position"),
+  t("vacancies"),
+],
       data: dashboardData?.totalVacancies || [],
     },
 
     requisitions: {
-      title: "Total Requisitions",
+     title: t("total_requisitions"),
       color: "#003087",
       headerBg: "#FBFDFF",
       iconBg: "#EEF5FF",
-      subtitle: "Detailed breakdown and metrics",
-      columns: [
-        "Requisition ID",
-        "Department",
-        "Total No Of Positions",
-        "Vacancies",
-      ],
+      subtitle: t("detailed_breakdown_metrics"),
+     columns: [
+  t("requisition_id"),
+  t("department"),
+  t("total_positions"),
+  t("vacancies"),
+],
       data: dashboardData?.totalRequisitions || [],
     },
 
     departments: {
-      title: "Total Departments",
+     title: t("total_departments"),
       color: "#C8102E",
       headerBg: "#FFF9F9",
       iconBg: "#FFF0F2",
-      subtitle: "Detailed breakdown and metrics",
-      columns: ["Department", "Positions Count"],
+      subtitle: t("detailed_breakdown_metrics"),
+     columns: [
+  t("department"),
+  t("positions_count"),
+],
       data: dashboardData?.totalDepartments || [],
     },
 
     positions: {
-      title: "Total Positions",
+     title: t("total_positions"),
       color: "#059669",
       headerBg: "#F7FFFB",
       iconBg: "#ECFFF7",
-      subtitle: "Detailed breakdown and metrics",
-      columns: ["Requisition", "Department", "Position", "Vacancies", "Status"],
+     subtitle: t("detailed_breakdown_metrics"),
+      columns: [
+  t("requisition"),
+  t("department"),
+  t("position"),
+  t("vacancies"),
+  t("status"),
+],
       data: dashboardData?.totalPositions || [],
     },
     ApprovedRequisitions: {
-      title: "Approved Requisitions",
+      title: t("approved_requisitions"),
       color: "#059669",
       headerBg: "#F7FFFB",
 
       iconBg: "#ECFFF7",
-      subtitle: "Approved requisition details",
-      columns: ["Requisition", "Total No Of Positions", "Vacancies"],
+      subtitle: t("approved_requisition_details"),
+
+      columns: [
+  t("requisition"),
+  t("total_positions"),
+  t("vacancies"),
+],
       data: dashboardData?.approvedRequisitionDetails || [],
     },
     PendingRequisitions: {
-      title: "Pending Requisitions",
+     title: t("pending_requisitions"),
       color: "#d97706",
       headerBg: "#FFF9F9",
       iconBg: "#FFF0F2",
-      subtitle: "Pending requisition details",
-      columns: ["Requisition", "Total No Of Positions", "Vacancies"],
+      subtitle: t("pending_requisition_details"),
+      columns: [
+  t("requisition"),
+  t("total_positions"),
+  t("vacancies"),
+],
       data: dashboardData?.pendingRequisitionDetails || [],
     },
     ActiveRequisitions: {
-      title: "Active Requisitions",
+      title: t("active_requisitions"),
       color: "#0891b2",
       headerBg: "#F0F9FF",
       iconBg: "#E6F4FF",
-      subtitle: "Active requisition details",
-      columns: ["Requisition", "Total No Of Positions", "Vacancies"],
+      subtitle: t("active_requisition_details"),
+      columns: [
+  t("requisition"),
+  t("total_positions"),
+  t("vacancies"),
+],
       data: dashboardData?.activeRequisitionDetails || [],
     },
     ClosedRequisitions: {
-      title: "Closed Requisitions",
+     title: t("closed_requisitions"),
       color: "#7c3aed",
       headerBg: "#F9F5FF",
       iconBg: "#F3EEFF",
-      subtitle: "Closed requisition details",
-      columns: ["Requisition", "Total No Of Positions"],
+      subtitle: t("closed_requisition_details"),
+      columns: [
+  t("requisition"),
+  t("total_positions"),
+],
       data: dashboardData?.closedRequisitionDetails || [],
     },
   };
@@ -165,7 +198,7 @@ const MetricDetailsModal = ({
             >
               <FiDownload />
               <span className="ms-2">
-                {downloading ? "Downloading..." : "Export Pdf"}
+              {downloading ? t("downloading") : t("export_pdf")}
               </span>
             </button>
 
@@ -187,7 +220,7 @@ const MetricDetailsModal = ({
             >
               <FiDownload />
               <span className="ms-2">
-                {downloading ? "Downloading..." : "Export Excel"}
+              {downloading ? t("downloading") : t("export_excel")}
               </span>
             </button>
 
@@ -219,7 +252,7 @@ const MetricDetailsModal = ({
                     colSpan={config.columns.length}
                     className="text-center py-4"
                   >
-                    No records found
+                   {t("no_records_found")}
                   </td>
                 </tr>
               ) : (

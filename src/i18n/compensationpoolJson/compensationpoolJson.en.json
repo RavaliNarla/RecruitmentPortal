@@ -26,5 +26,7 @@
   "variable": "Variable",
   "joining_bonus": "Joining Bonus",
   "hike": "Hike",
-  "reg_no": "Reg No"
+  "reg_no": "Reg No",
+  "previous": "Prev",
+  "next": "Next"
 }

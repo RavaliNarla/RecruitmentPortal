@@ -42,6 +42,7 @@ export default function EducationModal({
   qualifications = [],
   specializations = [],
   certifications = [],
+  isIntermediateRequired = false,
 }) {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const [errors, setErrors] = useState({});
@@ -64,6 +65,12 @@ export default function EducationModal({
         : [createCertGroup()]
     );
   }, [show, initialData, mode]);
+  useEffect(() => {
+    console.log(
+      "EducationModal isIntermediateRequired:",
+      isIntermediateRequired
+    );
+  }, [isIntermediateRequired]);
 
   const getLabel = (list, id, key = "label") =>
     list.find((i) => i.id === id)?.[key] || "";
@@ -319,11 +326,29 @@ export default function EducationModal({
         a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
   };
+  // const filteredQualifications = qualifications
+  //   .filter((q) => q.name?.toLowerCase() !== "others")
+  //   .sort((a, b) =>
+  //     a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+  //   );
+
   const filteredQualifications = qualifications
     .filter((q) => q.name?.toLowerCase() !== "others")
-    .sort((a, b) =>
-      a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
-    );
+    .filter((q) => {
+      const name = q.name?.trim().toLowerCase();
+
+      if (isIntermediateRequired) {
+        return !(
+          name === "intermediate board" ||
+          name === "icse (+2)" ||
+          name === "cbse (+2)" ||
+          name.startsWith("diploma")
+        );
+      }
+
+      return true;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const handleClose = () => {
     setErrors({});

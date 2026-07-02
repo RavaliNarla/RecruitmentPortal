@@ -239,29 +239,30 @@ const currentLogo =
                   {getInitials(displayName)}
                 </div>
 
-                <span className="text-white fonnav">
-                  {displayName}
-                  <FontAwesomeIcon
-                    icon={showDropdown ? faChevronUp : faChevronDown}
-                    className="ms-1"
-                  />
-                </span>
+                <div className="d-flex flex-column">
+                  <div className="d-flex align-items-center">
+                    <span className="text-white fonnav">{displayName}</span>
+                    <FontAwesomeIcon
+                      icon={showDropdown ? faChevronUp : faChevronDown}
+                      className="ms-1 text-white"
+                    />
+                  </div>
+
+                  <small className="text-white">{formatRole(user?.role)}</small>
+                </div>
               </div>
 
               {showDropdown && (
                 <div
-                  className="position-absolute end-0 mt-2 bg-white border rounded shadow p-2"
-                  style={{ minWidth: "200px", zIndex: 1050 }}
+                  className="position-absolute end-0 mt-2 bg-white border rounded shadow"
+                  style={{ minWidth: "220px", zIndex: 1050 }}
                 >
-                  <p className="mb-1 fw-semibold">{displayName}</p>
-                  <p className="mb-2 text-muted small">
-                    {formatRole(user?.role)}
-                  </p>
                   <div
+                    className="px-3 py-2 text-danger"
                     style={{ cursor: "pointer" }}
-                    className="text-danger"
                     onClick={handleLogout}
                   >
+                    <i className="bi bi-box-arrow-right me-2"></i>
                     {t("logout")}
                   </div>
                 </div>

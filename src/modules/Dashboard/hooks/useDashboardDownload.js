@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import dashboardService from "../service/dashboardService";
 import { toast } from "react-toastify";
 
 const useDashboardDownload = () => {
   const [downloading, setDownloading] = useState(false);
-
+const { t } = useTranslation("dashboard");
   const downloadReport = async ({
     filters = {},
     extension,
@@ -59,7 +60,7 @@ const useDashboardDownload = () => {
 
       window.URL.revokeObjectURL(url);
 
-      toast.success("Downloaded successfully");
+      toast.success(t("download_success"));
     } catch (err) {
       console.error("DOWNLOAD ERROR =>", err);
 
@@ -67,7 +68,7 @@ const useDashboardDownload = () => {
         err?.response?.data?.data ||
           err?.response?.data?.message ||
           err?.message ||
-          "Download failed"
+           t("download_failed")
       );
     } finally {
       setDownloading(false);

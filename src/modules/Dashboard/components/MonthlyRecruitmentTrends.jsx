@@ -8,10 +8,13 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import { FiTrendingUp } from "react-icons/fi";
 import "../../../style/css/Dashboard/MonthlyRecruitmentTrends.css";
 
 const CustomTooltip = ({ active, payload, label }) => {
+  const { t } = useTranslation("dashboard");
+
   if (!active || !payload || !payload.length) {
     return null;
   }
@@ -41,6 +44,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const MonthlyRecruitmentTrends = ({ monthlyTrends = [] }) => {
+  const { t } = useTranslation("dashboard");
   return (
     <div className="monthly-trends-card mb-4">
       <div className="monthly-trends-header">
@@ -49,29 +53,30 @@ const MonthlyRecruitmentTrends = ({ monthlyTrends = [] }) => {
         </div>
 
         <div>
-          <h2>Monthly Recruitment Trends</h2>
-          <p>Jan - Dec 2024 performance overview</p>
+          <h2>{t("monthly_recruitment_trends")}</h2>
+
+          <p>{t("monthly_performance_overview")}</p>
         </div>
       </div>
       <div className="monthly-trends-legend">
         <div className="legend-item">
           <span className="legend-line" style={{ background: "#0D3B94" }} />
-          <span className="legend-text">Candidate Registrations</span>
+          <span className="legend-text">{t("candidate_registrations")}</span>
         </div>
 
         <div className="legend-item">
           <span className="legend-line" style={{ background: "#1482BE" }} />
-          <span className="legend-text">Interviews Completed</span>
+          <span className="legend-text">{t("interviews_completed")}</span>
         </div>
 
         <div className="legend-item">
           <span className="legend-line" style={{ background: "#D90429" }} />
-          <span className="legend-text">Requisitions Created</span>
+          <span className="legend-text">{t("requisitions_created")}</span>
         </div>
 
         <div className="legend-item">
           <span className="legend-line" style={{ background: "#0F9D58" }} />
-          <span className="legend-text">Offers Sent</span>
+          <span className="legend-text">{t("offers_sent")}</span>
         </div>
       </div>
 
@@ -94,7 +99,7 @@ const MonthlyRecruitmentTrends = ({ monthlyTrends = [] }) => {
             />
 
             <Line
-              name="Candidate Registrations"
+              name={t("candidate_registrations")}
               type="monotone"
               dataKey="registrations"
               stroke="#0D3B94"
@@ -114,7 +119,7 @@ const MonthlyRecruitmentTrends = ({ monthlyTrends = [] }) => {
             />
 
             <Line
-              name="Interviews Completed"
+              name={t("interviews_completed")}
               type="monotone"
               dataKey="interviews"
               stroke="#1482BE"
@@ -134,7 +139,7 @@ const MonthlyRecruitmentTrends = ({ monthlyTrends = [] }) => {
             />
 
             <Line
-              name="Requisitions Created"
+              name={t("requisitions_created")}
               type="monotone"
               dataKey="requisitions"
               stroke="#D90429"
@@ -154,7 +159,7 @@ const MonthlyRecruitmentTrends = ({ monthlyTrends = [] }) => {
             />
 
             <Line
-              name="Offers Sent"
+              name={t("offers_sent")}
               type="monotone"
               dataKey="offers"
               stroke="#0F9D58"

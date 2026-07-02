@@ -1,10 +1,13 @@
 import React from "react";
 import { FiUsers } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import "../../../style/css/Dashboard/CategoryWiseDistribution.css";
 
 const colorClasses = ["blue", "red", "green", "orange", "purple"];
 
 const CategoryWiseDistribution = ({ categories = [] }) => {
+
+  const { t } = useTranslation("dashboard");
   return (
     <div className="category-distribution-card mb-4">
       <div className="category-header">
@@ -13,14 +16,15 @@ const CategoryWiseDistribution = ({ categories = [] }) => {
         </div>
 
         <div>
-          <h2>Category Wise Distribution</h2>
-          <p>Vacancy distribution by category</p>
+          <h2>{t("category_wise_distribution")}</h2>
+
+<p>{t("vacancy_distribution_by_category")}</p>
         </div>
       </div>
 
       <div className="category-grid">
         {categories.length === 0 ? (
-          <div className="no-data">No Data Available</div>
+         <div className="no-data">{t("no_data_available")}</div>
         ) : (
           categories.map((item, index) => (
             <div
@@ -42,7 +46,9 @@ const CategoryWiseDistribution = ({ categories = [] }) => {
                 </div>
               </div>
 
-              <div className="category-details-hover">Vacancies</div>
+             <div className="category-details-hover">
+  {t("vacancies")}
+</div>
             </div>
           ))
         )}
