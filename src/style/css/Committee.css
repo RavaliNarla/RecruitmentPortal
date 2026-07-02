@@ -109,7 +109,7 @@
 }
 
 .assign-positions-page .assign-button {
-  background: linear-gradient(135deg, #f26522 0%, #e55a1b 100%);
+  background:var(--app-primary-color);
   color: #ffffff;
   border: none;
   padding: 12px 24px;
@@ -386,12 +386,12 @@
 }
 
 .action-pill.add {
-  background: #f26522;
+  background: var(--app-primary-color);
   color: #ffffff;
 }
 
 .action-pill.add:hover {
-  background: #f26522;
+  background: var(--app-secondary-color);
 }
 
 .assign-positions-page .action-pill.remove {
@@ -486,7 +486,7 @@
   white-space: pre-line;
 }
 .header-title {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1.25rem;
   font-weight: 500;
 }
@@ -560,7 +560,7 @@
   height: 22px;
 }
 .modaleditcustom .modal-title {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1rem;
   font-weight: 500;
 }
@@ -583,3 +583,4 @@
   display: flex;
   justify-content: flex-end;
 }
+

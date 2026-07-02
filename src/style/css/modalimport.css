@@ -13,7 +13,7 @@
   font-size: 0.75em;
 }
 .bluecol {
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 .modalimport .modal-footer {
   border-top: none;
@@ -28,3 +28,4 @@
   height: auto;
   max-height: 185px;
 }
+

@@ -6,7 +6,7 @@
 
 .page-title {
   font-weight: 600;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1em;
 }
 
@@ -30,7 +30,7 @@
 .search-boxpost input {
   height: 42px;
   font-size: 0.875em;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 400;
 }
 
@@ -88,7 +88,7 @@
 
 .selectall {
   font-size: 0.875em;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
   gap: 1em;
 }
@@ -198,7 +198,7 @@
 /* .job-postings-page .req-code {
 	font-weight: 500;
 	margin: 12px 0;
-	color: #162B75 !important;
+	color: var(--app-secondary-color) !important;
 	font-size: 1em;
 	width: 100%;
 	white-space: wrap;
@@ -210,7 +210,7 @@
 .job-postings-page .req-code {
   font-weight: 500;
   margin: 12px 0;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
   font-size: 1em;
 
   display: block; /* important */
@@ -339,7 +339,7 @@
 .position-title {
   font-size: 1em;
   flex: 1;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
 }
 
@@ -508,13 +508,13 @@
 }
 
 .page-item.active .page-link {
-  background-color: #162b75;
-  border-color: #162b75;
+  background-color: var(--app-secondary-color);
+  border-color: var(--app-secondary-color);
   color: white;
 }
 
 .page-link:hover {
-  background-color: #162b75;
+  background-color: var(--app-secondary-color);
   color: #fff;
 }
 
@@ -555,11 +555,11 @@
 }
 
 .job-postings-page .pagesize {
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .subbtn:disabled {
-  background-color: #42579f !important;
+  background-color: var(--app-primary-color) !important;
   opacity: 0.6 !important;
   cursor: not-allowed;
 }
@@ -630,3 +630,4 @@
   background: #6679bc;
   /* border-radius: 10px 10px 0 0; */
 }
+

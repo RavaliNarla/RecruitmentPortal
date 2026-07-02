@@ -7,7 +7,7 @@
 
 .extensions-page .page-title {
   font-weight: 600;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1em;
 }
 
@@ -137,11 +137,11 @@
 }
 
 .extensions-page .filter-select__control:hover {
-  border-color: #162b75 !important;
+  border-color: var(--app-secondary-color) !important;
 }
 
 .extensions-page .filter-select__control--is-focused {
-  border-color: #162b75 !important;
+  border-color: var(--app-secondary-color) !important;
   box-shadow: 0 0 0 2px rgba(22, 43, 117, 0.1) !important;
 }
 
@@ -184,7 +184,7 @@
 }
 
 .extensions-page .filter-select__option--is-selected {
-  background-color: #162b75 !important;
+  background-color: var(--app-secondary-color) !important;
   color: #ffffff !important;
 }
 
@@ -209,7 +209,7 @@
 
 /*  Select All label color */
 .extensions-page .form-check-label {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
   font-size: 0.875em;
   cursor: pointer;
@@ -402,7 +402,7 @@
   padding-left: 36px;
   font-size: 0.8125rem;
   border-radius: 8px;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 400;
 }
 
@@ -459,3 +459,4 @@
   width: 18px;
   height: 18px;
 }
+

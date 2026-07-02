@@ -686,7 +686,7 @@
 .del-title {
   font-size: 15px;
   font-weight: 500;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .del-close {
@@ -701,7 +701,7 @@
 .del-message {
   font-size: 14px;
   font-weight: 400;
-  color: #162b75;
+  color: var(--app-secondary-color);
   margin-bottom: 22px;
 }
 

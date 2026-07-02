@@ -63,7 +63,7 @@
   border: 1px solid #d9d9d9;
   border-radius: 6px;
   background-color: #f0f0f0;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
@@ -395,7 +395,7 @@
 }
 
 .nav-arrow:hover {
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 /* Date pill remains same */
@@ -407,7 +407,7 @@
   background: #ffffff;
   border-radius: 10px;
   font-weight: 500;
-  color: #ff6a00;
+  color: var(--app-primary-color);
   cursor: pointer;
 }
 
@@ -745,3 +745,4 @@
     border: 1px solid #b7dfbd;
   }
 }
+

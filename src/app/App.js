@@ -49,6 +49,10 @@ function AppWrapper() {
       organizationTheme?.focusColor || "rgba(255, 106, 0, 0.12)"
     );
   }, [organizationTheme]);
+  useEffect(() => {
+  document.title =
+    organizationTheme?.organizationName || "Recruitment Tracking System";
+}, [organizationTheme]);
 
   return (
     <>

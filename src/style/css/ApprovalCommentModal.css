@@ -62,7 +62,7 @@
 
 /* Approve button */
 .approval-modal .btn-approve {
-  background-color: #28a745; /* Green */
+  background-color: var(--app-primary-color);
   border: none;
   color: #fff;
   border-radius: 8px;
@@ -71,12 +71,13 @@
 }
 
 .approval-modal .btn-approve:hover {
-  background-color: #218838;
+  background-color: var(--app-primary-color);
+  filter: brightness(0.92);
 }
 
 /* Reject button */
 .approval-modal .btn-reject {
-  background-color: #f37021; /* Bank orange */
+  background-color: var(--app-secondary-color);
   border: none;
   color: #fff;
   border-radius: 8px;
@@ -85,5 +86,6 @@
 }
 
 .approval-modal .btn-reject:hover {
-  background-color: #e0621b;
+  background-color: var(--app-secondary-color);
+  filter: brightness(0.92);
 }

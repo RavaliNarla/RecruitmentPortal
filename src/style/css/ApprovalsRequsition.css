@@ -7,7 +7,7 @@
 
 .requisition-page .page-title {
   font-weight: 600;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1em;
 }
 
@@ -38,7 +38,7 @@
 .requisition-page .search-boxpost input {
   height: 42px;
   font-size: 0.875em;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 400;
 }
 
@@ -61,7 +61,7 @@
   cursor: pointer;
   font-weight: 400;
   font-size: 0.875em;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 /* Remove default dropdown arrow in IE */
@@ -98,7 +98,7 @@
 
 .requisition-page .selectall {
   font-size: 0.875em;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
   gap: 1em;
 }
@@ -207,7 +207,7 @@
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.625em;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 
 .requisition-page .icon-22 {
@@ -218,7 +218,7 @@
 .requisition-page .req-code {
   font-weight: 500;
   margin: 12px 0;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
   font-size: 1em;
 
   display: block;
@@ -342,7 +342,7 @@
 .requisition-page .position-title {
   font-size: 1em;
   flex: 1;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
 }
 
@@ -492,13 +492,13 @@
 }
 
 .requisition-page .page-item.active .page-link {
-  background-color: #162b75;
-  border-color: #162b75;
+  background-color: var(--app-secondary-color);
+  border-color: var(--app-secondary-color);
   color: white;
 }
 
 .requisition-page .page-link:hover {
-  background-color: #162b75;
+  background-color: var(--app-secondary-color);
   color: #fff;
 }
 
@@ -539,7 +539,7 @@
 }
 
 .requisition-page.pagesize {
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .requisition-page .subbtn:disabled {
@@ -626,7 +626,7 @@
 .requisition-page .filters-row select {
   height: 42px;
   font-size: 0.875em;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 400;
 }
 
@@ -635,3 +635,4 @@
   margin: 30px;
   padding-bottom: 30px;
 }
+

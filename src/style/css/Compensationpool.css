@@ -63,8 +63,9 @@
 
 /*  Save button (orange like screenshot) */
 .btn-warning {
-  background-color: #f36f21 !important;
+  background-color: var(--app-primary-color) !important;
   border: none !important;
+  color: #fff !important;
 }
 
 /*  Cancel button */
@@ -95,7 +96,7 @@
 }
 
 .neg-orange {
-  background-color: #f36f21 !important;
+  background-color: var(--app-primary-color) !important;
   color: #fff !important;
   display: inline-block;
 }
@@ -108,7 +109,8 @@
 }
 
 .orange-bg {
-  background-color: #f36f21;
+  background-color: var(--app-primary-color);
+  color: #fff;
 }
 
 /* HEADER FIX */
@@ -195,8 +197,9 @@
 
 /* SAVE BUTTON */
 .custom-modal .btn-save {
-  background-color: #f97316;
+  background-color: var(--app-primary-color);
   border: none;
   border-radius: 8px;
   padding: 6px 18px;
+  color: #fff;
 }

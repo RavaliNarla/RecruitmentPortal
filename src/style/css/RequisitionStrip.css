@@ -35,18 +35,18 @@
   display: flex;
   gap: 18px;
   font-size: 12px;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .req-dates i {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 12px;
 }
 
 .req-title {
   font-size: 14px;
   font-weight: 600;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 /* RIGHT SIDE */
@@ -57,8 +57,8 @@
 
 .btn-view-position {
   background: #ffffff;
-  color: #162b75;
-  border: 1px solid #162b75;
+  color: var(--app-secondary-color);
+  border: 1px solid var(--app-secondary-color);
   border-radius: 6px;
   padding: 6px 14px;
   font-size: 13px;
@@ -67,7 +67,7 @@
 }
 
 .btn-view-position:hover {
-  background: #162b75;
+  background: var(--app-secondary-color);
   color: #ffffff;
 }
 
@@ -136,3 +136,4 @@
 .req-position-readonly .req-position-close {
   display: none !important;
 }
+

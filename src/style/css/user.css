@@ -23,13 +23,13 @@
 }
 
 .user-actions .fw-semibold {
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 .page-link:focus {
   box-shadow: none;
 }
 .user-header h2 {
-  color: #162b75;
+  color: var(--app-secondary-color);
   margin: 0;
   font-weight: 500;
   font-size: 1em;
@@ -254,7 +254,7 @@
 }
 
 .modal-header-custom .modal-title {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
   font-size: 1em;
   margin: 0;
@@ -766,7 +766,7 @@ body.modal-open {
 .btnfont {
   font-size: 1.1em;
   font-weight: 500;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 
 .btnupload {
@@ -955,3 +955,4 @@ body.modal-open {
   color: #6e6e6e;
   font-weight: 500;
 }
+

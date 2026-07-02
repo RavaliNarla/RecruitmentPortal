@@ -12,7 +12,7 @@
   justify-content: center;
   gap: 6px;
 
-  background-color: #f37021; /* 🔥 orange */
+  background-color: var(--app-primary-color); /* dynamic primary */
   border: none;
   color: #fff;
 
@@ -21,7 +21,8 @@
 }
 
 .add-panels-btn:hover {
-  background-color: #e45f12;
+  background-color: var(--app-primary-color);
+  filter: brightness(0.92);
 }
 
 .add-panels-btn:active {

@@ -21,7 +21,7 @@
 
 .create-requisition-page .section-title h6 {
   margin: 0;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
   font-size: 1.125em;
 }
@@ -108,3 +108,4 @@
   font-size: 0.785em;
   color: #828282 !important;
 }
+

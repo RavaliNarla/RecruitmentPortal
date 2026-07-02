@@ -3,11 +3,11 @@
 }
 
 .blue-color {
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 
 .orange-color {
-  color: #f36f21 !important;
+  color: var(--app-primary-color) !important;
 }
 
 .react-select__control {
@@ -57,7 +57,7 @@
 .schedule-approval-modal .modal-title {
   font-size: 18px;
   font-weight: 600;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .schedule-approval-modal .modal-body {
@@ -99,17 +99,17 @@
 }
 
 .orange-bg {
-  background-color: #f36f21 !important;
+  background-color: var(--app-primary-color) !important;
   opacity: 1 !important;
 }
 
 .orange-border {
-  border: 1px solid #f36f21 !important;
+  border: 1px solid var(--app-primary-color) !important;
 }
 
 .orange-bottom-border {
-  border: 1px solid rgb(22, 43, 117) !important;
-  background: rgb(22, 43, 117) !important;
+  border: 1px solid var(--app-primary-color) !important;
+  background: var(--app-primary-color) !important;
   color: #fff !important;
 }
 
@@ -242,7 +242,7 @@ candidate-screening-tabs-header ul {
 }
 
 .rank-btn {
-  background-color: #f26522;
+  background-color: var(--app-primary-color);
   color: #fff;
   border: none;
   padding: 8px 12px;
@@ -519,7 +519,7 @@ candidate-screening-tabs-header ul {
 }
 .selected-count-chip {
   background: #eef3ff;
-  color: #162b75;
+  color: var(--app-secondary-color);
   /* border: 1px solid #C9D7FF; */
   border-radius: 20px;
   padding: 6px 12px;

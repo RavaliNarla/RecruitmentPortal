@@ -62,6 +62,6 @@
 }
 .dashboard-page .fs-17 {
 	font-weight: 600 !important;
-	color: #162b75;
+	color: var(--app-secondary-color);
 	font-size: 1em;
 }

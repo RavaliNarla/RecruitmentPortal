@@ -73,12 +73,13 @@
 /* ================= BUTTON ================= */
 
 .add-config-btn {
-  background: #f97316 !important;
+  background: var(--app-primary-color) !important;
   border: none !important;
   border-radius: 10px !important;
   height: 38px;
   font-size: 14px;
   font-weight: 500;
+  color: #fff;
 }
 
 /* ================= TABLE ================= */
@@ -177,9 +178,9 @@
 }
 
 .pagination-btn.active {
-  background: #f97316;
+  background: var(--app-primary-color);
   color: #fff;
-  border-color: #f97316;
+  border-color: var(--app-primary-color);
 }
 
 /* ================= STRIP ================= */
@@ -200,15 +201,17 @@
 }
 
 .orange-bg {
-  background: #f97316 !important;
+  background: var(--app-primary-color) !important;
   border: none !important;
   border-radius: 10px !important;
   height: 38px;
   font-weight: 500;
+  color: #fff;
 }
 
 .orange-bg:hover {
-  background: #ea580c !important;
+  background: var(--app-primary-color) !important;
+  filter: brightness(0.92);
 }
 
 .cutoff-custom-table {
@@ -285,9 +288,9 @@
 }
 
 .pagination-box.active {
-  background: #ff6b00;
+  background: var(--app-primary-color);
   color: white;
-  border-color: #ff6b00;
+  border-color: var(--app-primary-color);
 }
 
 .weightage-column {
@@ -590,8 +593,8 @@
 }
 
 .weightage-chip .form-check-input:checked {
-  background-color: #f97316;
-  border-color: #f97316;
+  background-color: var(--app-primary-color);
+  border-color: var(--app-primary-color);
 }
 
 .weightage-input-wrapper {
@@ -727,8 +730,14 @@
 }
 
 .orange-btn {
-  background: #f97316;
+  background: var(--app-primary-color);
   border: none;
+  color: #fff;
+}
+
+.orange-btn:hover {
+  background: var(--app-primary-color);
+  filter: brightness(0.92);
 }
 
 /* =========================================
@@ -914,8 +923,8 @@
 }
 
 .cutoff-type-box .form-check-input:checked {
-  background-color: #f97316;
-  border-color: #f97316;
+  background-color: var(--app-primary-color);
+  border-color: var(--app-primary-color);
 }
 
 .statewise-info-box {
@@ -991,12 +1000,14 @@
 }
 
 .orange-btn {
-  background: #f97316 !important;
+  background: var(--app-primary-color) !important;
   border: none !important;
+  color: #fff;
 }
 
 .orange-btn:hover {
-  background: #ea580c !important;
+  background: var(--app-primary-color) !important;
+  filter: brightness(0.92);
 }
 
 .delete-btn {
@@ -1064,21 +1075,23 @@
   min-width: 100px;
   border-radius: 14px !important;
 
-  background: linear-gradient(180deg, #ff8a1f 0%, #f97316 100%) !important;
+  background: var(--app-primary-color) !important;
 
   border: none !important;
+  color: #fff;
 
   font-size: 15px !important;
   font-weight: 700 !important;
 
-  box-shadow: 0 8px 18px rgba(249, 115, 22, 0.28);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 
   transition: all 0.2s ease;
 }
 
 .generate-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(249, 115, 22, 0.32);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+  filter: brightness(0.95);
 }
 
 .section-header-content {

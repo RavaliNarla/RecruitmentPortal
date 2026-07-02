@@ -273,7 +273,7 @@
 }
 
 #msg-card-1 .msg-btn-accept {
-  background-color: #20ad4f;
+  background-color: var(--app-primary-color);
   color: #fff;
   font-size: 0.875rem !important;
   border: none;
@@ -282,13 +282,12 @@
 }
 
 #msg-card-1 .msg-btn-reject {
-  /* background-color: #f5f7fa; */
-
   font-size: 0.875rem !important;
-  border: 1px solid #dcdfe3;
+  border: 1px solid var(--app-secondary-color);
   padding: 6px 12px;
   border-radius: 6px;
-  color: #fff;
+  color: var(--app-secondary-color);
+  background: transparent;
 }
 
 /* SUBTITLE */
@@ -415,9 +414,9 @@
 }
 
 .pagination-btn.active {
-  background: #ff6b2c;
+  background: var(--app-primary-color);
   color: #fff;
-  border-color: #ff6b2c;
+  border-color: var(--app-primary-color);
 }
 
 .pagination-btn:disabled {
@@ -445,8 +444,8 @@
 }
 
 .pagination .active .page-link {
-  background-color: #ff6b2c;
-  border-color: #ff6b2c;
+  background-color: var(--app-primary-color);
+  border-color: var(--app-primary-color);
 }
 
 .msg-card {
@@ -575,7 +574,7 @@
 /* BUTTON */
 #msg-card-1 .submit-btn {
   height: 34px;
-  background-color: #ff6b2c;
+  background-color: var(--app-primary-color);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -607,7 +606,7 @@
 } */
 
 #msg-card-1 .submit-btn {
-  background-color: #ff6b2c;
+  background-color: var(--app-primary-color);
   color: #fff;
   font-size: 0.875rem !important;
   border: none;

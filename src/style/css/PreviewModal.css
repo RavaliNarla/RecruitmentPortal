@@ -85,7 +85,7 @@
 }
 
 .bob-header-title {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1rem;
   font-weight: 500;
 }
@@ -212,7 +212,7 @@
 .bob-accordion .accordion-header button {
   background: #f8f9fa !important;
   padding: 10px 14px;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 0.9rem;
   font-weight: 500;
   border: none;
@@ -220,7 +220,7 @@
 }
 
 .bob-accordion .accordion-header button:not(.collapsed) {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -824,19 +824,19 @@ select.form-control {
 }
 
 .date-text {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 14px;
 }
 
 .job-title {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1rem;
   font-weight: 500;
 }
 
 /* ===== OK BUTTON ===== */
 .ok-btn {
-  background-color: #f57c00;
+  background-color:var(--app-primary-color);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -846,7 +846,7 @@ select.form-control {
 }
 
 .ok-btn:hover {
-  background-color: #e56f00;
+  background-color: var(--app-primary-color);
 }
 
 /* ===== REMOVE UNDERLINES COMPLETELY ===== */
@@ -1060,3 +1060,4 @@ select.form-control {
   object-fit: contain; /* 🔥 IMPORTANT: prevents cutting */
   display: block;
 }
+

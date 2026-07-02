@@ -421,7 +421,7 @@
 
 .approved-header-position {
     margin-top: 6px;
-    color: #162b75;
+    color: var(--app-secondary-color);
     font-size: 15px;
     font-weight: 500;
     text-decoration: underline;

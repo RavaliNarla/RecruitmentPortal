@@ -3,9 +3,9 @@
   min-height: 100vh;
   font-family: "Segoe UI", sans-serif;
   align-items: stretch;
-  --login-primary-color: #ff6a00;
-  --login-secondary-color: #162b75;
-  --login-link-color: #ff6a00;
+  --login-primary-color: var(--app-primary-color);
+  --login-secondary-color: var(--app-secondary-color);
+  --login-link-color: var(--app-primary-color);
   --login-focus-color: rgba(255, 106, 0, 0.12);
 }
 
@@ -183,3 +183,4 @@
     font-size: 16px;
   }
 }
+

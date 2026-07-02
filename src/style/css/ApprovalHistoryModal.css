@@ -19,7 +19,7 @@
 .approval-history-title {
   font-size: 1.05em;
   font-weight: 500;
-  color: #162b75;
+  color: var(--app-secondary-color);
   margin-bottom: 6px;
 }
 
@@ -134,3 +134,4 @@
     max-height: 260px;
   }
 }
+

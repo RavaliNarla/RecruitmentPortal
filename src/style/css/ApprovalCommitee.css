@@ -8,7 +8,7 @@
 
 .committee-page .page-title {
   font-weight: 600;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1em;
 }
 .committee-page .filter-select__input-container {
@@ -450,7 +450,7 @@
   padding-left: 36px;
   font-size: 0.8125rem;
   border-radius: 8px;
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 400;
 }
 
@@ -480,11 +480,11 @@
 }
 
 .committee-page .filter-select__control:hover {
-  border-color: #162b75 !important;
+  border-color: var(--app-secondary-color) !important;
 }
 
 .committee-page .filter-select__control--is-focused {
-  border-color: #162b75 !important;
+  border-color: var(--app-secondary-color) !important;
   box-shadow: 0 0 0 2px rgba(22, 43, 117, 0.1) !important;
 }
 
@@ -527,7 +527,7 @@
 }
 
 .committee-page .filter-select__option--is-selected {
-  background-color: #162b75 !important;
+  background-color: var(--app-secondary-color) !important;
   color: #ffffff !important;
 }
 
@@ -561,19 +561,19 @@
 
 .committee-page .selectall {
   font-size: 0.875em;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
   font-weight: 500;
   gap: 1em;
 }
 
 .committee-page .selectall .form-check-label {
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
   margin-top: 5px;
   margin-left: -5px;
 }
 
 .committee-page .select-checkbox .form-check-label {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-weight: 500;
   font-size: 0.875em;
   cursor: pointer;
@@ -645,14 +645,14 @@
 }
 
 .committee-page .page-item.active .page-link {
-  background-color: #162b75;
-  border-color: #162b75;
+  background-color: var(--app-secondary-color);
+  border-color: var(--app-secondary-color);
   color: #ffffff;
 }
 
 .committee-page .pagesize {
   font-size: 0.875rem;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 /* ================= STATUS BADGE ================= */
@@ -726,3 +726,4 @@
   margin: 30px;
   padding-bottom: 30px;
 }
+

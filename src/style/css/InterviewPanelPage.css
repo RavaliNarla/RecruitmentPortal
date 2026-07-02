@@ -17,7 +17,7 @@
 }
 
 .interview-panel-container .panel-header h2 {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1.25rem;
   font-weight: 500;
 }
@@ -266,7 +266,7 @@
 
 .interview-panel-container .action-btn:hover {
   background: #f0f0f0;
-  color: #ff6a00;
+  color: var(--app-primary-color);
 }
 
 /* Buttons */
@@ -290,7 +290,7 @@
 }
 
 .interview-panel-container .btn-primary {
-  background: #ff6a00;
+  background: var(--app-primary-color);
   color: white;
   border: none;
 }
@@ -327,9 +327,9 @@
 }
 
 .interview-panel-container .pagination button.active {
-  background: #ff6a00;
+  background: var(--app-primary-color);
   color: white;
-  border-color: #ff6a00;
+  border-color: var(--app-primary-color);
 }
 
 /* Form Actions */
@@ -492,29 +492,29 @@
 }
 
 .header-title {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 1.25rem;
   font-weight: 500;
 }
 
 /* Bulk Import Button Styling */
 .bulk-import-btn {
-  background-color: #ff6a00 !important;
-  border-color: #ff6a00 !important;
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
   color: white !important;
   transition: all 0.2s ease-in-out;
 }
 
 .bulk-import-btn:hover {
-  background-color: #ff6a00 !important;
-  border-color: #ff6a00 !important;
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
   color: white !important;
   transform: translateY(-1px);
 }
 
 .bulk-import-btn:active {
-  background-color: #ff6a00 !important;
-  border-color: #ff6a00 !important;
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
   transform: translateY(0);
 }
 
@@ -561,7 +561,7 @@
   font-size: 16px;
   font-weight: 600;
   margin: 0;
-  color: #ff6a00;
+  color: var(--app-primary-color);
 }
 
 .guideline-section {
@@ -572,7 +572,7 @@
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 
 .main-list {
@@ -601,3 +601,4 @@ hr {
   border: none;
   border-top: 1px solid #ddd;
 }
+

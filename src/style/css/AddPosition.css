@@ -34,16 +34,16 @@
 }
 
 .imprcls {
-  color: #162b75;
+  color: var(--app-secondary-color);
   font-size: 0.875em;
-  border: 1px solid #162b75;
+  border: 1px solid var(--app-secondary-color);
   background-color: #fff;
 }
 
 .imprcls:hover {
   background-color: none !important;
-  border: 1px solid #162b75;
-  color: #162b75;
+  border: 1px solid var(--app-secondary-color);
+  color: var(--app-secondary-color);
 }
 
 .icon-14 {
@@ -62,7 +62,7 @@
   border-radius: 4px;
   font-size: 0.625em;
   font-weight: 500;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 
 .req-code {
@@ -248,7 +248,7 @@
 
 .req_top-bar .req-code {
   font-size: 1rem;
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
   margin-top: 0.25rem;
 }
 
@@ -332,7 +332,7 @@
 
 .section-title h6 {
   font-size: 1.125em;
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .add-position-page .form-label {
@@ -349,7 +349,7 @@
 }
 
 .upload-indent-box .textclick {
-  color: #162b75;
+  color: var(--app-secondary-color);
 }
 
 .upload-indent-box .support {
@@ -399,7 +399,7 @@
 }
 
 .genfonts .text-primary {
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
   font-size: 0.875em;
   font-weight: 500;
 }
@@ -422,13 +422,13 @@
 }
 
 .addstatefont {
-  background-color: #162b75;
+  background-color: var(--app-secondary-color);
   font-weight: 600;
   font-size: 0.875em;
 }
 
 .addstatefont:hover {
-  background-color: #162b75 !important;
+  background-color: var(--app-secondary-color) !important;
   font-weight: 600;
   font-size: 0.875em;
 }
@@ -618,7 +618,7 @@
   margin-top: 6px;
 }
 .selectindent .bluecol {
-  color: #162b75 !important;
+  color: var(--app-secondary-color) !important;
 }
 #hide-school-degrees{
   width: 15px;
