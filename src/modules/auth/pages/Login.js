@@ -3,8 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import "../../../style/css/Login.css";
 import pana from "../../../assets/pana.png";
-import BobLogo from "../../../assets/bob-logo1.jpg";
-import PnbLogo from "../../../assets/pnb-logo.png";
+
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../services/msalConfig";
 import loginOrganizations from "../config/loginOrganizations.json";
@@ -46,12 +45,11 @@ const Login = () => {
     "--login-link-color": organizationConfig.linkColor,
     "--login-focus-color": organizationConfig.focusColor,
   };
-const organizationLogos = {
-  bob: BobLogo,
-  pnb: PnbLogo,
-};
+
 const logo =
-  organizationLogos[organizationConfig.logo] || BobLogo;
+  organizationConfig.logo.startsWith("data:")
+    ? organizationConfig.logo
+    : `data:image/png;base64,${organizationConfig.logo}`;
   useEffect(() => {
     let isActive = true;
 

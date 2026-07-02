@@ -19,8 +19,7 @@ import {
   getOrganizationPath,
   getSavedLoginOrganization,
 } from "../../modules/auth/services/organizationContextService";
-import BobLogo from "../../assets/bob-logo1.jpg";
-import PnbLogo from "../../assets/pnb-logo.png";
+
 const Header = () => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
@@ -32,15 +31,14 @@ const Header = () => {
   /* ===================== USER FROM REDUX ===================== */
   const userSlice = useSelector((state) => state.user);
   const organizationTheme = useSelector(
-  (state) => state.user.organizationTheme
-);
-const organizationLogos = {
-  "Bank of Baroda": BobLogo,
-  "Punjab National Bank": PnbLogo,
-};
+    (state) => state.user.organizationTheme
+  );
 
-const currentLogo =
-  organizationLogos[organizationTheme?.organizationName] || BobLogo;
+  const currentLogo = organizationTheme?.logo
+    ? organizationTheme.logo.startsWith("data:")
+      ? organizationTheme.logo
+      : `data:image/png;base64,${organizationTheme.logo}`
+    : logo;
   const user = userSlice?.user;
 
   /* ===================== USER DROPDOWN STATE ===================== */
@@ -162,8 +160,9 @@ const currentLogo =
           <div className="d-flex align-items-center">
             <Image
               src={currentLogo}
-  alt={organizationTheme?.logoAlt}
+              alt={organizationTheme?.logoAlt || "Logo"}
               width={155}
+              height={57}
               className="me-2 imgbob"
             />
           </div>
