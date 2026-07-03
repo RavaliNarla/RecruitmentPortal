@@ -61,6 +61,17 @@ const CandidatePreviewPage = ({ onHide }) => {
   const positionIds = state?.positionIds || [];
   const positionss = state.position;
 
+  const backRequisitionId =
+    state?.requisitionId || state?.requisition?.id || state?.requisition?.requisitionId;
+  const backPositionIds =
+    Array.isArray(state?.positionIds) && state.positionIds.length > 0
+      ? state.positionIds
+      : Array.isArray(state?.position)
+      ? state.position.map((p) => p.positionId).filter(Boolean)
+      : state.position?.positionId
+      ? [state.position.positionId]
+      : [];
+
   const applicationId = isZonalHr
     ? state?.applicationId
     : (state?.applicationId ?? state?.candidate?.id);
@@ -139,23 +150,31 @@ const CandidatePreviewPage = ({ onHide }) => {
       />
 
       {/* Header */}
-      {isRecruiter ||
+      {isFromInterview ? (
+        <HeaderWithBackss
+          title={t("candidateWorkflow:candidate_profile")}
+          subtitle={t("candidateWorkflow:view_candidate_application_status")}
+        />
+      ) : isRecruiter ||
       privileges?.["Candidate Pool"] ||
       privileges?.["Compensation Pool"] ? (
         <HeaderWithBack
           title={t("candidateWorkflow:candidate_screening")}
           subtitle={t("candidateWorkflow:manage_schedule_interviews")}
           onBack={() => {
-            navigate(getOrganizationPath("/candidate-verification", orgSlug), {
+            navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
               state: {
                 requisition: state.requisition,
                 position: state.position,
-                preloadedCandidates: state.candidates,
-                selectedDate: state,
+                requisitionId: backRequisitionId,
+                positionIds: backPositionIds,
+                preloadedCandidates:
+                  state.preloadedCandidates || state.candidates || [],
+                selectedDate: state.selectedDate,
                 page: state.page,
                 pageSize: state.pageSize,
                 filters: state.filters,
-                   activeTab: state.activeTab,
+                activeTab: state.activeTab,
               },
             });
           }}
@@ -175,7 +194,9 @@ const CandidatePreviewPage = ({ onHide }) => {
               state: {
                 requisition,
                 position,
-                preloadedCandidates: state.candidates || [],
+                requisitionId: backRequisitionId,
+                positionIds: backPositionIds,
+                preloadedCandidates: state.preloadedCandidates || state.candidates || [],
                 selectedDate,
                 page: state.page,
                 pageSize: state.pageSize,
@@ -195,6 +216,8 @@ const CandidatePreviewPage = ({ onHide }) => {
               state: {
                 requisition,
                 position,
+                requisitionId: backRequisitionId,
+                positionIds: backPositionIds,
                 preloadedCandidates:
                   state.preloadedCandidates || state.candidates || [],
                 selectedDate,

@@ -522,14 +522,14 @@
 .import-btn:active,
 .import-btn:hover,
 .import-btn:focus-visible {
-  background-color: #f26522 !important;
-  border-color: #f26522 !important;
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
   box-shadow: none !important;
   color: #fff !important;
 }
 .import-btn {
-  background-color: #f26522 !important;
-  border-color: #f26522 !important;
+  background-color: var(--app-primary-color) !important;
+  border-color: var(--app-primary-color) !important;
   color: #fff !important;
 }
 .file-name {

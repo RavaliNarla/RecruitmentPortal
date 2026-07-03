@@ -21,11 +21,31 @@ const HeaderWithBackss = ({ title, subtitle }) => {
     const payload = {
       requisition: state.requisition,
       position: state.position,
+      requisitionId: state.requisitionId,
+      positionIds:
+        Array.isArray(state.positionIds) && state.positionIds.length > 0
+          ? state.positionIds
+          : Array.isArray(state.position)
+          ? state.position.map((p) => p.positionId)
+          : state.position?.positionId
+          ? [state.position.positionId]
+          : [],
+      activeTab: state.activeTab,
       preloadedCandidates: state.preloadedCandidates || state.candidates || [],
       selectedDate: state.selectedDate,
       page: state.page,
       pageSize: state.pageSize,
     };
+
+    if (state.from) {
+      navigate(getOrganizationPath(state.from, orgSlug), {
+        state: {
+          ...payload,
+          from: state.from,
+        },
+      });
+      return;
+    }
 
     if (privileges?.Interview) {
       navigate(getOrganizationPath("/candidate-interviewer", orgSlug), {
