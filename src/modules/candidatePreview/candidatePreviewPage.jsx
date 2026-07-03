@@ -8,17 +8,19 @@ import masterApiService from "../master/services/masterApiService";
 import candidateWorkflowServices from "../candidatePreview/services/CandidateWorkflowServices";
 import { mapCandidateToPreview } from "../candidatePreview/mappers/candidatePreviewMapper";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import HeaderWithBack from "../../../src/shared/components/HeaderWithBack";
 import HeaderWithBacks from "../../../src/shared/components/headerwithbacks";
 import HeaderWithBackss from "../../../src/shared/components/headerwithbackss";
 import { useSelector } from "react-redux";
+import { getOrganizationPath } from "../auth/services/organizationContextService";
 import { useTranslation } from "react-i18next";
 
 const CandidatePreviewPage = ({ onHide }) => {
   const { t } = useTranslation(["candidateWorkflow", "common"]);
   const location = useLocation();
   const navigate = useNavigate();
+  const { orgSlug } = useParams();
 
   //  DEFINE STATE FIRST
   const state = location.state || {};
@@ -144,7 +146,7 @@ const CandidatePreviewPage = ({ onHide }) => {
           title={t("candidateWorkflow:candidate_screening")}
           subtitle={t("candidateWorkflow:manage_schedule_interviews")}
           onBack={() => {
-            navigate("/candidate-verification", {
+            navigate(getOrganizationPath("/candidate-verification", orgSlug), {
               state: {
                 requisition: state.requisition,
                 position: state.position,
@@ -169,7 +171,7 @@ const CandidatePreviewPage = ({ onHide }) => {
           onBack={() => {
             sessionStorage.setItem("fromPreviewBack", "true");
 
-            navigate("/candidate-verification", {
+            navigate(getOrganizationPath("/candidate-verification", orgSlug), {
               state: {
                 requisition,
                 position,
@@ -189,7 +191,7 @@ const CandidatePreviewPage = ({ onHide }) => {
           onBack={() => {
             sessionStorage.setItem("fromPreviewBack", "true");
 
-            navigate("/candidate-interviewer", {
+            navigate(getOrganizationPath("/candidate-interviewer", orgSlug), {
               state: {
                 requisition,
                 position,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { getOrganizationPath } from "../auth/services/organizationContextService";
 
 import HeaderWithBack from "../../shared/components/HeaderWithBack";
 
@@ -17,6 +18,7 @@ import InterviewCentreConfirmModal from "../interviews/components/InterviewCentr
 import ScheduleErrorModal from "../interviews/components/ScheduleErrorModal";
 const ScheduleInterviews = () => {
   const navigate = useNavigate();
+  const { orgSlug } = useParams();
 
   const [scheduledCount, setScheduledCount] = useState(0);
   const [showReadyBar, setShowReadyBar] = useState(false);
@@ -262,7 +264,7 @@ const [isScheduling, setIsScheduling] = useState(false);
         }
         activeTab={sourceTab}
         onBack={() => {
-          navigate("/candidate-workflow", {
+          navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
             state: {
               requisitionId: state.requisitionId,
               positionIds: Array.isArray(state.positionId)
@@ -382,7 +384,7 @@ const [isScheduling, setIsScheduling] = useState(false);
 
                   toast.success("Interview scheduled successfully");
 
-                  navigate("/candidate-workflow", {
+                  navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
                     state: {
                       requisitionId: selectedRequisitionId,
                       positionIds: Array.isArray(selectedPositionId)

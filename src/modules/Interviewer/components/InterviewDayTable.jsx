@@ -1,10 +1,10 @@
 import React from "react";
 import { Person, FileText } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams  } from "react-router-dom";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 const InterviewDayTable = ({
   rows = [],
   totalElements = 0,
@@ -26,7 +26,7 @@ const InterviewDayTable = ({
   const { t } = useTranslation("interviewDay");
 
   const navigate = useNavigate();
-
+const { orgSlug } = useParams();
   /*  NAVIGATION */
   const goToPreview = (row) => {
     const posId =
@@ -36,7 +36,7 @@ const InterviewDayTable = ({
       position?.value ||
       null;
 
-    navigate("/candidate-preview", {
+   navigate(getOrganizationPath("/candidate-preview", orgSlug), {
       state: {
         from: "/candidate-interviewer",
         candidate: row.raw,

@@ -2,13 +2,13 @@ import React, { useState, useMemo } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Person, FileText } from "react-bootstrap-icons";
 import briefcaseIcon from "../../../assets/breifcase.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams  } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import candidateWorkflowServices from "../services/CandidateWorkflowServices";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 import "../../../style/css/Compensationpool.css";
 
 export default function CompensationPool({
@@ -51,6 +51,7 @@ export default function CompensationPool({
     return numeric ? Number(numeric).toLocaleString("en-IN") : "";
   };
 
+  const { orgSlug } = useParams();
   const navigate = useNavigate();
 
   const [managerForm, setManagerForm] = useState({
@@ -596,7 +597,7 @@ export default function CompensationPool({
                         size={16}
                         className="me-3 cursor-pointer"
                         onClick={() => {
-                          navigate("/candidate-preview", {
+                          navigate(getOrganizationPath("/candidate-preview", orgSlug), {
                             state: {
                               candidate: c,
                               applicationId: c.applicationId,

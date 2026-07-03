@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import {
   Container,
   Row,
@@ -26,6 +26,7 @@ import { useJobPositionsByRequisition } from "../hooks/useJobPositionsByRequisit
 import masterApiService from "../../master/services/masterApiService";
 import requisitionApiService from "../services/requisitionApiService";
 import jobPositionApiService from "../services/jobPositionApiService";
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 import SinglePositionInfoModal from "../component/SinglePositionInfoModal";
 import { mapVacancyBreakdownByPosition } from "../../jobPosting/mappers/VacancyBreakdownBySinglePosition";
 
@@ -38,6 +39,7 @@ const CreateRequisition = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { orgSlug } = useParams();
   const from = location.state?.from;
 
   /* ===================== URL + MODE ===================== */
@@ -58,9 +60,9 @@ const CreateRequisition = () => {
 
   const handleCancel = () => {
     if (from === "approval") {
-      navigate("/requisition-requests");
+      navigate(getOrganizationPath("/requisition-requests", orgSlug));
     } else {
-      navigate("/job-posting");
+      navigate(getOrganizationPath("/job-posting", orgSlug));
     }
   };
 

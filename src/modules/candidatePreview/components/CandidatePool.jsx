@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams  } from "react-router-dom";
 import { Person, FileText } from "react-bootstrap-icons";
 import { OverlayTrigger, Popover, Tooltip } from "react-bootstrap";
 import I_icon from "../../../assets/I_icon.png";
 import { toast } from "react-toastify";
 
 import { useTranslation } from "react-i18next";
-
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 export default function CandidatePool({
   candidates,
   selectedIds,
@@ -40,7 +40,7 @@ export default function CandidatePool({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   /* ---------- Selection logic ---------- */
-
+const { orgSlug } = useParams();
   const allSelected =
     allCandidatesForFilters?.length > 0 &&
     allCandidatesForFilters.every((c) => selectedIds.includes(c.id));
@@ -416,7 +416,7 @@ export default function CandidatePool({
                         size={16}
                         className="me-3 cursor-pointer"
                         onClick={() => {
-                          navigate("/candidate-preview", {
+                          navigate(getOrganizationPath("/candidate-preview", orgSlug), {
                             state: {
                               from: "/candidate-workflow",
                               candidate: c,
@@ -561,7 +561,7 @@ export default function CandidatePool({
                   size={16}
                   className="me-3 cursor-pointer"
                   onClick={() =>
-                    navigate("/candidate-preview", {
+                    navigate(getOrganizationPath("/candidate-preview", orgSlug), {
                       state: {
                         from: "/candidate-workflow",
                         isRankEnabled,

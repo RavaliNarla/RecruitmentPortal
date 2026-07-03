@@ -161,8 +161,8 @@ const Header = () => {
             <Image
               src={currentLogo}
               alt={organizationTheme?.logoAlt || "Logo"}
-              width={155}
-              height={57}
+              width={140}
+              height={40}
               className="me-2 imgbob"
             />
           </div>

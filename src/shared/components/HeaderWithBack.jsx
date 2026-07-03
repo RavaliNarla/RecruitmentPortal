@@ -1,6 +1,7 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { getOrganizationPath } from "../../modules/auth/services/organizationContextService";
 
 const PageHeaderWithBack = ({
   title,
@@ -8,12 +9,19 @@ const PageHeaderWithBack = ({
   positionId,
   requisitionId,
   activeTab,
+  onBack,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { orgSlug } = useParams();
   const { t } = useTranslation("common");
 
   const handleBack = () => {
+    if (typeof onBack === "function") {
+      onBack();
+      return;
+    }
+
     const state = location.state || {};
     const from = state.from;
 
@@ -23,7 +31,7 @@ const PageHeaderWithBack = ({
     // 🔥 keep this (your interviewer depends on it)
     sessionStorage.setItem("fromPreviewBack", "true");
 
-    navigate(target, {
+    navigate(getOrganizationPath(target, orgSlug), {
       state: {
         requisition: state.requisition,
         position: state.position,

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import masterApiService from "../../master/services/masterApiService";
 import jobPositionApiService from "../../jobPosting/services/jobPositionApiService";
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 import { toast } from "react-toastify";
 import candidateWorkflowServices from "../../candidatePreview/services/CandidateWorkflowServices";
 import committeeManagementService from "../../committeeManagement/services/committeeManagementService";
@@ -27,6 +28,7 @@ export default function AddExaminationCutoffModal({
 
   const [loading, setLoading] = useState(false);
 
+  const { orgSlug } = useParams();
   const privileges = useSelector((state) => state.user.privileges);
 
   const isL1 = privileges?.["L1 Approval"];
@@ -356,7 +358,7 @@ export default function AddExaminationCutoffModal({
     /* FROM CANDIDATE SCREENING */
 
     if (fromCandidateScreening) {
-      navigate("/candidate-workflow", {
+      navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
         replace: true,
 
         state: {
@@ -830,7 +832,7 @@ export default function AddExaminationCutoffModal({
         resetForm();
 
         if (fromCandidateScreening) {
-          navigate("/candidate-workflow", {
+          navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
             replace: true,
             state: {
               requisitionId: selectedRequisition?.id,

@@ -1,9 +1,10 @@
 import React from "react";
 import { Person, FileText } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 const CandidateTable = ({
   requisition,
   position,
@@ -26,9 +27,9 @@ const CandidateTable = ({
   const { t } = useTranslation(["verification", "common"]);
 
   const navigate = useNavigate();
-
+const { orgSlug } = useParams();
   const goToPreview = (c) => {
-    navigate("/candidate-preview", {
+     navigate(getOrganizationPath("/candidate-preview", orgSlug), {
       state: {
         candidate: c.raw,
         candidateId: c.raw.candidateId,

@@ -1,11 +1,13 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { getOrganizationPath } from "../../modules/auth/services/organizationContextService";
 
 const PageHeaderWithBacks = ({ title, subtitle }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { orgSlug } = useParams();
   const { t } = useTranslation("common");
 
   const state = location.state || {};
@@ -22,7 +24,7 @@ const PageHeaderWithBacks = ({ title, subtitle }) => {
       ? "/candidate-verification"
       : "/candidate-workflow";
 
-    navigate(targetRoute, {
+    navigate(getOrganizationPath(targetRoute, orgSlug), {
       state: {
         requisition: state.requisition,
         position: state.position,

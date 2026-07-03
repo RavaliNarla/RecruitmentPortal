@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import { usePositionsImport } from "../hooks/usePositionsImport";
 import "../../../style/css/modalimport.css";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 
 const ImportModal = ({ show, onHide, requisitionId, onSuccess = () => {} }) => {
   if (!requisitionId) {
@@ -13,6 +14,7 @@ const ImportModal = ({ show, onHide, requisitionId, onSuccess = () => {} }) => {
   }
   const { t } = useTranslation(["importModal", "common"]);
   const navigate = useNavigate();
+  const { orgSlug } = useParams();
   const { bulkImport, downloadPositionTemplate, loading } =
     usePositionsImport();
 
@@ -57,7 +59,7 @@ const ImportModal = ({ show, onHide, requisitionId, onSuccess = () => {} }) => {
       onHide();
 
       //  REDIRECT TO JOB LISTING PAGE
-      navigate("/job-posting");
+      navigate(getOrganizationPath("/job-posting", orgSlug));
     } else {
       const errorMsg =
         Array.isArray(result.details) && result.details.length > 0

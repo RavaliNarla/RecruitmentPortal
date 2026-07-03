@@ -18,8 +18,9 @@ import {
   XCircleFill,
 } from "react-bootstrap-icons";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "react-bootstrap";
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 import "../../../style/css/JobPostingsList.css";
 import DeleteConfirmationModal from "../component/DeleteConfirmationModal";
 import ConfirmationModal from "../component/ConfirmationModal";
@@ -55,6 +56,7 @@ import SinglePositionInfoModal from "../component/SinglePositionInfoModal";
 import { mapVacancyBreakdownByPosition } from "../mappers/VacancyBreakdownBySinglePosition";
 
 const JobPostingsList = () => {
+  const { orgSlug } = useParams();
   const { t } = useTranslation(["jobPostingsList", "common"]);
 
   const formatStatusLabel = (status = "") =>
@@ -484,7 +486,11 @@ const JobPostingsList = () => {
           <h5 className="page-title">{t("jobPostingsList:page_title")}</h5>
         </Col>
         <Col className="text-end create">
-          <Button onClick={() => navigate("/job-posting/create-requisition")}>
+          <Button
+            onClick={() =>
+              navigate(getOrganizationPath("/job-posting/create-requisition", orgSlug))
+            }
+          >
             <img
               src={CreatePlus_Icon}
               alt="Create New Requisition"
@@ -622,9 +628,15 @@ const JobPostingsList = () => {
             onClick={() => {
               const req = selectedRequisitions[0];
 
-              navigate(`/job-posting/create-requisition?id=${req.id}`, {
-                state: { mode: "reinitialize" },
-              });
+              navigate(
+                getOrganizationPath(
+                  `/job-posting/create-requisition?id=${req.id}`,
+                  orgSlug
+                ),
+                {
+                  state: { mode: "reinitialize" },
+                }
+              );
             }}
           >
             {t("jobPostingsList:reinitialize")}
@@ -842,7 +854,10 @@ const JobPostingsList = () => {
                           e.stopPropagation();
 
                           navigate(
-                            `/job-posting/create-requisition?id=${req.id}`,
+                            getOrganizationPath(
+                              `/job-posting/create-requisition?id=${req.id}`,
+                              orgSlug
+                            ),
                             {
                               state: { mode: "clone" },
                             }
@@ -982,7 +997,12 @@ const JobPostingsList = () => {
                         className="icon-btn"
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/job-posting/${req.id}/add-position`);
+                          navigate(
+                            getOrganizationPath(
+                              `/job-posting/${req.id}/add-position`,
+                              orgSlug
+                            )
+                          );
                         }}
                       >
                         <img
@@ -1010,7 +1030,10 @@ const JobPostingsList = () => {
                           // NORMAL REQUISITION EDIT
                           if (!req.isDraft) {
                             navigate(
-                              `/job-posting/create-requisition?id=${req.id}`,
+                              getOrganizationPath(
+                                `/job-posting/create-requisition?id=${req.id}`,
+                                orgSlug
+                              ),
                               {
                                 state: {
                                   mode: "edit",
@@ -1024,7 +1047,10 @@ const JobPostingsList = () => {
                           // DRAFT REQUISITION EDIT
                           // use clone mode so positions can be selected/unselected
                           navigate(
-                            `/job-posting/create-requisition?id=${req.parentRequisitionId}`,
+                            getOrganizationPath(
+                              `/job-posting/create-requisition?id=${req.parentRequisitionId}`,
+                              orgSlug
+                            ),
                             {
                               state: {
                                 mode: "clone",
@@ -1089,7 +1115,10 @@ const JobPostingsList = () => {
 
                       if (!req.isDraft) {
                         navigate(
-                          `/job-posting/create-requisition?id=${req.id}`,
+                          getOrganizationPath(
+                            `/job-posting/create-requisition?id=${req.id}`,
+                            orgSlug
+                          ),
                           {
                             state: {
                               mode: "view",
@@ -1102,7 +1131,10 @@ const JobPostingsList = () => {
 
                       // DRAFT VIEW
                       navigate(
-                        `/job-posting/create-requisition?id=${req.parentRequisitionId}`,
+                        getOrganizationPath(
+                          `/job-posting/create-requisition?id=${req.parentRequisitionId}`,
+                          orgSlug
+                        ),
                         {
                           state: {
                             mode: "view",
@@ -1404,7 +1436,10 @@ const JobPostingsList = () => {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       navigate(
-                                        `/job-posting/${req.id}/add-position?positionId=${pos.positionId}`,
+                                        getOrganizationPath(
+                                          `/job-posting/${req.id}/add-position?positionId=${pos.positionId}`,
+                                          orgSlug
+                                        ),
                                         {
                                           state: {
                                             mode: "edit",
@@ -1481,7 +1516,10 @@ const JobPostingsList = () => {
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     navigate(
-                                      `/job-posting/${req.id}/add-position?positionId=${pos.positionId}`,
+                                      getOrganizationPath(
+                                        `/job-posting/${req.id}/add-position?positionId=${pos.positionId}`,
+                                        orgSlug
+                                      ),
                                       {
                                         state: {
                                           mode: "view",

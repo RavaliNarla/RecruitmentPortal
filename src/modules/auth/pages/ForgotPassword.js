@@ -3,6 +3,7 @@ import "../../../style/css/Login.css";
 import pana from "../../../assets/pana.png";
 import boblogo from "../../../assets/bob-logo1.jpg";
 import { useNavigate } from "react-router-dom";
+import { getLoginPath, getSavedLoginOrganization } from "../services/organizationContextService";
 import loginApi from "../services/loginService";
 
 const ForgotPassword = () => {
@@ -15,7 +16,7 @@ const ForgotPassword = () => {
     try {
       await loginApi.forgotPassword(email);
       alert("Password reset link sent. Check your email.");
-      navigate("/login");
+      navigate(getLoginPath(getSavedLoginOrganization()));
     } catch (error) {
       console.error(error);
       setMessage("Failed to send reset link. Try again.");
@@ -37,7 +38,10 @@ const ForgotPassword = () => {
         </div>
 
         <form className="login_form" onSubmit={handleSubmit}>
-          <button className="back-button" onClick={() => navigate("/login")}>
+          <button
+            className="back-button"
+            onClick={() => navigate(getLoginPath(getSavedLoginOrganization()))}
+          >
             ← Login
           </button>
 

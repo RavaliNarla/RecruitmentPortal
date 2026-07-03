@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
+import { useParams } from "react-router-dom";
 import masterApiService from "../master/services/masterApiService";
 import "../../style/css/CandidateScreening.css";
 
@@ -54,6 +55,7 @@ import ScheduleApprovalModal from "../candidatePreview/components/ScheduleApprov
 import ScheduleErrorModal from "../interviews/components/ScheduleErrorModal";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import DigitalSignatureModal from "./modal/DigitalSignatureModal";
+import { getOrganizationPath } from "../auth/services/organizationContextService";
 export default function CandidateScreening({ selectedJob }) {
   const { t } = useTranslation(["candidateWorkflow", "common"]);
 
@@ -72,6 +74,8 @@ export default function CandidateScreening({ selectedJob }) {
   const role = user?.role?.toLowerCase();
 
   const isRecruiter = role === "recruiter";
+
+  const { orgSlug } = useParams();
 
   const [selectedRequisitionId, setSelectedRequisitionId] = useState("");
 
@@ -439,7 +443,7 @@ export default function CandidateScreening({ selectedJob }) {
         interviewCenterName: c.interviewCenterName,
       }));
 
-    navigate("/schedule-interviews", {
+    navigate(getOrganizationPath("/schedule-interviews", orgSlug), {
       state: {
         candidates: selectedCandidatesData,
 
@@ -1502,7 +1506,7 @@ export default function CandidateScreening({ selectedJob }) {
       }, {})
     );
 
-    navigate("/schedule-interviews", {
+    navigate(getOrganizationPath("/schedule-interviews", orgSlug), {
       state: {
         isEditMode: true,
         isReschedule: true,
@@ -2202,7 +2206,7 @@ export default function CandidateScreening({ selectedJob }) {
 
     setExaminationScoreData([]);
 
-    navigate("/ExaminationCutoffConfiguration", {
+    navigate(getOrganizationPath("/ExaminationCutoffConfiguration", orgSlug), {
       state: {
         requisitionId: selectedRequisitionId,
 
@@ -2399,7 +2403,7 @@ export default function CandidateScreening({ selectedJob }) {
     }, {})
   );
   const handleEditSchedule = () => {
-    navigate("/schedule-interviews", {
+    navigate(getOrganizationPath("/schedule-interviews", orgSlug), {
       state: {
         isEditMode: true,
         isReschedule: false,
@@ -3412,7 +3416,7 @@ export default function CandidateScreening({ selectedJob }) {
               onPageChange={setSchedulePoolPage}
               onPageSizeChange={setSchedulePoolPageSize}
               onViewProfile={(candidate) => {
-                navigate("/candidate-preview", {
+                navigate(getOrganizationPath("/candidate-preview", orgSlug), {
                   state: {
                     candidate: candidate,
 

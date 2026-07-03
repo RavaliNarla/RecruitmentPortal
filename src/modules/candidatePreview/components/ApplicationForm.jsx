@@ -3,8 +3,9 @@ import { Accordion, Card, OverlayTrigger, Tooltip } from "react-bootstrap";
 import "../../../style/css/PreviewModal.css";
 import viewIcon from "../../../assets/view_icon.png";
 import DocumentViewerModal from "../components/DocumentViewerModal";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import jobPositionApiService from "../../jobPosting/services/jobPositionApiService";
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 import { toast } from "react-toastify";
 import masterApiService from "../../master/services/masterApiService";
 import { useSelector } from "react-redux";
@@ -66,6 +67,7 @@ const ApplicationForm = ({
   const { t } = useTranslation(["preview", "common", "validation"]);
 
   const navigate = useNavigate();
+  const { orgSlug } = useParams();
   const [activeAccordion, setActiveAccordion] = useState(["0", "1", "2", "3"]);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [isEligible, setIsEligible] = useState(false);
@@ -380,7 +382,7 @@ const [submitting, setSubmitting] = useState(false);
 
       sessionStorage.setItem("fromZonalSubmit", "true");
 
-      navigate("/candidate-verification", {
+      navigate(getOrganizationPath("/candidate-verification", orgSlug), {
         state: {
           requisition: location.state?.requisition,
           position: location.state?.position,
@@ -1025,7 +1027,7 @@ submitRef.current = true;
       // toast.success("Screening submitted successfully");
       toast.success(t("screening_submitted_success"));
 
-      navigate("/candidate-workflow", {
+      navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
         state: {
           requisitionId,
 

@@ -1,11 +1,13 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { getOrganizationPath } from "../../modules/auth/services/organizationContextService";
 
 const HeaderWithBackss = ({ title, subtitle }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { orgSlug } = useParams();
   const { t } = useTranslation("common");
 
   const state = location.state || {};
@@ -26,17 +28,23 @@ const HeaderWithBackss = ({ title, subtitle }) => {
     };
 
     if (privileges?.Interview) {
-      navigate("/candidate-interviewer", { state: payload });
+      navigate(getOrganizationPath("/candidate-interviewer", orgSlug), {
+        state: payload,
+      });
       return;
     }
 
     if (privileges?.Verification) {
-      navigate("/candidate-verification", { state: payload });
+      navigate(getOrganizationPath("/candidate-verification", orgSlug), {
+        state: payload,
+      });
       return;
     }
 
     if (privileges?.["Candidate Pool"]) {
-      navigate("/candidate-workflow", { state: payload });
+      navigate(getOrganizationPath("/candidate-workflow", orgSlug), {
+        state: payload,
+      });
       return;
     }
 

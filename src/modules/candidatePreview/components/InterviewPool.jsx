@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { Person, FileText } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import I_icon from "../../../assets/I_icon.png";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-
+import { getOrganizationPath } from "../../auth/services/organizationContextService";
 export default function InterviewPool({
   selectedIds,
   setSelectedIds,
@@ -29,6 +29,7 @@ export default function InterviewPool({
 }) {
   const { t } = useTranslation(["candidateWorkflow", "common"]);
   const navigate = useNavigate();
+  const { orgSlug } = useParams();
   const STATUS_CLASS_MAP = {
     SCHEDULED: "blue-bg",
     QUALIFIED: "bg-success",
@@ -261,7 +262,7 @@ export default function InterviewPool({
                       size={16}
                       className="me-3 cursor-pointer"
                       onClick={() =>
-                        navigate("/candidate-preview", {
+                       navigate(getOrganizationPath("/candidate-preview", orgSlug), {
                           state: {
                             candidate: c,
                             applicationId: c.applicationId,
