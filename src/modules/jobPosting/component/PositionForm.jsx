@@ -53,6 +53,7 @@ const PositionForm = ({
   MONTH_OPTIONS,
   ALLOWED_EXTENSIONS,
   MAX_FILE_SIZE_MB,
+  
 }) => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
 
@@ -1261,6 +1262,7 @@ const PositionForm = ({
             />
             <ErrorMessage>{renderError(errors.medicalRequired)}</ErrorMessage>
           </Col>
+           
         </Row>
       </div>
     </>

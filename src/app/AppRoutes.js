@@ -385,8 +385,8 @@ const AppRoutes = () => {
       <Routes>
         {/* Public */}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/:orgSlug" element={<Login />} />
+        <Route path="/:orgSlug/login" element={<Login />} />
+        <Route path="/login" element={<Navigate to={savedLoginPath} replace />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
 

@@ -9,6 +9,7 @@ import {
   getLoginPath,
   getSavedLoginOrganization,
   saveLoginOrganization,
+  normalizeOrganizationKey,
 } from "./organizationContextService";
 
 export default function PrivateRoute() {
@@ -18,7 +19,8 @@ export default function PrivateRoute() {
   const authUser = useSelector((state) => state.user?.authUser);
 
   useEffect(() => {
-    if (orgSlug) {
+    // Only save organization from URL when user is not authenticated.
+    if (orgSlug && !authUser) {
       const organizationKey = saveLoginOrganization(orgSlug);
       dispatch(setOrganizationTheme(getOrganizationConfig(organizationKey)));
     }
@@ -31,6 +33,16 @@ export default function PrivateRoute() {
 
   // ✅ If we have authUser from Redux, user is authenticated - allow through
   if (authUser) {
+    // If URL contains an orgSlug that doesn't match the saved login organization,
+    // block access and redirect to login so user can't switch org by URL.
+    if (orgSlug) {
+      const urlOrgKey = normalizeOrganizationKey(orgSlug);
+      const savedOrg = getSavedLoginOrganization();
+      if (urlOrgKey !== savedOrg) {
+        return <Navigate to={getLoginPath(savedOrg)} replace />;
+      }
+    }
+
     return <Outlet />;
   }
 

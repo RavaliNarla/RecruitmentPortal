@@ -1,7 +1,7 @@
 import loginOrganizations from "../config/loginOrganizations.json";
 
 const STORAGE_KEY = "loginOrganization";
-const DEFAULT_ORG = "bob";
+const DEFAULT_ORG = "sagarsoft";
 
 export const normalizeOrganizationKey = (orgSlug) => {
   const organizationKey = orgSlug?.toLowerCase();
@@ -29,7 +29,7 @@ export const getSavedLoginOrganization = () =>
 
 export const getLoginPath = (orgSlug) => {
   const organizationKey = normalizeOrganizationKey(orgSlug);
-  return `/login/${organizationKey}`;
+  return `/${organizationKey}/login`;
 };
 
 export const getOrganizationPath = (path = "/", orgSlug) => {

@@ -110,5 +110,7 @@
   "widowed_divorced_separated_women": "Widowed, divorced, or judicially separated women (not remarried)",
   "state_wise_reservation": "State Wise Reservation",
   "Exclusions": "Exclusions",
-  "is_intermediate_required": "Is Intermediate / ICSE (+2) / CBSE (+2) / Diploma Required?"
+  "is_intermediate_required": "Is Intermediate / ICSE (+2) / CBSE (+2) / Diploma Required?",
+  "additional_details": "Additional Details",
+  "configure": "Configure"
 }

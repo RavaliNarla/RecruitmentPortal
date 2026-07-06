@@ -111,5 +111,7 @@
   "widowed_divorced_separated_women": "विधवा, तलाकशुदा, या न्यायिक रूप से अलग महिलाएं (जो पुनर्विवाह नहीं करती हैं)",
   "state_wise_reservation": "राज्यवार आरक्षण",
   "Exclusions" : "अपवर्जन",
-  "is_intermediate_required": "क्या इंटरमीडिएट / आईसीएसई (+2) / सीबीएसई (+2) / डिप्लोमा आवश्यक है?"
+  "is_intermediate_required": "क्या इंटरमीडिएट / आईसीएसई (+2) / सीबीएसई (+2) / डिप्लोमा आवश्यक है?",
+  "additional_details": "अतिरिक्त विवरण",
+  "configure": "कॉन्फ़िगर करें"
 }

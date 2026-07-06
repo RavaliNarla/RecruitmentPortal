@@ -99,6 +99,7 @@ export const mapCandidateToPreview = (apiData = {}, masters = {}, job = {}) => {
   ]
     .filter(Boolean)
     .join(", ");
+    
 
   const educations = apiData?.educationDetails || [];
   const experiences = apiData?.experienceDetails || [];
@@ -190,7 +191,8 @@ export const mapCandidateToPreview = (apiData = {}, masters = {}, job = {}) => {
       permanentAddress:
         permanentAddressFull + " - " + address.permanentPincode || "-",
 
-      exService: yesNo(profile.exServiceman),
+      // exService: yesNo(profile.exServiceman),
+      exService: profile.exServiceman,
       physicalDisability: yesNo(profile.disability),
       centralGovtEmployment: yesNo(profile.centralGovtEmployed),
       servingLowerPost: yesNo(profile.employedInLowerPost),
@@ -270,6 +272,9 @@ export const mapCandidateToPreview = (apiData = {}, masters = {}, job = {}) => {
     experienceSummary: {
       currentCtc: safeCurrency(experiences?.[0]?.workExperience?.currentCtc),
     },
+    additionalDetails: {
+      dynamicFormData: locationprefApiData?.dynamicFormData || {},
+    },
     /* ================= DOCUMENTS ================= */
     documents: {
       allDocs: groupDocs(() => true),
@@ -297,7 +302,7 @@ export const mapJobPositionToRequisitionStrip = (
   const departmentObj = masters?.departments?.find(
     (d) => d.departmentId === apiData.deptId
   );
-
+  const dynamicFields = apiData?.dynamicFields || {};
   const nationalCategoryCounts = {};
   const nationalDisabilityCounts = {};
 
@@ -360,6 +365,7 @@ export const mapJobPositionToRequisitionStrip = (
     roles_responsibilities: apiData.rolesResponsibilities || "-",
 
     isLocationWise: apiData.isLocationWise,
+     dynamicFields: dynamicFields,
 
     /* ========= NATIONAL (READY FOR UI) ========= */
     nationalCategoryDistribution: {

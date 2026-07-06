@@ -179,6 +179,7 @@ export const mapAddPositionToUpdateDto = ({
   // ✅ ADD THESE
   isAgeRelRiotVictimFamily,
   isAgeRelWdsWomen,
+  dynamicFields,
   jobPositionExclusion = [],
 }) => {
   const dto = {
@@ -252,6 +253,8 @@ export const mapAddPositionToUpdateDto = ({
       isProficientInLocalLanguage === true ? true : false,
     isAgeRelRiotVictimFamily: !!isAgeRelRiotVictimFamily,
     isAgeRelWdsWomen: !!isAgeRelWdsWomen,
+    dynamicFields,
+    
 
     approvedBy,
     approvedOn,

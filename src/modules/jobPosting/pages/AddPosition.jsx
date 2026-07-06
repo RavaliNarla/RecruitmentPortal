@@ -26,6 +26,7 @@ import ReservationSection from "../component/ReservationSection";
 import { useTranslation } from "react-i18next";
 import SelectIndentModal from "../component/SelectIndentModal";
 import jobPositionApiService from "../services/jobPositionApiService";
+import FormBuilderModal from "../component/DynamicForm/FormBuilderModal";
 const AddPosition = () => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx"];
@@ -55,6 +56,9 @@ const AddPosition = () => {
   const isImportDisabled = isViewMode || isEditMode;
   const parentRequisitionId = location.state?.parentRequisitionId;
   const { positionsByReq, fetchPositions } = useJobPositionsByRequisition();
+  const [showFormBuilder, setShowFormBuilder] = useState(false);
+
+  const [additionalForm, setAdditionalForm] = useState(null);
 
   useEffect(() => {
     if (requisitionId) {
@@ -309,7 +313,11 @@ const AddPosition = () => {
       usePreferredEducationLevelExperience:
         existingPosition.isPreferredExpMonthsEduWise || false,
       isIntermediateRequired: existingPosition.isIntermediateRequired,
+      dynamicFields: existingPosition.dynamicFields || {},
     });
+    if (existingPosition?.dynamicFields) {
+      setAdditionalForm(existingPosition.dynamicFields);
+    }
     setApprovedBy(existingPosition.approvedBy || "");
     setIndentOthers(existingPosition.indentOthers || "");
     setApprovedOn(existingPosition.approvedOn || "");
@@ -870,7 +878,7 @@ const AddPosition = () => {
       nationalCategories,
       nationalDisabilities,
       stateDistributions,
-     // existingPositions: positionsByReq[requisitionId] || [],
+      // existingPositions: positionsByReq[requisitionId] || [],
       existingPositions: positionsByReq[reqKey] || [],
       positionId,
       isContractEmployment,
@@ -919,6 +927,7 @@ const AddPosition = () => {
       stateDistributions: stateDistributions.filter((s) => !s.__deleted),
       isAgeRelRiotVictimFamily,
       isAgeRelWdsWomen,
+       dynamicFields: additionalForm,
 
       jobPositionExclusion: exclusions.map((item) => {
         const existingExclusion = existingPosition?.jobPositionExclusions?.find(
@@ -1048,6 +1057,7 @@ const AddPosition = () => {
               setIndentOthers={setIndentOthers}
               onPositionSelect={onPositionSelect}
               educationData={educationData}
+              
               onEducationClick={(m) => {
                 if (isViewMode) return;
 
@@ -1109,6 +1119,7 @@ const AddPosition = () => {
               exclusions={exclusions}
               selectedExclusions={selectedExclusions}
               setSelectedExclusions={setSelectedExclusions}
+              onOpenDynamicForm={() => setShowFormBuilder(true)}
             />
 
             <div className="form-footer mt-4 mb-4">
@@ -1175,6 +1186,16 @@ const AddPosition = () => {
         onSelect={handleUseIndent}
         selectedIndent={selectedIndent}
       />
+       <FormBuilderModal
+        show={showFormBuilder}
+        onHide={() => setShowFormBuilder(false)}
+        value={additionalForm}
+        onSave={(schema) => {
+          setAdditionalForm(schema);
+        }}
+         isViewMode={isViewMode}
+      />
+     
     </Container>
   );
 };

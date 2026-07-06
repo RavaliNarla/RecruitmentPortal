@@ -26,9 +26,10 @@ function AppWrapper() {
     (state) => state.user?.organizationTheme
   );
   const hideHeaderFor = ["/login", "/forgot-password", "/verify-otp"];
-  const shouldHideHeader = hideHeaderFor.some((p) =>
-    location.pathname.toLowerCase().startsWith(p)
-  );
+  const pathname = location.pathname.toLowerCase();
+  const shouldHideHeader =
+    hideHeaderFor.some((p) => pathname.startsWith(p)) ||
+    pathname.endsWith("/login");
 
   useEffect(() => {
     const root = document.documentElement;

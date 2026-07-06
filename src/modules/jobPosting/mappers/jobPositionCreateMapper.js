@@ -19,7 +19,8 @@ export const mapAddPositionToCreateDto = ({
   certifications = [],
   isAgeRelRiotVictimFamily,
   isAgeRelWdsWomen,
-    jobPositionExclusion = [],
+  dynamicFields,
+  jobPositionExclusion = [],
 }) => {
   /* ================= SAFE NORMALIZATION ================= */
 
@@ -210,13 +211,14 @@ export const mapAddPositionToCreateDto = ({
     approvedBy,
     approvedOn,
     indentOthers: indentOthers?.trim() || null,
+    dynamicFields,
 
     // backend expects this
     cibilScore: 0,
 
     positionStatus: "Draft",
 
-      jobPositionExclusion,
+    jobPositionExclusion,
 
     positionRequiredDocuments: [],
 

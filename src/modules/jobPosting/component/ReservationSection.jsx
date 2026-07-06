@@ -45,6 +45,8 @@ const ReservationSection = ({
   exclusions,
   selectedExclusions,
   setSelectedExclusions,
+  onOpenDynamicForm,
+  dynamicFields,
 }) => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const renderError = (e) => {
@@ -78,6 +80,7 @@ const ReservationSection = ({
       .join(", ");
   };
   return (
+     <>
     <fieldset disabled={isViewMode}>
       {/* ✅ Age Relaxation Section */}
       <Col xs={12} className="mt-3">
@@ -102,7 +105,6 @@ const ReservationSection = ({
         </div>
       </Col>
 
-
       <Col xs={12} className="mt-3">
         <Form.Label>{t("exclusions")}:</Form.Label>
 
@@ -115,10 +117,7 @@ const ReservationSection = ({
               checked={selectedExclusions.includes(item.exclusionId)}
               onChange={(e) => {
                 if (e.target.checked) {
-                  setSelectedExclusions((prev) => [
-                    ...prev,
-                    item.exclusionId,
-                  ]);
+                  setSelectedExclusions((prev) => [...prev, item.exclusionId]);
                 } else {
                   setSelectedExclusions((prev) =>
                     prev.filter((id) => id !== item.exclusionId)
@@ -130,6 +129,21 @@ const ReservationSection = ({
           ))}
         </div>
       </Col>
+      </fieldset>
+      <Col className="mt-3" md={12}>
+        <div className="d-flex gap-3 align-items-center mb-2">
+          <Form.Label className="mb-0">
+            {t("addPosition:additional_details")}:
+          </Form.Label>
+
+          <Button variant="primary" size="sm" onClick={onOpenDynamicForm}>
+            {dynamicFields?.fields?.length
+              ? t("common:edit")
+              : t("addPosition:configure")}
+          </Button>
+        </div>
+      </Col>
+      <fieldset disabled={isViewMode}>
       {/* Reservation Section */}
       <Col xs={12} className="mt-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -831,6 +845,7 @@ const ReservationSection = ({
         <ErrorMessage>{renderError(errors.nationalDistribution)}</ErrorMessage>
       </Col>
     </fieldset>
+    </>
   );
 };
 

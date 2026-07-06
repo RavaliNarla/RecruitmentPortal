@@ -72,6 +72,24 @@
   "failed_to_approve": "Failed to approve",
   "failed_to_reject": "Failed to reject",
   "rejected_successfully": "Rejected successfully",
-  "approved_failed": "Approved failed"
+  "approved_failed": "Approved failed",
+  "configure_additional": "Configure Additional Form",
+  "close": "Close",
+  "save_form": "Save Form",
+  "label": "Label",
+  "type": "Type",
+  "enter_label": "Enter Label",
+  "required": "Required",
+  "text": "Text",
+  "placeholder": "Placeholder",
+  "enter_placeholder": "Enter Placeholder",
+  "character_limit": "Character Limit",
+  "dropdown_options": "Dropdown Options",
+  "option": "Option {{index}}",
+  "add_option": "Add Option",
+  "date_field_description": "Date field will display a calendar while filling the form.",
+  "dropdown": "Dropdown",
+  "date": "Date",
+  "label_required": "This field is required"
   
 }

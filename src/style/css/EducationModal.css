@@ -259,3 +259,6 @@
   min-height: 41px;
 }
 
+.tglswt input {
+  width: 40px !important;
+}

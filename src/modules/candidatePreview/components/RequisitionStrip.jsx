@@ -22,7 +22,8 @@ const RequisitionStrip = ({
   isSaveBtn,
   showImportBtn,
   onImportClick,
-  isSaving
+  isSaving,
+  setDynamicFields,
 }) => {
   const [showPosition, setShowPosition] = useState(false);
   const [job, setJob] = useState(null);
@@ -88,9 +89,6 @@ const RequisitionStrip = ({
           ...(masterRes.data || {}),
           exclusions: exclusionsRes.data || [],
         });
-
-
-
       } catch (err) {
         console.error("Failed to load master data", err);
         setMasterData({});
@@ -112,30 +110,30 @@ const RequisitionStrip = ({
           position.positionId
         );
 
-       const mapped = mapJobPositionToRequisitionStrip(res.data, masterData);
+        const mapped = mapJobPositionToRequisitionStrip(res.data, masterData);
 
-const exclusionNames =
-  res.data?.jobPositionExclusion
-    ?.filter((item) => item.isExcluded)
-    ?.map((item) => {
-      const exclusion = masterData?.exclusions?.find(
-        (e) => String(e.exclusionId) === String(item.exclusionId)
-      );
+        const exclusionNames =
+          res.data?.jobPositionExclusion
+            ?.filter((item) => item.isExcluded)
+            ?.map((item) => {
+              const exclusion = masterData?.exclusions?.find(
+                (e) => String(e.exclusionId) === String(item.exclusionId)
+              );
 
-      return exclusion?.exclusionValue;
-    })
-    .filter(Boolean) || [];
+              return exclusion?.exclusionValue;
+            })
+            .filter(Boolean) || [];
 
-mapped.exclusionNames = exclusionNames;
+        mapped.exclusionNames = exclusionNames;
 
-// ✅ ADD THESE
-mapped.isAgeRelRiotVictimFamily =
-  res.data?.isAgeRelRiotVictimFamily || false;
+        // ✅ ADD THESE
+        mapped.isAgeRelRiotVictimFamily =
+          res.data?.isAgeRelRiotVictimFamily || false;
 
-mapped.isAgeRelWdsWomen =
-  res.data?.isAgeRelWdsWomen || false;
+        mapped.isAgeRelWdsWomen = res.data?.isAgeRelWdsWomen || false;
 
-setJob(mapped);
+        setJob(mapped);
+        setDynamicFields(mapped?.dynamicFields || []); // ✅ Pass dynamic fields to parent
       } catch (err) {
         console.error("Failed to fetch job details", err);
         toast.error(t("candidateWorkflow:failed_load_position_details"));
@@ -298,7 +296,7 @@ setJob(mapped);
         onHide={() => setShowPosition(false)}
         centered
         size="lg"
-      // scrollable
+        // scrollable
       >
         <Modal.Header closeButton className="knowmore-header">
           <div className="w-100">
@@ -404,9 +402,9 @@ setJob(mapped);
                       {job?.isMandatoryExpMonthsEduWise
                         ? getEduWiseExperience().join("/ ")
                         : formatExperience(
-                          job?.mandatory_experience_years,
-                          job?.mandatory_experience_months
-                        )}
+                            job?.mandatory_experience_years,
+                            job?.mandatory_experience_months
+                          )}
                     </span>
                   </div>
                 </div>
@@ -469,27 +467,25 @@ setJob(mapped);
                 />
               )}
 
-                 {(job?.isAgeRelRiotVictimFamily || job?.isAgeRelWdsWomen) && (
-  <div className="info-card">
-    <div className="section-title">
-     {t("addPosition:age_relaxation_for")}:
-    </div>
+              {(job?.isAgeRelRiotVictimFamily || job?.isAgeRelWdsWomen) && (
+                <div className="info-card">
+                  <div className="section-title">
+                    {t("addPosition:age_relaxation_for")}:
+                  </div>
 
-    <ul className="section-lists">
-      {job?.isAgeRelRiotVictimFamily && (
-        <li>{t("addPosition:persons_affected_by_1984_riots")}</li>
-      )}
+                  <ul className="section-lists">
+                    {job?.isAgeRelRiotVictimFamily && (
+                      <li>{t("addPosition:persons_affected_by_1984_riots")}</li>
+                    )}
 
-      {job?.isAgeRelWdsWomen && (
-        <li>
-        {t("addPosition:widowed_divorced_separated_women")}
-        </li>
-      )}
-    </ul>
-  </div>
-)}
-
-
+                    {job?.isAgeRelWdsWomen && (
+                      <li>
+                        {t("addPosition:widowed_divorced_separated_women")}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
 
               {job?.exclusionNames?.length > 0 && (
                 <div className="info-card">
@@ -504,9 +500,6 @@ setJob(mapped);
                   </ul>
                 </div>
               )}
-
-
-           
 
               {job?.positionStateDistributions?.length === 0 &&
                 job?.nationalCategoryDistribution && (

@@ -1061,3 +1061,12 @@ select.form-control {
   display: block;
 }
 
+.add-table th {
+  background: #4b5fa8;
+  color: #fff !important;
+  padding: 12px 10px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-align: left;
+  border: 1px solid #4b5fa8; /* same structure */
+}
