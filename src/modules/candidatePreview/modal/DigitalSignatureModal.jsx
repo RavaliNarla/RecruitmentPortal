@@ -29,7 +29,7 @@ const DigitalSignatureModal = ({
     if (!selectedFile) return;
 
     if (!selectedFile.name.toLowerCase().endsWith(".zip")) {
-      toast.error("Only ZIP files are allowed.");
+      toast.error(t("candidateWorkflow:only_zip_files_allowed"));
       e.target.value = "";
       return;
     }
@@ -49,7 +49,7 @@ const DigitalSignatureModal = ({
 
   const handleDownloadTemplate = async () => {
     if (!selectedIds?.length) {
-      toast.error("Please select at least one offer.");
+      toast.error(t("candidateWorkflow:please_select_file"));
       return;
     }
 
@@ -63,7 +63,7 @@ const DigitalSignatureModal = ({
 
     if (invalidOffers.length > 0) {
       toast.error(
-        "Only Offer Generated candidates can be downloaded for digital signature."
+        t("candidateWorkflow:only_offer_generated_candidates_can_be_downloaded")
       );
       return;
     }
@@ -86,11 +86,11 @@ const DigitalSignatureModal = ({
 
       window.URL.revokeObjectURL(url);
 
-      toast.success("Offers downloaded successfully.");
+      toast.success(t("candidateWorkflow:offers_downloaded_successfully"));
     } catch (err) {
       console.error(err);
 
-      toast.error(err?.response?.data?.message || "Failed to download offers.");
+      toast.error(err?.response?.data?.message || t("candidateWorkflow:failed_to_download_offers"));
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ const DigitalSignatureModal = ({
 
   const handleDigitalSignatureUpload = async () => {
     if (!file) {
-      toast.error("Please upload a ZIP file.");
+      toast.error(t("candidateWorkflow:please_upload_file"));
       return;
     }
 
@@ -107,17 +107,17 @@ const DigitalSignatureModal = ({
       setLoading(true);
       setValidationErrors([]);
 
-      const res = await jobPositionApiService.uploadSignedOffers(file);
+      const res = await jobPositionApiService.uploadSignedOffers(file,positionId);
 
       if (res?.success === true) {
         const { successCount = 0, failureCount = 0 } = res.data || {};
 
         if (failureCount > 0 && successCount === 0) {
-          toast.error("Failed to upload signed offers.");
+          toast.error(t("candidateWorkflow:failed_to_upload_signed_offers"));
           return;
         }
 
-        toast.success(res?.message || "Signed offers uploaded successfully.");
+        toast.success(res?.message || t("candidateWorkflow:signed_offers_uploaded_successfully."));
 
         if (typeof onUploadSuccess === "function") {
           await onUploadSuccess();
@@ -126,7 +126,7 @@ const DigitalSignatureModal = ({
         closeModal();
         setSelectedIds([]);
       } else {
-        toast.error(res?.message || "Failed to upload signed offers.");
+        toast.error(res?.message || t("candidateWorkflow:failed_to_upload_signed_offers"));
 
         const errors = Array.isArray(res?.data) ? res.data : [];
         setValidationErrors(errors);
@@ -137,7 +137,7 @@ const DigitalSignatureModal = ({
       const errorData = err?.response?.data;
 
       toast.error(
-        errorData?.message || err?.message || "Digital signature upload failed."
+        errorData?.message || err?.message || t("candidateWorkflow:failed_to_upload_signed_offers")
       );
 
       const errors = Array.isArray(errorData?.data) ? errorData.data : [];
@@ -165,10 +165,9 @@ const DigitalSignatureModal = ({
     >
       <Modal.Header closeButton className="modalhead">
         <div className="d-grid">
-          <h5 className="mb-1 blue-color fs-15"> Upload Digital Signature </h5>
+          <h5 className="mb-1 blue-color fs-15"> {t("candidateWorkflow:upload_digital_signature")} </h5>
           <p className="text-muted fs-14 mb-0">
-            Download the generated offers, digitally sign them, and upload the
-            signed files.{" "}
+                {t("candidateWorkflow:upload_digital_signature_description")}.{" "}
           </p>
         </div>
       </Modal.Header>
@@ -179,15 +178,15 @@ const DigitalSignatureModal = ({
           style={{ backgroundColor: "#FFF1E8" }}
         >
           <img src={fileIcon} width={60} className="mb-2" alt="file" />
-          <p className="mb-1 fw-600 fs-15">Upload Signed Files</p>
-          <small className="text-muted fs-13">Supports ZIP format</small>
+          <p className="mb-1 fw-600 fs-15">{t("candidateWorkflow:upload_signed_files")}</p>
+          <small className="text-muted fs-13">{t("candidateWorkflow:supports_zip_format")}</small>
 
           <div className="d-grid justify-content-center gap-2 mt-3">
             <button
               className="btn orange-bg text-white fs-13 rounded shadow px-3"
               onClick={() => fileInputRef.current.click()}
             >
-              Upload ZIP
+              {t("candidateWorkflow:upload_zip")}
             </button>
           </div>
 
@@ -221,14 +220,14 @@ const DigitalSignatureModal = ({
 
           <div className="d-flex justify-content-center gap-1 mt-4">
             <small className="text-muted fs-12">
-              Download Generated Offers:
+              {t("candidateWorkflow:download_generated_offers")}:
             </small>
 
             <span
               className="blue-color fw-500 cursor-pointer fs-14"
               onClick={handleDownloadTemplate}
             >
-              ZIP
+              {t("candidateWorkflow:zip")}
             </span>
           </div>
         </div>
@@ -257,7 +256,7 @@ const DigitalSignatureModal = ({
           onClick={handleDigitalSignatureUpload}
           disabled={!file}
         >
-          Upload{" "}
+          {t("candidateWorkflow:upload")}{" "}
         </button>
       </Modal.Footer>
     </Modal>

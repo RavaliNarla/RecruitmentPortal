@@ -285,5 +285,26 @@
   "l2_pending": "L2 Pending",
   "l1_rejected": "L1 Rejected",
   "l2_rejected": "L2 Rejected",
-  "offer_generated":"Offer Generated"
+  "offer_generated":"Offer Generated",
+
+  "signatory": "Signatory",
+  "designation": "Designation",
+  "generate_offer": "Generate Offer",
+  "upload_digital_signature": "Upload Digital Signature",
+  "upload_digital_signature_description": "Download the generated offers, digitally sign them, and upload the signed files.",
+  "upload_signed_files": "Upload Signed Files",
+  "supports_zip_format": "Supports ZIP format",
+  "upload_zip": "Upload ZIP",
+  "download_generated_offers": "Download Generated Offers",
+  "zip": "ZIP",
+  "upload": "Upload",
+  "only_zip_files_allowed": "Only ZIP files are allowed.",
+  "please_select_file": "Please select at least one offer.",
+  "only_offer_generated_candidates_can_be_downloaded": "Only Offer Generated candidates can be downloaded for digital signature.",
+  "offers_downloaded_successfully": "Offers downloaded successfully.",
+  "failed_to_download_offers": "Failed to download offers.",
+  "please_upload_file": "Please upload a ZIP file.",
+  "failed_to_upload_signed_offers": "Failed to upload signed offers.",
+  "signed_offers_uploaded_successfully.": "Signed offers uploaded successfully.",
+  "digital_signature_upload_failed": "Digital signature upload failed."
 }

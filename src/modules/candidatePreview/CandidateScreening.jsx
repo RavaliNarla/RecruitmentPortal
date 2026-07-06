@@ -56,6 +56,7 @@ import ScheduleErrorModal from "../interviews/components/ScheduleErrorModal";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import DigitalSignatureModal from "./modal/DigitalSignatureModal";
 import { getOrganizationPath } from "../auth/services/organizationContextService";
+import Loader from "../../shared/components/Loader";
 export default function CandidateScreening({ selectedJob }) {
   const { t } = useTranslation(["candidateWorkflow", "common"]);
 
@@ -311,6 +312,9 @@ export default function CandidateScreening({ selectedJob }) {
       setExamConfigMap({});
     }
   }, [selectedPositionId]);
+  useEffect(() => {
+    setOfferSelectedIds([]);
+  }, [selectedPositionId]);
 
   const handleOpenZonalComments = (comment) => {
     setZonalComment(comment || "-");
@@ -560,6 +564,7 @@ export default function CandidateScreening({ selectedJob }) {
   const [signatoryDesignation, setSignatoryDesignation] = useState("");
   const dispatch = useDispatch();
   const [templates, setTemplates] = useState([]);
+  const [generatingOffer, setGeneratingOffer] = useState(false);
 
   const isRankEnabled = useSelector((state) => state.rank.isRankEnabled);
   const isScoreEnabled = useSelector((state) => state.rank.isScoreEnabled);
@@ -1264,6 +1269,7 @@ export default function CandidateScreening({ selectedJob }) {
     setSelectedCandidateIds([]);
     setSelectedInterviewCandidateIds([]);
     setSelectedCompensationIds([]);
+    setOfferSelectedIds([]);
     setPage(0);
     setTotalElements(0);
 
@@ -1277,6 +1283,7 @@ export default function CandidateScreening({ selectedJob }) {
     dispatch(clearRankState());
     setRankListGenerated(false);
     setSelectedPositionId(ids);
+    setOfferSelectedIds([]);
 
     // CLEAR EVERYTHING WHEN NO POSITION SELECTED
     if (!ids || ids.length === 0) {
@@ -2236,6 +2243,7 @@ export default function CandidateScreening({ selectedJob }) {
       console.error("Preview failed", err);
     }
   };
+
   const handleGenerateOffer = async () => {
     if (offerSelectedIds.length === 0) {
       toast.error("Please select at least one candidate");
@@ -2261,6 +2269,7 @@ export default function CandidateScreening({ selectedJob }) {
       toast.error("Please enter designation");
       return;
     }
+
     const selectedOffers = offerData.filter((offer) =>
       offerSelectedIds.includes(offer.id)
     );
@@ -2275,11 +2284,13 @@ export default function CandidateScreening({ selectedJob }) {
     }
 
     try {
+      setGeneratingOffer(true);
+
       const payload = {
         offerTemplateId,
         joiningDate,
         acceptBeforeDate,
-        designationId: null, // Selected designation ID
+        designationId: null,
         offerIds: offerSelectedIds,
         signatoryName: signatory,
         signatoryDesignation: signatoryDesignation,
@@ -2288,15 +2299,31 @@ export default function CandidateScreening({ selectedJob }) {
       const res = await jobPositionApiService.generateOffers(payload);
 
       toast.success("Offer generated successfully");
+
       setOfferRefreshKey((prev) => prev + 1);
+
+      // Clear form
+      setOfferTemplateId("");
+      setSelectedTemplate("");
+      setAcceptBeforeDate("");
+      setJoiningDate("");
+      setSignatory("");
+      setSignatoryDesignation("");
+      setOfferSelectedIds([]);
+
+      setFormErrors({
+        acceptBeforeDate: "",
+        joiningDate: "",
+      });
 
       console.log(res);
     } catch (err) {
       console.error(err);
       toast.error(err?.response?.data?.message || "Failed to generate offers");
+    } finally {
+      setGeneratingOffer(false);
     }
   };
-
   const handleSubmitBeforeDateChange = (value) => {
     const today = todayString();
 
@@ -3003,14 +3030,14 @@ export default function CandidateScreening({ selectedJob }) {
                     {/* Signatory */}
                     <div>
                       <p className="mb-1 fw-normal fs-13 blue-color">
-                        Signatory
+                        {t("candidateWorkflow:signatory")}
                       </p>
 
                       <input
                         type="text"
                         className="form-control fs-13 py-1"
                         style={{ width: "100px" }}
-                        placeholder="Signatory"
+                        placeholder={t("candidateWorkflow:signatory")}
                         value={signatory}
                         onChange={(e) => setSignatory(e.target.value)}
                       />
@@ -3022,7 +3049,7 @@ export default function CandidateScreening({ selectedJob }) {
                     {/* Designation */}
                     <div>
                       <p className="mb-1 fw-normal fs-13 blue-color">
-                        Designation
+                        {t("candidateWorkflow:designation")}
                       </p>
 
                       <input
@@ -3048,13 +3075,20 @@ export default function CandidateScreening({ selectedJob }) {
 
                       <OverlayTrigger
                         placement="bottom"
-                        overlay={<Tooltip>Generate Offer</Tooltip>}
+                        overlay={
+                          <Tooltip>
+                            {t("candidateWorkflow:generate_offer")}
+                          </Tooltip>
+                        }
                       >
                         <button
                           type="button"
                           className="btn orange-bg text-white"
                           onClick={handleGenerateOffer}
-                          disabled={offerSelectedIds.length === 0}
+                          // disabled={offerSelectedIds.length === 0}
+                          disabled={
+                            generatingOffer || offerSelectedIds.length === 0
+                          }
                         >
                           <i className="bi bi-file-earmark-plus"></i>
                         </button>
@@ -3106,7 +3140,11 @@ export default function CandidateScreening({ selectedJob }) {
 
                     <OverlayTrigger
                       placement="bottom"
-                      overlay={<Tooltip>Upload Digital Signature</Tooltip>}
+                      overlay={
+                        <Tooltip>
+                          {t("candidateWorkflow:upload_digital_signature")}
+                        </Tooltip>
+                      }
                     >
                       <button
                         type="button"
@@ -3508,6 +3546,7 @@ export default function CandidateScreening({ selectedJob }) {
       <DigitalSignatureModal
         showDigitalSignatureModal={showDigitalSignatureModal}
         setShowDigitalSignatureModal={setShowDigitalSignatureModal}
+        positionId={selectedPositionId?.[0]}
         selectedIds={offerSelectedIds}
         setSelectedIds={setOfferSelectedIds}
         offerData={offerData}
@@ -3644,6 +3683,7 @@ export default function CandidateScreening({ selectedJob }) {
         reservationCategories={reservationCategories}
         examConfigMap={examConfigMap}
       />
+      {generatingOffer && <Loader />}
     </div>
   );
 }

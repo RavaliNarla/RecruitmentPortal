@@ -397,12 +397,12 @@ const jobPositionApiService = {
       responseType: "blob",
     });
   },
-  uploadSignedOffers(file) {
+  uploadSignedOffers(file, positionId) {
     const formData = new FormData();
     formData.append("file", file);
 
     return api.post(
-      "/recruiter/candidate-offer/upload-signed-offers",
+      `/recruiter/candidate-offer/upload-signed-offers/${positionId}`,
       formData,
       {
         headers: {
@@ -411,7 +411,6 @@ const jobPositionApiService = {
       }
     );
   },
-
   uploadRanksExcel: (file) => {
     const formData = new FormData();
     formData.append("file", file);
