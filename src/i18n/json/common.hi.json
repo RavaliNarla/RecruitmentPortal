@@ -90,5 +90,11 @@
   "november": "नवंबर",
   "december": "दिसंबर",
   "view_file": "ऑफर पूर्वावलोकन",
-  "offer_letter_request": "ऑफ़र लेटर अनुरोध"
+  "offer_letter_request": "ऑफ़र लेटर अनुरोध",
+  "all": "सभी",
+  "l1_pending": "एल1 लंबित",
+  "l2_pending": "एल2 लंबित",
+  "l1_rejected": "एल1 अस्वीकृत",
+  "l2_rejected": "एल2 अस्वीकृत",
+  "approved": "स्वीकृत"
 }

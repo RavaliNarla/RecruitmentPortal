@@ -13,7 +13,20 @@
   overflow-wrap: anywhere;
   font-size: 0.85rem;
   font-weight: 500;
-  padding: 0.5rem;
+  padding: 0.5rem;  
+}
+
+.react-select__control {
+  border-radius: 0.375rem !important;
+}
+
+.react-select__control--is-focused {
+  border-radius: 0.375rem !important;
+}
+
+.education-modal {
+  max-width: 1100px !important;
+  width: 95% !important;
 }
 
 /* HEADER */

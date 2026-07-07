@@ -16,6 +16,14 @@ const masterApiService = {
       responseType: "blob",
     }),
 
+    getEducationGroups: () =>
+  apis.get("/master-dd-data/get/edu-groups"),
+
+
+     getEducationGroupes() {
+  return apis.get("/master-dd-data/get/edu-groups");
+},
+
   bulkAddUsers: (file) => {
     const formData = new FormData();
 

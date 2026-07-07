@@ -43,16 +43,17 @@ export const mapAddPositionToCreateDto = ({
       edu.groups.forEach((group) => {
         const conditions = [];
 
-        if (group.educations && Array.isArray(group.educations)) {
+          if (group.educations && Array.isArray(group.educations)) {
           group.educations.forEach((edu) => {
             if (edu.educationTypeId && edu.educationQualificationsId) {
-              conditions.push({
-                educationType: edu.educationTypeId,
-                qualification: edu.educationQualificationsId,
-                specialization: edu.specializationId || "",
-                duration: edu.duration || "",
-                percentage: edu.percentage || "",
-              });
+             conditions.push({
+  educationType: edu.educationTypeId,
+  qualification: edu.educationQualificationsId,
+  specialization: edu.group ? "" : (edu.specializationId || ""),
+  group: edu.group || "",
+  duration: edu.duration || "",
+  percentage: edu.percentage || "",
+});
             }
           });
         }

@@ -875,12 +875,16 @@ export default function CandidateScreening({ selectedJob }) {
 
       // examQualificationStatus: c.examQualificationStatus || "-",
 
-      examQualificationStatus:
-        c.examQualificationStatus === "QUALIFIED_UNDER_UR"
-          ? "Qualified Under UR"
-          : c.examQualificationStatus === "NOT_MARKED"
-            ? "Not Marked"
-            : c.examQualificationStatus || "-",
+      // examQualificationStatus:
+      //   c.examQualificationStatus === "QUALIFIED_UNDER_UR"
+      //     ? "Qualified Under UR"
+      //     : c.examQualificationStatus === "NOT_MARKED"
+      //       ? "Not Marked"
+      //       : c.examQualificationStatus || "-",
+
+      examQualificationStatus: c.examQualificationStatus
+  ? c.examQualificationStatus.replaceAll("_", " ")
+  : "-",
 
       educationScore: c?.candidateRankingResults?.educationScore ?? "-",
 
@@ -1356,7 +1360,7 @@ export default function CandidateScreening({ selectedJob }) {
 
       return (
         c.status === "Shortlisted" &&
-        ["QUALIFIED", "QUALIFIED_UNDER_UR"].includes(c.examQualificationStatus)
+        ["QUALIFIED", "QUALIFIED_UNDER_UR", "QUALIFIED UNDER UR", "Qualified Under UR"].includes(c.examQualificationStatus)
       );
     });
 
@@ -2297,6 +2301,11 @@ export default function CandidateScreening({ selectedJob }) {
       };
 
       const res = await jobPositionApiService.generateOffers(payload);
+      if (!res.success) {
+        toast.error(res.data || res.message || "Failed to generate offers");
+        return;
+      }
+      console.log("Generate Offer Response:", res);
 
       toast.success("Offer generated successfully");
 
@@ -2318,8 +2327,13 @@ export default function CandidateScreening({ selectedJob }) {
 
       console.log(res);
     } catch (err) {
-      console.error(err);
-      toast.error(err?.response?.data?.message || "Failed to generate offers");
+      // console.error(err);
+      // toast.error(err?.response?.data?.message || "Failed to generate offers");
+      toast.error(
+        err?.response?.data?.data ||
+          err?.response?.data?.message ||
+          "Failed to generate offers"
+      );
     } finally {
       setGeneratingOffer(false);
     }

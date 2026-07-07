@@ -133,7 +133,7 @@ const RequisitionStrip = ({
         mapped.isAgeRelWdsWomen = res.data?.isAgeRelWdsWomen || false;
 
         setJob(mapped);
-        setDynamicFields(mapped?.dynamicFields || []); // ✅ Pass dynamic fields to parent
+        setDynamicFields?.(mapped?.dynamicFields || []);
       } catch (err) {
         console.error("Failed to fetch job details", err);
         toast.error(t("candidateWorkflow:failed_load_position_details"));

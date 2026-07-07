@@ -5,24 +5,35 @@ export const mapEducationListFromApi = (list = [], educationOptions = []) => {
       opt.documentName,
     ])
   );
+
   return list.map((item) => {
     const docId = String(item?.qualification?.levelId || "").toLowerCase();
 
-    const documentName = docMap.get(docId);
+    const firstGroup = item?.specializations?.[0]?.group || null;
 
     return {
-      educationLevel: documentName || "-",
+      educationLevel: docMap.get(docId) || "-",
       qualificationCode: item?.qualification?.qualificationCode || "-",
       course: item?.qualification?.qualificationName || "-",
-      specialization: Array.isArray(item?.specializations)
-        ? item.specializations.map((s) => ({
-            name: s.specializationName,
-            id: s.specializationId,
-            code: s.specializationCode,
-          }))
-        : [],
+
+      //  ADD THIS
+      group: firstGroup,
+
+      specialization:
+        item?.specializations?.map((sp) => ({
+          id: sp?.specialization?.specializationId || "",
+          name: sp?.specialization?.specializationName || "",
+          code: sp?.specialization?.specializationCode || "",
+
+          group: sp?.group?.educationGroupId || "",
+          groupName: sp?.group?.groupName || "",
+          groupCode: sp?.group?.groupCode || "",
+          readOnly: true,
+        
+        })) || [],
+
       educationQualificationsId:
-        item?.qualification?.educationQualificationsId || "-",
+        item?.qualification?.educationQualificationsId || "",
     };
   });
 };

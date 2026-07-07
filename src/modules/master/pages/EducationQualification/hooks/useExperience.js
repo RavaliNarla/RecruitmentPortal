@@ -20,11 +20,13 @@ export const useExperience = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [groupOptions, setGroupOptions] = useState([]);
 
   const [formData, setFormData] = useState([
     {
       educationLevel: "",
       course: "",
+      group: "",
       educationQualificationsId: "",
       specializationOthers: [],
     },
@@ -61,6 +63,22 @@ export const useExperience = () => {
     }
   };
 
+  const fetchEducationGroups = async () => {
+    try {
+      const res = await masterApiService.getEducationGroups();
+
+      setGroupOptions(
+        (res.data || []).map((item) => ({
+          value: item.educationGroupId,
+          label: item.groupName,
+        }))
+      );
+    } catch (err) {
+      toast.error("Failed to fetch education groups");
+    }
+  };
+
+
   const fetchEducationByIds = async (ids, educationOptionsList) => {
     try {
       setLoading(true);
@@ -84,6 +102,7 @@ export const useExperience = () => {
   }, []);
 
   const loadData = async () => {
+    await fetchEducationGroups();
     const { ids, filtered } = await fetchEducationOptions();
 
     if (ids?.length) {
@@ -103,6 +122,8 @@ export const useExperience = () => {
       updated[formIndex].specializationOthers[specIndex].name = value;
     } else if (field === "specializationCode") {
       updated[formIndex].specializationOthers[specIndex].code = value;
+    } else if (field === "specializationGroup") {
+      updated[formIndex].specializationOthers[specIndex].group = value;
     } else {
       updated[formIndex][field] = value;
     }
@@ -127,6 +148,14 @@ export const useExperience = () => {
       fieldError = value?.trim()
         ? null
         : t("education:course_code_required", "Course code is required");
+    }
+
+
+
+    if (field === "group") {
+      fieldError = value?.trim()
+        ? null
+        : t("education:group_required", "Group is required");
     }
 
     if (field === "specialization") {
@@ -171,6 +200,7 @@ export const useExperience = () => {
         educationLevel: "",
         course: "",
         courseCode: "",
+        group: "",
         specializationOthers: [],
         // specializationOthers: [{ name: "", id: "" }]
       },
@@ -187,6 +217,112 @@ export const useExperience = () => {
     setEditIndex(null);
   };
 
+  //   const saveExperience = async () => {
+  //     try {
+  //       const { valid, errors: newErrors } = validateEducationForm(formData[0], {
+  //         existing: experienceList,
+  //         currentId: formData[0].educationQualificationsId,
+  //         editMode: isEditMode,
+  //       });
+  //       setErrors([newErrors]);
+
+  //       // return
+  //      if (!valid) return;
+
+  // const specs = formData[0].specializationOthers;
+
+  // const specializations =
+  //   specs.length > 0
+  //     ? specs.map((s) => ({
+  //       specializations: formData[0].specializationOthers
+  //   .filter((s) => s?.name.trim())
+  //   .map((s) => ({
+  //     specialization: {
+  //       specializationId: s.id || null,
+  //       specializationName: s.name.trim(),
+  //       specializationCode: s.code || "",
+  //     },
+  //     group: {
+  //       educationGroupId: s.group || "",
+  //     },
+  //   })),
+  //       }))
+  //     : formData[0].group
+  //     ? [
+  //         {
+  //           specialization: {
+  //             specializationId: null,
+  //             educationQualificationsId:
+  //               formData[0].educationQualificationsId || null,
+  //             specializationName: null,
+  //             specializationCode: null,
+  //           },
+  //           group: {
+  //             groupCode: null,
+  //             groupName: null,
+  //             displayOrder: 0,
+  //             educationGroupId: formData[0].group,
+  //           },
+  //         },
+  //       ]
+  //     : [];
+
+  // const payload = {
+  //         qualification: {
+  //           levelId: formData[0].educationLevel,
+  //           qualificationName: formData[0].course,
+  //           // qualificationCode: formData[0].course,
+  //           qualificationCode: formData[0].courseCode || "",
+  //           displayOrder: 0,
+  //           educationQualificationsId:
+  //             formData[0].educationQualificationsId || null,
+  //         },
+  //        specializations: formData[0].specializationOthers
+  //   .filter((s) => s?.name.trim())
+  //   .map((s) => ({
+  //     specialization: {
+  //       specializationId: s.id || null,
+  //       specializationName: s.name.trim(),
+  //       specializationCode: s.code || "",
+  //     },
+  //     group: {
+  //       educationGroupId: s.group || "",
+  //     },
+  //   })),
+  //       };
+
+  //       const res = await masterApiService.saveEducation(payload);
+
+  //       const saved = res.data;
+
+  //       if (isEditMode) {
+  //         if (res.success) {
+  //           toast.success(t("education:updated_success"));
+  //         } else {
+  //           toast.error(res.message + ": " + res.data);
+  //         }
+  //       } else {
+  //         if (res.success) {
+  //           toast.success(t("education:saved_success"));
+  //         } else {
+  //           toast.error(res.message + ": " + res.data);
+  //         }
+  //       }
+  //       if (res.success) {
+  //         await loadData();
+
+  //         setShowModal(false);
+  //         setIsEditMode(false);
+  //         setEditIndex(null);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //       toast.error("Save failed");
+  //     }
+  //   };
+
+
+
   const saveExperience = async () => {
     try {
       const { valid, errors: newErrors } = validateEducationForm(formData[0], {
@@ -194,33 +330,130 @@ export const useExperience = () => {
         currentId: formData[0].educationQualificationsId,
         editMode: isEditMode,
       });
-      setErrors([newErrors]);
 
-      // return
-      if (!valid) return;
+
+      const readOnlyCodes =
+  isEditMode &&
+  [
+    "Graduation",
+    "Post-Graduation",
+    "Any Graduation",
+    "Any Post-Graduation",
+  ].includes(formData[0].course?.trim());
+
+      // ===== Group Validation =====
+      const selectedEducation = educationOptions.find(
+        (item) => item.documentTypeId === formData[0].educationLevel
+      );
+
+      const hideGroup =
+        [
+          "Any Graduation",
+          "Any Post-Graduation",
+        ].includes(formData[0].course?.trim()) ||
+        [
+          "10th / SSC",
+          "Intermediate / 12th / HSC",
+        ].includes(selectedEducation?.documentName);
+
+      const showTopGroup =
+        !hideGroup &&
+        (formData[0].specializationOthers?.length || 0) === 0;
+
+      if (showTopGroup && !formData[0].group?.trim()) {
+        newErrors.group = t(
+          "education:group_required",
+          "Group is required"
+        );
+      }
+
+const specs = formData[0].specializationOthers || [];
+
+// Validate specialization rows BEFORE returning
+specs.forEach((s, index) => {
+  // User added a specialization row but left Name empty
+  if (!s.name?.trim()) {
+    newErrors.specialization = newErrors.specialization || [];
+    newErrors.specialization[index] = {
+      name: t(
+        "education:specialization_required",
+        "Specialization Name is required"
+      ),
+    };
+  }
+});
+
+const hasSpecializationError =
+  newErrors.specialization?.some((e) => e?.name);
+
+// Set all errors only once
+setErrors([newErrors]);
+
+// Return only after all validations are completed
+if (!valid || newErrors.group || hasSpecializationError) {
+  return;
+}
+
+      const specializations =
+        specs.length > 0
+          ? specs.map((s) => ({
+           specialization: {
+  specializationId: s.id || null,
+  educationQualificationsId:
+    formData[0].educationQualificationsId || null,
+  specializationName: s.name || null,
+  ...(readOnlyCodes && s.id
+    ? {}
+    : {
+        specializationCode: s.code || null,
+      }),
+},
+            group: {
+              educationGroupId: s.group || formData[0].group || null,
+              groupCode: null,
+              groupName: null,
+              displayOrder: 0,
+            },
+          }))
+          : formData[0].group
+            ? [
+              {
+                specialization: {
+                  specializationId: null,
+                  educationQualificationsId:
+                    formData[0].educationQualificationsId || null,
+                  specializationName: null,
+                  specializationCode: null,
+                },
+                group: {
+                  educationGroupId: formData[0].group,
+                  groupCode: null,
+                  groupName: null,
+                  displayOrder: 0,
+                },
+              },
+            ]
+            : [];
+
       const payload = {
-        qualification: {
-          levelId: formData[0].educationLevel,
-          qualificationName: formData[0].course,
-          // qualificationCode: formData[0].course,
-          qualificationCode: formData[0].courseCode || "",
-          displayOrder: 0,
-          educationQualificationsId:
-            formData[0].educationQualificationsId || null,
-        },
-        specializations: formData[0].specializationOthers
-          .filter((s) => s?.name.trim())
-          .map((s) => ({
-            specializationName: s.name.trim(),
-            // specializationCode: s.name,
-            specializationCode: s.code || "",
-            specializationId: s.id || null,
-          })),
+   qualification: {
+  levelId: formData[0].educationLevel,
+  qualificationName: formData[0].course,
+  ...(readOnlyCodes
+    ? {}
+    : {
+        qualificationCode: formData[0].courseCode || "",
+      }),
+  displayOrder: 0,
+  educationQualificationsId:
+    formData[0].educationQualificationsId || null,
+},
+        specializations,
       };
 
-      const res = await masterApiService.saveEducation(payload);
+      console.log("Payload:", payload);
 
-      const saved = res.data;
+      const res = await masterApiService.saveEducation(payload);
 
       if (isEditMode) {
         if (res.success) {
@@ -235,9 +468,9 @@ export const useExperience = () => {
           toast.error(res.message + ": " + res.data);
         }
       }
+
       if (res.success) {
         await loadData();
-
         setShowModal(false);
         setIsEditMode(false);
         setEditIndex(null);
@@ -247,7 +480,6 @@ export const useExperience = () => {
       toast.error("Save failed");
     }
   };
-
   const handleDelete = (index) => {
     setExperienceList((prev) => prev.filter((_, i) => i !== index));
     toast.success(t("education:deleted_success"));
@@ -261,20 +493,25 @@ export const useExperience = () => {
         String(item.educationLevel).toLowerCase()
     );
 
+    const hasSpecialization =
+      item.specialization?.some(
+        (s) => s.name || s.code
+      ) || false;
+
     setFormData([
       {
-        educationLevel: selectedOption?.documentTypeId || "", // ✅ FIXED
+        educationLevel: selectedOption?.documentTypeId || "",
         course: item.course,
         courseCode: item.qualificationCode || "",
         educationQualificationsId: item.educationQualificationsId || null,
-        specializationOthers:
-          item.specialization?.length > 0
-            ? item.specialization.map((s) => ({
-                name: s.name,
-                id: s.id,
-                code: s.code,
-              }))
-            : [],
+
+        specializationOthers: hasSpecialization
+          ? item.specialization
+          : [],
+
+        group: !hasSpecialization
+          ? item.group?.educationGroupId || ""
+          : "",
       },
     ]);
 
@@ -310,6 +547,7 @@ export const useExperience = () => {
     currentPage,
     pageSize,
     isEditMode,
+    groupOptions,
 
     setSearchTerm,
     setCurrentPage,

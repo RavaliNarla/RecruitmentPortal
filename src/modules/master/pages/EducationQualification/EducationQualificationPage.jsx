@@ -20,6 +20,7 @@ const ExperienceDetails = () => {
     currentPage,
     pageSize,
     educationOptions,
+    groupOptions,
 
     setSearchTerm,
     setCurrentPage,
@@ -127,6 +128,7 @@ const ExperienceDetails = () => {
         isViewing={isViewing}
         isEditing={isEditing}
         educationOptions={educationOptions}
+          groupOptions={groupOptions}
       />
 
       <DeleteConfirmModal

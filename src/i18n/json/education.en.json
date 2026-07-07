@@ -24,6 +24,9 @@
   "deleted_success": "Deleted successfully",
   "invalid_characters": "Invalid characters",
   "duplicate_specialization": "Duplicate specialization",
+  "group_required": "Group is required",
+  "group": "Group",
+   "group_placeholder": "Enter group",
   "duplicate_course": "Course already exists",
   "specialization_required": "Specialization is required",
   "course": "Course",
@@ -33,5 +36,10 @@
   "view_education": "View Education",
   "edit_education": "Edit Education",
   "specialization_name_placeholder": "Specialization Name",
-  "specialization_code_placeholder": "Specialization Code"
+  "specialization_code_placeholder": "Specialization Code",
+      "course_required": "Course is required",
+
+  "course_code_required": "Course Code is required",
+  "specialization_code_required": "Specialization Code is required",
+  "duplicate_specialization_code": "Duplicate specialization code"
 }

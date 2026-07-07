@@ -215,51 +215,64 @@ const ExtensionsRequests = () => {
   const isL1 = privileges?.["L1 Approval"];
   const isL2 = privileges?.["L2 Approval"];
 
-  const statusOptionsByApproval = {
-    L1: [
-      { value: "ALL", label: "All" },
-      { value: "L1_PENDING", label: "L1 Pending" },
-      { value: "L2_PENDING", label: "L2 Pending" },
-      { value: "L1_REJECTED", label: "L1 Rejected" },
-      { value: "L2_REJECTED", label: "L2 Rejected" },
-      { value: "APPROVED", label: "Approved" },
-    ],
-    L2: [
-      { value: "ALL", label: "All" },
-      { value: "L2_PENDING", label: "L2 Pending" },
-      { value: "L2_REJECTED", label: "L2 Rejected" },
-      { value: "APPROVED", label: "Approved" },
-    ],
-  };
+const statusOptionsByApproval = {
+  L1: [
+    { value: "ALL", label: t("common:all") },
+    { value: "L1_PENDING", label: t("common:l1_pending") },
+    { value: "L2_PENDING", label: t("common:l2_pending") },
+    { value: "L1_REJECTED", label: t("common:l1_rejected") },
+    { value: "L2_REJECTED", label: t("common:l2_rejected") },
+    { value: "APPROVED", label: t("common:approved") },
+  ],
+
+  L2: [
+    { value: "ALL", label: t("common:all") },
+    { value: "L2_PENDING", label: t("common:l2_pending") },
+    { value: "L2_REJECTED", label: t("common:l2_rejected") },
+    { value: "APPROVED", label: t("common:approved") },
+  ],
+};
   const requestTypeCol = isL2 ? 3 : 2;
   const statusCol = isL2 ? 2 : 1;
 
-  const statusOptions = useMemo(() => {
-    if (isL1) return statusOptionsByApproval.L1;
-    if (isL2) return statusOptionsByApproval.L2;
-    return [{ value: "ALL", label: "All" }];
-  }, [isL1, isL2]);
+ const {  i18n } = useTranslation([
+  "jobPostingsList",
+  "common",
+  "extensionsRequests",
+]);
 
-  const requestTypeDropdownOptions = useMemo(() => {
-    const options = [
-      {
-        label: "All",
-        value: "ALL",
-        raw: null,
-      },
-      ...requestTypeOptions,
-    ];
+const statusOptions = useMemo(() => {
+  if (isL1) return statusOptionsByApproval.L1;
+  if (isL2) return statusOptionsByApproval.L2;
 
-    if (isL2) {
-      return options.filter(
-        (opt) =>
-          opt.value === "ALL" ||
-          !opt.label?.toLowerCase().includes("zone office change request")
-      );
-    }
+  return [
+    {
+      value: "ALL",
+      label: t("common:all"),
+    },
+  ];
+}, [isL1, isL2, i18n.language]);
 
-    return options;
-  }, [isL2, requestTypeOptions]);
+const requestTypeDropdownOptions = useMemo(() => {
+  const options = [
+    {
+      label: t("common:all"),
+      value: "ALL",
+      raw: null,
+    },
+    ...requestTypeOptions,
+  ];
+
+  if (isL2) {
+    return options.filter(
+      (opt) =>
+        opt.value === "ALL" ||
+        !opt.label?.toLowerCase().includes("zone office change request")
+    );
+  }
+
+  return options;
+}, [isL2, requestTypeOptions, i18n.language]);
 
   const getStatusBadge = (status = "") => {
     switch (status) {

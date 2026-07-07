@@ -36,7 +36,7 @@ export function mapEduRulesToModalData(
         educationQualificationsId: condition.qualification || "",
         specializationId: condition.specialization || "",
         duration: condition.duration || "",
-
+ group: condition.group || "", 
         percentage: condition.percentage || "",
       })),
     }));

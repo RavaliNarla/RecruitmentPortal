@@ -90,5 +90,11 @@
   "november": "November",
   "december": "December",
   "view_file": "Preview Offer",
-  "offer_letter_request": "Offer Letter Request"
-}
+  "offer_letter_request": "Offer Letter Request",
+    "all": "All",
+  "l1_pending": "L1 Pending",
+  "l2_pending": "L2 Pending",
+  "l1_rejected": "L1 Rejected",
+  "l2_rejected": "L2 Rejected",
+  "approved": "Approved"
+} 
