@@ -246,6 +246,7 @@ useEffect(() => {
               {formatDMY(
                 requisition?.startDate || requisition?.registration_start_date
               )}
+              
             </span>
 
             <span className="date-divider">|</span>
@@ -329,7 +330,9 @@ useEffect(() => {
               <span className="modal-date">
                 <i className="bi bi-calendar3 me-1"></i>
                 {t("candidateWorkflow:start")}:{" "}
-                {formatDMY(requisition?.registration_start_date)}
+                {formatDMY(
+                  requisition?.startDate || requisition?.registration_start_date
+                )}
               </span>
 
               <span className="modal-divider">|</span>
@@ -337,7 +340,9 @@ useEffect(() => {
               <span className="modal-date">
                 <i className="bi bi-clock me-1"></i>
                 {t("candidateWorkflow:end")}:{" "}
-                {formatDMY(requisition?.registration_end_date)}
+                {formatDMY(
+                  requisition?.endDate || requisition?.registration_end_date
+                )}
               </span>
             </div>
 
