@@ -32,42 +32,42 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 (async () => {
   try {
     // Set favicon based on orgSlug in URL or saved login org
-    const pathname = window.location.pathname || "/";
-    const parts = pathname.split('/').filter(Boolean);
-    const urlOrg = parts.length > 0 ? parts[0] : null;
-    const orgKey = normalizeOrganizationKey(urlOrg || getSavedLoginOrganization());
-    const orgConfig = getOrganizationConfig(orgKey);
+    // const pathname = window.location.pathname || "/";
+    // const parts = pathname.split('/').filter(Boolean);
+    // const urlOrg = parts.length > 0 ? parts[0] : null;
+    // const orgKey = normalizeOrganizationKey(urlOrg || getSavedLoginOrganization());
+    // const orgConfig = getOrganizationConfig(orgKey);
 
-    const setIcon = (href) => {
-      const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-      link.type = 'image/png';
-      link.rel = 'icon';
-      link.href = href;
-      document.getElementsByTagName('head')[0].appendChild(link);
+    // const setIcon = (href) => {
+    //   const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    //   link.type = 'image/png';
+    //   link.rel = 'icon';
+    //   link.href = href;
+    //   document.getElementsByTagName('head')[0].appendChild(link);
 
-      const apple = document.querySelector("link[rel='apple-touch-icon']") || document.createElement('link');
-      apple.rel = 'apple-touch-icon';
-      apple.href = href;
-      document.getElementsByTagName('head')[0].appendChild(apple);
-    };
+    //   const apple = document.querySelector("link[rel='apple-touch-icon']") || document.createElement('link');
+    //   apple.rel = 'apple-touch-icon';
+    //   apple.href = href;
+    //   document.getElementsByTagName('head')[0].appendChild(apple);
+    // };
 
-    if (orgConfig?.logo) {
-      const logo = orgConfig.logo;
-      const trimmed = String(logo).trim();
+    // if (orgConfig?.logo) {
+    //   const logo = orgConfig.logo;
+    //   const trimmed = String(logo).trim();
 
-      if (trimmed.startsWith("data:")) {
-        setIcon(trimmed);
-      } else if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('/')) {
-        // Absolute or relative URL
-        setIcon(trimmed);
-      } else {
-        // Likely base64 without data prefix - try to detect type
-        const isPng = trimmed.startsWith('iVBOR');
-        const isJpeg = trimmed.startsWith('/9j') || trimmed.startsWith('ffd8');
-        const mime = isJpeg ? 'image/jpeg' : isPng ? 'image/png' : 'image/png';
-        setIcon(`data:${mime};base64,${trimmed}`);
-      }
-    }
+    //   if (trimmed.startsWith("data:")) {
+    //     setIcon(trimmed);
+    //   } else if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('/')) {
+    //     // Absolute or relative URL
+    //     setIcon(trimmed);
+    //   } else {
+    //     // Likely base64 without data prefix - try to detect type
+    //     const isPng = trimmed.startsWith('iVBOR');
+    //     const isJpeg = trimmed.startsWith('/9j') || trimmed.startsWith('ffd8');
+    //     const mime = isJpeg ? 'image/jpeg' : isPng ? 'image/png' : 'image/png';
+    //     setIcon(`data:${mime};base64,${trimmed}`);
+    //   }
+    // }
     // Initialize MSAL
     await msalInstance.initialize();
 

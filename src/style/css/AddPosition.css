@@ -405,7 +405,7 @@
 }
 
 .mandedu .btn-primary {
-  background-color: #f26522 !important;
+  background-color: var(--app-primary-color) !important;
 }
 
 .add-position-page .btn.disabled,
