@@ -66,27 +66,27 @@ const OfferPool = ({
 
 
   const fetchExamConfiguration = async () => {
-  try {
-    if (!selectedPositionId) {
+    try {
+      if (!selectedPositionId) {
+        setHasExamConfiguration(false);
+        return;
+      }
+
+      const query = Array.isArray(selectedPositionId)
+        ? selectedPositionId.join(",")
+        : selectedPositionId;
+
+      const res =
+        await jobPositionApiService.getExamConfigurationsByPositions(query);
+
+      const data = res?.data || [];
+
+      setHasExamConfiguration(data.length > 0);
+    } catch (err) {
+      console.error(err);
       setHasExamConfiguration(false);
-      return;
     }
-
-    const query = Array.isArray(selectedPositionId)
-      ? selectedPositionId.join(",")
-      : selectedPositionId;
-
-    const res =
-      await jobPositionApiService.getExamConfigurationsByPositions(query);
-
-    const data = res?.data || [];
-
-    setHasExamConfiguration(data.length > 0);
-  } catch (err) {
-    console.error(err);
-    setHasExamConfiguration(false);
-  }
-};
+  };
 
   const formatDate = (value) => {
     if (!value) return "-";
@@ -170,7 +170,7 @@ const OfferPool = ({
       setLoading(true);
       const res =
         await jobPositionApiService.getOffersByPosition(selectedPositionId);
-        console.log("Offer API Response:", res.data);
+      console.log("Offer API Response:", res.data);
 
       const rawList = res?.data || [];
       const mapped = rawList.map((item) => {
@@ -181,35 +181,35 @@ const OfferPool = ({
           applicationNo: item.regNo,
           applicationId: offer.applicationId,
           offerFileUrl: offer.offerFileUrl,
-            letterNumber: offer.letterNumber,
+          letterNumber: offer.letterNumber,
 
           name: item.candidateFullName,
           categoryName: item.reservationCategory,
-            // NEW FIELDS
-    dateOfBirth: item.candidateDob
-      ? formatDate(item.candidateDob)
-      : "-",
+          // NEW FIELDS
+          dateOfBirth: item.candidateDob
+            ? formatDate(item.candidateDob)
+            : "-",
 
-    age: item.age || "-",
+          age: item.age || "-",
 
-    ageConcession: item.hasAgeConcession ? "Yes" : "No",
+          ageConcession: item.hasAgeConcession ? "Yes" : "No",
 
-    qnq: offer.qualified ? "Q" : "NQ",
+          qnq: offer.qualified ? "Q" : "NQ",
 
-    writtenMarks:
-      item.examMarks !== null && item.examMarks !== undefined
-        ? item.examMarks
-        : "-",
+          writtenMarks:
+            item.examMarks !== null && item.examMarks !== undefined
+              ? item.examMarks
+              : "-",
 
-    interviewScore:
-      item.interviewMarks !== null && item.interviewMarks !== undefined
-        ? item.interviewMarks
-        : "-",
+          interviewScore:
+            item.interviewMarks !== null && item.interviewMarks !== undefined
+              ? item.interviewMarks
+              : "-",
 
-    combinedScore:
-      item.finalScore !== null && item.finalScore !== undefined
-        ? item.finalScore
-        : "-",
+          combinedScore:
+            item.finalScore !== null && item.finalScore !== undefined
+              ? item.finalScore
+              : "-",
 
           score: item.finalScore,
           // qnq: offer.qualified === true ? "Q" : "NQ",
@@ -223,9 +223,9 @@ const OfferPool = ({
           acceptBeforeDate: formatDate(offer.acceptBeforeDate),
           joiningDate: formatDate(offer.joiningDate),
           historyId: item.offerApprovalId, // add this|
-            cutOffDate: "-",
-    shortlisted: "-",
-    
+          cutOffDate: "-",
+          shortlisted: "-",
+
         };
       });
 
@@ -339,7 +339,7 @@ const OfferPool = ({
                 {t("candidateWorkflow:registration_number")}
               </th>
 
-              
+
               <th
                 className="fs-14 fw-normal py-3 border-top"
                 style={{ paddingLeft: "2rem" }}
@@ -397,6 +397,15 @@ const OfferPool = ({
                 {t("candidateWorkflow:city")}
               </th>
 
+
+               <th
+                className="fs-14 fw-normal py-3 border-top"
+                scope="col"
+                style={{ paddingLeft: "1.25rem" }}
+              >
+                {t("candidateWorkflow:offer_letter_number")}
+              </th>
+
               <th
                 className="fs-14 fw-normal py-3 border-top"
                 scope="col"
@@ -420,13 +429,7 @@ const OfferPool = ({
               </th>
 
 
-              <th
-  className="fs-14 fw-normal py-3 border-top"
-  scope="col"
-  style={{ paddingLeft: "1.25rem" }}
->
-{t("candidateWorkflow:offer_letter_number")}
-</th>
+             
               <th
                 className="fs-14 fw-normal py-3 border-top sticky-col-action border-left"
                 scope="col"
@@ -546,9 +549,8 @@ const OfferPool = ({
                     style={{ paddingLeft: "1.25rem", alignContent: "center" }}
                   >
                     <span
-                      className={`round_badge px-3 py-1 fs-12 rounded text-white ${
-                        OFFER_STATUS_CLASS_MAP[c.status] || "bg-secondary"
-                      }`}
+                      className={`round_badge px-3 py-1 fs-12 rounded text-white ${OFFER_STATUS_CLASS_MAP[c.status] || "bg-secondary"
+                        }`}
                     >
                       {OFFER_STATUS_LABEL_MAP[c.status] || c.status}
                     </span>
@@ -586,6 +588,15 @@ const OfferPool = ({
                     </p>
                   </td>
 
+                    <td
+                    className="align-content-center"
+                    style={{ paddingLeft: "1.25rem" }}
+                  >
+                    <p className="fw-normal fs-14 mb-0 py-2 text-muted">
+                      {c.letterNumber || "-"}
+                    </p>
+                  </td>
+
                   <td
                     className="align-content-center"
                     style={{ paddingLeft: "1.25rem" }}
@@ -610,14 +621,7 @@ const OfferPool = ({
                       {c.joiningDate}
                     </p>
                   </td>
-                  <td
-  className="align-content-center"
-  style={{ paddingLeft: "1.25rem" }}
->
-  <p className="fw-normal fs-14 mb-0 py-2 text-muted">
-    {c.letterNumber || "-"}
-  </p>
-</td>
+                
 
                   <td
                     className="align-content-center sticky-col-action"
@@ -635,18 +639,8 @@ const OfferPool = ({
                       <button
                         className="btn btn-sm btn-outline-secondary border-0 me-2"
                         onClick={() => {
-                          if (
-                            c.status === "OFFER_SENT" ||
-                            c.status === "OFFER_ACCEPTED" ||
-                            c.status === "L1_REJECTED" ||
-                            c.status === "L2_REJECTED" ||
-                            c.status === "L1_PENDING" ||
-                            c.status === "L2_PENDING" ||
-                            c.status === "OFFER_REJECTED"
-                          ) {
-                            handleCandidateOfferPreview(
-                              c.offerFileUrl // applicationId
-                            );
+                          if (c.offerFileUrl) {
+                            handleCandidateOfferPreview(c.offerFileUrl);
                           } else {
                             if (!offerTemplateId) {
                               toast.error(t("candidateWorkflow:OfferTemplate"));
@@ -655,7 +649,7 @@ const OfferPool = ({
 
                             handleCandidatePreview(
                               offerTemplateId,
-                              c.applicationId // applicationId
+                              c.applicationId
                             );
                           }
                         }}
@@ -750,100 +744,100 @@ const OfferPool = ({
                 </div>
 
                 {/* Body */}
-           <div className="modal-body pt-2">
-  <div
-    className="container-fluid rounded p-4 shadow-sm"
-    style={{ backgroundColor: "#f7f8fb" }}
-  >
-    <div className="row g-3">
+                <div className="modal-body pt-2">
+                  <div
+                    className="container-fluid rounded p-4 shadow-sm"
+                    style={{ backgroundColor: "#f7f8fb" }}
+                  >
+                    <div className="row g-3">
 
-      <InfoField
-        label={t("candidateWorkflow:registration_number")}
-        value={selectedOffer.applicationNo}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:registration_number")}
+                        value={selectedOffer.applicationNo}
+                      />
 
-      <InfoField
-        label={t("common:name")}
-        value={selectedOffer.name}
-      />
+                      <InfoField
+                        label={t("common:name")}
+                        value={selectedOffer.name}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:caste")}
-        value={selectedOffer.categoryName}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:caste")}
+                        value={selectedOffer.categoryName}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:date_of_birth")}
-        value={selectedOffer.dateOfBirth}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:date_of_birth")}
+                        value={selectedOffer.dateOfBirth}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:cutoff_date")}
-        value={selectedOffer.cutOffDate}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:cutoff_date")}
+                        value={selectedOffer.cutOffDate}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:age")}
-        value={selectedOffer.age}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:age")}
+                        value={selectedOffer.age}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:age_concession")}
-        value={selectedOffer.ageConcession}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:age_concession")}
+                        value={selectedOffer.ageConcession}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:qnq")}
-        value={selectedOffer.qnq}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:qnq")}
+                        value={selectedOffer.qnq}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:shortlisted")}
-        value={selectedOffer.shortlisted}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:shortlisted")}
+                        value={selectedOffer.shortlisted}
+                      />
 
-      {hasExamConfiguration && (
-  <InfoField
-    label={t("candidateWorkflow:written_mark")}
-    value={selectedOffer.writtenMarks}
-  />
-)}
+                      {hasExamConfiguration && (
+                        <InfoField
+                          label={t("candidateWorkflow:written_mark")}
+                          value={selectedOffer.writtenMarks}
+                        />
+                      )}
 
-      <InfoField
-        label={t("candidateWorkflow:interview_score")}
-        value={selectedOffer.interviewScore}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:interview_score")}
+                        value={selectedOffer.interviewScore}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:combined_score_details")}
-        value={selectedOffer.combinedScore}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:combined_score_details")}
+                        value={selectedOffer.combinedScore}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:status")}
-        value={
-          OFFER_STATUS_LABEL_MAP[selectedOffer.status] ||
-          selectedOffer.status
-        }
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:status")}
+                        value={
+                          OFFER_STATUS_LABEL_MAP[selectedOffer.status] ||
+                          selectedOffer.status
+                        }
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:select_list")}
-        value={selectedOffer.selectList}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:select_list")}
+                        value={selectedOffer.selectList}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:wait_list")}
-        value={selectedOffer.waitList}
-      />
+                      <InfoField
+                        label={t("candidateWorkflow:wait_list")}
+                        value={selectedOffer.waitList}
+                      />
 
-      <InfoField
-        label={t("candidateWorkflow:city")}
-        value={selectedOffer.location}
-      />
-    </div>
-  </div>
-</div>
+                      <InfoField
+                        label={t("candidateWorkflow:city")}
+                        value={selectedOffer.location}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -2999,7 +2999,7 @@ export default function CandidateScreening({ selectedJob }) {
                     {/* Accept Before Date */}
                     <div>
                       <p className="mb-1 fw-normal fs-13 blue-color">
-                        {t("candidateWorkflow:accept_before")}
+                        {t("candidateWorkflow:accept_before_dte")}
                       </p>
                       <input
                         type="date"

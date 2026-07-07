@@ -289,6 +289,7 @@
   "l1_rejected": "L1 अस्वीकृत",
   "l2_rejected": "L2 अस्वीकृत",
   "signatory": "हस्ताक्षरकर्ता",
+  "accept_before_dte": "स्वीकृति की अंतिम तिथि",
   "designation": "पदनाम",
   "generate_offer": "ऑफ़र उत्पन्न करें",
   "upload_digital_signature": "डिजिटल हस्ताक्षर अपलोड करें",

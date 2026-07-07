@@ -151,6 +151,7 @@
   "offer_template": "Offer Template",
   "select_template": "Select Template",
   "accept_before": "Accept Before",
+  "accept_before_dte": "Accept Before Date",
   "send_offers": "Send Offers",
   "send_for_approval": "Send for Approval",
   "assign_locations": "Assign Locations",

@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Container, Row, Col, Form, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Modal,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import Select from "react-select";
 import "../../../style/css/OfferLetterRequestApproval.css";
 import ApprovalCommentModal from "../components/ApprovalCommentModal";
@@ -271,9 +280,10 @@ const OfferLetterRequestApproval = () => {
               <th>{t("approvalHistory:state")}</th>
               <th>{t("approvalHistory:city")}</th>
               <th>{t("common:score")}</th>
-              <th>{t("offerLetterRequest:joining_date")}</th>
+              <th>{t("offerLetterRequest:offer_letter_number")}</th>
               <th>{t("offerLetterRequest:offer_release_date")}</th>
               <th>{t("offerLetterRequest:accept_before")}</th>
+              <th>{t("offerLetterRequest:joining_date")}</th>
               <th>{t("approvalHistory:status")}</th>
               <th>{t("common:action")}</th>
             </tr>
@@ -282,7 +292,7 @@ const OfferLetterRequestApproval = () => {
           <tbody>
             {candidates.length === 0 ? (
               <tr>
-                <td colSpan="11" className="text-center py-4 text-muted">
+                <td colSpan="12" className="text-center py-4 text-muted">
                   {t("offerLetterRequest:no_candidates_found")}
                 </td>
               </tr>
@@ -326,9 +336,10 @@ const OfferLetterRequestApproval = () => {
                   <td>{candidate.state}</td>
                   <td>{candidate.city}</td>
                   <td>{candidate.score}</td>
-                  <td>{formatDateDDMMYYYY(candidate.joiningDate)}</td>
+                  <td>{candidate.letterNumber}</td>
                   <td>{formatDateDDMMYYYY(candidate.offerReleaseDate)}</td>
                   <td>{formatDateDDMMYYYY(candidate.acceptBefore)}</td>
+                  <td>{formatDateDDMMYYYY(candidate.joiningDate)}</td>
                   <td>
                     <span className={`badge bg-${candidate.statusBadge}`}>
                       {candidate.statusLabel}

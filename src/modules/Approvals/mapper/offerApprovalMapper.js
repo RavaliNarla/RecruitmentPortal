@@ -60,5 +60,6 @@ export const mapOfferApprovalCandidate = (item) => {
     acceptBefore: history.acceptBeforeDate || "-",
 
     offerFileUrl: history.offerFileUrl || "",
+    letterNumber: item.letterNumber || "-",
   };
 };
