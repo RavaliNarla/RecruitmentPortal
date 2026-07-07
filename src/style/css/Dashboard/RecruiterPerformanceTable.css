@@ -141,14 +141,14 @@
 }
 
 .recruiter-table thead th {
-  color: white;
-  font-size: 0.75rem;
+  color: var(--app-secondary-color);
+  font-size: 0.875rem;
   font-weight: 600;
   border: none !important;
   white-space: nowrap;
   padding: 14px 14px;
   vertical-align: middle;
-  background: #0f3b96;
+  background:var(--app-dashboardbg-color);
 }
 
 .recruiter-table thead th:first-child {

@@ -41,6 +41,10 @@ function AppWrapper() {
       "--app-secondary-color",
       organizationTheme?.secondaryColor || "#162b75"
     );
+     root.style.setProperty(
+      "--app-dashboardbg-color",
+      organizationTheme?.dashboardbgcolor || "#e7ebec"
+    );
     root.style.setProperty(
       "--app-link-color",
       organizationTheme?.linkColor || "#ff6a00"

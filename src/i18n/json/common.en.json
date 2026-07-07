@@ -37,7 +37,7 @@
   "select_education": "Select Education",
   "select_specialization": "Select Specialization",
   "select_certification": "Select Certification",
-  "footer_text": "Copyright © {{year}} Bank of Baroda. All rights reserved | Powered by Sagarsoft",
+  "footer_text": "Copyright © {{year}} {{organizationName}}. All rights reserved | Powered by Sagarsoft",
   "english_us": "English (US)",
   "hindi": "हिंदी",
   "candidate_workflow": "Candidate Workflow",

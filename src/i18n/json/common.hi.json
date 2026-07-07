@@ -36,7 +36,7 @@
   "select_education": "डिग्री चुनें",
   "select_specialization": "विशेषज्ञता चुनें",
   "select_certification": "प्रमाणन चुनें",
-  "footer_text": "कॉपीराइट © {{year}} बैंक ऑफ बड़ौदा। सर्वाधिकार सुरक्षित | संचालित: सागर सॉफ्ट",
+  "footer_text": "कॉपीराइट © {{year}} {{organizationName}}। सर्वाधिकार सुरक्षित | संचालित: सागर सॉफ्ट",
   "english_us": "English (US)",
   "hindi": "हिंदी",
   "candidate_workflow": "उम्मीदवार कार्यप्रवाह",

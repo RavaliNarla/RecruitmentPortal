@@ -161,8 +161,8 @@ const Header = () => {
             <Image
               src={currentLogo}
               alt={organizationTheme?.logoAlt || "Logo"}
-              width={140}
-              height={40}
+              width="auto"
+              height={30}
               className="me-2 imgbob"
             />
           </div>
@@ -400,7 +400,8 @@ const Header = () => {
 
                   <NavDropdown.Item
                     as={NavLink}
-                    to="/exam-requests"
+                    to={orgRoute("/exam-requests")}
+                    
                     onClick={closeMenu}
                   >
                     {t("exam_requests")}

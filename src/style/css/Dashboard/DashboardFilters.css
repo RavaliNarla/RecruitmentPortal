@@ -8,18 +8,18 @@
 
 .filters-header {
   height: 40px;
-  color: #fff;
+  color: var(--app-secondary-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  background: linear-gradient(90deg, rgb(0, 48, 135) 0%, rgb(0, 82, 204) 100%);
+  background: var(--app-dashboardbg-color);
 }
 .header-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  /* color: #fff; */
   font-size: 0.875rem;
   font-weight: 700;
 }
@@ -110,7 +110,7 @@
 }
 
 .segmented-control button.active {
-  background: #003da5;
+  background: var(--app-secondary-color);
   color: #fff;
 }
 
@@ -400,7 +400,7 @@
   border: none;
   border-radius: 18px;
 
-  background: #0047c7;
+  background: var(--app-secondary-color);
   color: #fff;
 
   display: flex;
@@ -415,7 +415,7 @@
 }
 
 .apply-btn:hover {
-  background: linear-gradient(135deg, rgb(0, 48, 135) 0%, rgb(0, 82, 204) 100%);
+  background:  var(--app-secondary-color);
 }
 
 /* ==========================

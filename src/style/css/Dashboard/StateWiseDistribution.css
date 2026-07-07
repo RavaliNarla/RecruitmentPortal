@@ -75,13 +75,13 @@ table {
 }
 
 thead {
-  background: #0f3b96;
+  background:var(--app-dashboardbg-color);
 }
 
 thead th {
-  color: #fff ;
+  color: var(--app-secondary-color); ;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 800;
   text-align: left;
   padding: 18px 22px;
 }
@@ -97,9 +97,9 @@ tbody td {
 }
 
 .state-name {
-  color: #002f87;
+  color: #000;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .city-name {

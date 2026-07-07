@@ -124,12 +124,12 @@ const logo =
       <div className="right-panel">
         <div className="logo">
           <img src={logo} alt={organizationConfig.logoAlt} />
-          <h4>{organizationConfig.appTitle}</h4>
+          {/* <h4>{organizationConfig.appTitle}</h4>
           {isOrganizationLogin && (
             <p className="organization-name">
               {organizationConfig.organizationName}
             </p>
-          )}
+          )} */}
         </div>
 
         {isPasswordLogin ? (
