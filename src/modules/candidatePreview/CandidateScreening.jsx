@@ -2025,6 +2025,10 @@ export default function CandidateScreening({ selectedJob }) {
     return offerData.filter((o) => offerSelectedIds.includes(o.id));
   }, [offerData, offerSelectedIds]);
 
+  const canGenerateOffer =
+    selectedOfferObjects.length > 0 &&
+    selectedOfferObjects.every((o) => o.qnq === "Q" && !o.waitList);
+
   const allHaveLocationAndState =
     selectedOfferObjects.length > 0 &&
     selectedOfferObjects.every(
@@ -3100,8 +3104,13 @@ export default function CandidateScreening({ selectedJob }) {
                           className="btn orange-bg text-white"
                           onClick={handleGenerateOffer}
                           // disabled={offerSelectedIds.length === 0}
+                          // disabled={
+                          //   generatingOffer || offerSelectedIds.length === 0
+                          // }
                           disabled={
-                            generatingOffer || offerSelectedIds.length === 0
+                            generatingOffer ||
+                            offerSelectedIds.length === 0 ||
+                            !canGenerateOffer
                           }
                         >
                           <i className="bi bi-file-earmark-plus"></i>
