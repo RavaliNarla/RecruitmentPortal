@@ -26,7 +26,10 @@ import { useJobPositionsByRequisition } from "../hooks/useJobPositionsByRequisit
 import masterApiService from "../../master/services/masterApiService";
 import requisitionApiService from "../services/requisitionApiService";
 import jobPositionApiService from "../services/jobPositionApiService";
-import { getOrganizationPath } from "../../auth/services/organizationContextService";
+import {
+  getOrganizationPath,
+  getSavedLoginOrganization,
+} from "../../auth/services/organizationContextService";
 import SinglePositionInfoModal from "../component/SinglePositionInfoModal";
 import { mapVacancyBreakdownByPosition } from "../../jobPosting/mappers/VacancyBreakdownBySinglePosition";
 
@@ -40,6 +43,7 @@ const CreateRequisition = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { orgSlug } = useParams();
+  const currentOrg = orgSlug || getSavedLoginOrganization();
   const from = location.state?.from;
 
   /* ===================== URL + MODE ===================== */
@@ -60,9 +64,9 @@ const CreateRequisition = () => {
 
   const handleCancel = () => {
     if (from === "approval") {
-      navigate(getOrganizationPath("/requisition-requests", orgSlug));
+      navigate(getOrganizationPath("/requisition-requests", currentOrg));
     } else {
-      navigate(getOrganizationPath("/job-posting", orgSlug));
+      navigate(getOrganizationPath("/job-posting", currentOrg));
     }
   };
 
@@ -260,7 +264,9 @@ const CreateRequisition = () => {
         toast.success(editId ? t("update_success") : t("create_success"));
       }
 
-      navigate(REQUISITION_CONFIG.SUCCESS_REDIRECT);
+      navigate(
+        getOrganizationPath(REQUISITION_CONFIG.SUCCESS_REDIRECT, currentOrg)
+      );
     } catch (err) {
       console.error("Save failed", err);
     }

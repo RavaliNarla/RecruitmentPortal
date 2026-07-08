@@ -344,6 +344,7 @@
   color: #fff;
   padding: 12px 8px;
   border-bottom: 1px solid #e5e7eb;
+  background:var(--app-secondary-color);
 }
 
 .schedule-table tbody td {

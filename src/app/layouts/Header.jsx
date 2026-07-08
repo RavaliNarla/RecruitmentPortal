@@ -34,10 +34,10 @@ const Header = () => {
     (state) => state.user.organizationTheme
   );
 
-  const currentLogo = organizationTheme?.logo
-    ? organizationTheme.logo.startsWith("data:")
-      ? organizationTheme.logo
-      : `data:image/png;base64,${organizationTheme.logo}`
+  const currentLogo = organizationTheme?.headerlogo
+    ? organizationTheme.headerlogo.startsWith("data:")
+      ? organizationTheme.headerlogo
+      : `data:image/png;base64,${organizationTheme.headerlogo}`
     : logo;
   const user = userSlice?.user;
 
@@ -162,7 +162,7 @@ const Header = () => {
               src={currentLogo}
               alt={organizationTheme?.logoAlt || "Logo"}
               width="auto"
-              height={30}
+              height={45}
               className="me-2 imgbob"
             />
           </div>

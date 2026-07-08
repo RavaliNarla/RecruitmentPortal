@@ -979,7 +979,7 @@ select.form-control {
   height: 40px;
   min-width: 110px;
 
-  background: #f47c2c;
+  background: var(--app-primary-color);
   color: #fff;
 
   border: none;

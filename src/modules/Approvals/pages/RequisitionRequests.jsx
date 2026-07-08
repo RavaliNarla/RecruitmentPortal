@@ -9,7 +9,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { Search, ChevronDown, ChevronUp } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../../style/css/ApprovalsRequsition.css";
 import start_icon from "../../../assets/start_icon.png";
 import dept_icon from "../../../assets/dept_icon.jpg";
@@ -37,11 +37,17 @@ import { useSelector } from "react-redux";
 import { useApprovalRequisitions } from "../hooks/useApprovalRequisitions";
 import requisitionApiService from "../../jobPosting/services/requisitionApiService";
 import masterApiService from "../../master/services/masterApiService";
+import {
+  getOrganizationPath,
+  getSavedLoginOrganization,
+} from "../../auth/services/organizationContextService";
 
 const RequisitionRequests = () => {
   const { t } = useTranslation(["jobPostingsList", "common"]);
 
   const navigate = useNavigate();
+  const { orgSlug } = useParams();
+  const currentOrg = orgSlug || getSavedLoginOrganization();
   const [pageSize, setPageSize] = useState(10);
 
   const [showCommentModal, setShowCommentModal] = useState(false);
@@ -358,7 +364,10 @@ const RequisitionRequests = () => {
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate(
-                      `/job-posting/${req.id}/add-position?positionId=${pos.positionId}`,
+                      getOrganizationPath(
+                        `/job-posting/${req.id}/add-position?positionId=${pos.positionId}`,
+                        currentOrg
+                      ),
                       {
                         state: {
                           mode: "view",
@@ -646,8 +655,12 @@ const RequisitionRequests = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       if (!req.isDraft) {
-                        navigate(
-                          `/job-posting/create-requisition?id=${req.id}`,
+                        	
+					          navigate(
+                          getOrganizationPath(
+                            `/job-posting/create-requisition?id=${req.id}`,
+                            currentOrg
+                          ),
                           {
                             state: {
                               mode: "view",
@@ -655,13 +668,17 @@ const RequisitionRequests = () => {
                             },
                           }
                         );
+						
 
                         return;
                       }
 
                       // DRAFT REQUISITION
-                      navigate(
+                    navigate(
+                      getOrganizationPath(
                         `/job-posting/create-requisition?id=${req.parentRequisitionId}`,
+                        currentOrg
+                      ),
                         {
                           state: {
                             mode: "view",
