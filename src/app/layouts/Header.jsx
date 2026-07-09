@@ -71,21 +71,38 @@ const Header = () => {
 
   /* ===================== LOGOUT ===================== */
   const handleLogout = async () => {
-    dispatch(clearUser());
-    dispatch(setRankEnabled(false));
-    dispatch(setLanguage("en"));
-    i18n.changeLanguage("en");
-    await persistor.purge();
+  const activeAccount =
+    instance.getActiveAccount() ||
+    instance.getAllAccounts()[0];
 
-    const activeAccount =
-      instance.getActiveAccount() || instance.getAllAccounts()[0];
-    await instance.logoutRedirect({
-      account: activeAccount,
-      postLogoutRedirectUri: `${window.location.origin}${getLoginPath(
+  console.log("Logout started");
+
+  await instance.logoutRedirect({
+    account: activeAccount,
+    postLogoutRedirectUri:
+      `${window.location.origin}${getLoginPath(
         getSavedLoginOrganization()
       )}`,
-    });
-  };
+  });
+
+  console.log("This should never execute");
+};
+  // const handleLogout = async () => {
+  //   dispatch(clearUser());
+  //   dispatch(setRankEnabled(false));
+  //   dispatch(setLanguage("en"));
+  //   i18n.changeLanguage("en");
+  //   await persistor.purge();
+
+  //   const activeAccount =
+  //     instance.getActiveAccount() || instance.getAllAccounts()[0];
+  //   await instance.logoutRedirect({
+  //     account: activeAccount,
+  //     postLogoutRedirectUri: `${window.location.origin}${getLoginPath(
+  //       getSavedLoginOrganization()
+  //     )}`,
+  //   });
+  // };
   //Privileges
   const privileges = useSelector((state) => state.user.privileges);
 
