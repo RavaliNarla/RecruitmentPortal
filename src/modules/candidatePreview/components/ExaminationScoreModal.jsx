@@ -32,7 +32,8 @@ const TableSection = ({
   const rows = [
     "Appeared",
     "Vacancies",
-    "Qualified Without Relaxation",
+    "Qualified"
+    // "Qualified Without Relaxation",
     // "Qualified With Relaxation"
   ];
 
@@ -104,16 +105,16 @@ const TableSection = ({
 
                 let value = 0;
 
-                if (rowLabel === "Appeared") {
-                  value = category?.appeared || 0;
-                } else if (rowLabel === "Vacancies") {
-                  value = category?.vacancy || 0;
-                } else if (rowLabel === "Qualified Without Relaxation") {
-                  value =
-                    category?.qualifiedWithoutRelaxation ??
-                    category?.qualified ??
-                    0;
-                }
+           if (rowLabel === "Appeared") {
+  value = category?.appeared || 0;
+} else if (rowLabel === "Vacancies") {
+  value = category?.vacancy || 0;
+} else if (rowLabel === "Qualified") {
+  value =
+    category?.qualifiedWithoutRelaxation ??
+    category?.qualified ??
+    0;
+}
 
                 return (
                   <td
@@ -143,7 +144,7 @@ const TableSection = ({
                   ? totalAppearedCount
                   : rowLabel === "Vacancies"
                     ? totalVacancyCount
-                    : rowLabel === "Qualified Without Relaxation"
+                    : rowLabel === "Qualified"
                       ? totalQualifiedCount
                       : 0}
               </td>
