@@ -27,6 +27,8 @@ import { useTranslation } from "react-i18next";
 import SelectIndentModal from "../component/SelectIndentModal";
 import jobPositionApiService from "../services/jobPositionApiService";
 import FormBuilderModal from "../component/DynamicForm/FormBuilderModal";
+import DynamicFieldRenderer from "../component/DynamicForm/DynamicFieldRenderer";
+import useOrgFormSchema from "../hooks/useOrgFormSchema";
 const AddPosition = () => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx"];
@@ -59,6 +61,8 @@ const AddPosition = () => {
   const [showFormBuilder, setShowFormBuilder] = useState(false);
 
   const [additionalForm, setAdditionalForm] = useState(null);
+  const { schema: orgPositionSchema } = useOrgFormSchema("jobPosting");
+  const [orgDynamicFieldValues, setOrgDynamicFieldValues] = useState({});
 
   useEffect(() => {
     if (requisitionId) {
@@ -928,6 +932,7 @@ const AddPosition = () => {
       isAgeRelRiotVictimFamily,
       isAgeRelWdsWomen,
        dynamicFields: additionalForm,
+      orgDynamicFieldValues,
 
       jobPositionExclusion: exclusions.map((item) => {
         const existingExclusion = existingPosition?.jobPositionExclusions?.find(
@@ -1121,6 +1126,21 @@ const AddPosition = () => {
               setSelectedExclusions={setSelectedExclusions}
               onOpenDynamicForm={() => setShowFormBuilder(true)}
             />
+
+            {orgPositionSchema && (
+              <div className="mt-4">
+                <DynamicFieldRenderer
+                  schema={orgPositionSchema}
+                  values={orgDynamicFieldValues}
+                  onChange={(fieldId, value) =>
+                    setOrgDynamicFieldValues((prev) => ({
+                      ...prev,
+                      [fieldId]: value,
+                    }))
+                  }
+                />
+              </div>
+            )}
 
             <div className="form-footer mt-4 mb-4">
               <Button

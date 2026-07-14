@@ -20,6 +20,7 @@ export const mapAddPositionToCreateDto = ({
   isAgeRelRiotVictimFamily,
   isAgeRelWdsWomen,
   dynamicFields,
+  orgDynamicFieldValues,
   jobPositionExclusion = [],
 }) => {
   /* ================= SAFE NORMALIZATION ================= */
@@ -213,6 +214,7 @@ export const mapAddPositionToCreateDto = ({
     approvedOn,
     indentOthers: indentOthers?.trim() || null,
     dynamicFields,
+    orgDynamicFieldValues,
 
     // backend expects this
     cibilScore: 0,

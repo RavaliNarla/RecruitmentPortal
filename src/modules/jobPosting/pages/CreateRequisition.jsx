@@ -32,6 +32,8 @@ import {
 } from "../../auth/services/organizationContextService";
 import SinglePositionInfoModal from "../component/SinglePositionInfoModal";
 import { mapVacancyBreakdownByPosition } from "../../jobPosting/mappers/VacancyBreakdownBySinglePosition";
+import DynamicFieldRenderer from "../component/DynamicForm/DynamicFieldRenderer";
+import useOrgFormSchema from "../hooks/useOrgFormSchema";
 
 const CreateRequisition = () => {
   const { t } = useTranslation(["CreateRequisition", "common"]);
@@ -82,6 +84,8 @@ const CreateRequisition = () => {
   } = useCreateRequisition(editId, mode, isDraftMode);
 
   const [errors, setErrors] = useState({});
+  const { schema: orgRequisitionSchema } = useOrgFormSchema("requisition");
+  const [dynamicFieldValues, setDynamicFieldValues] = useState({});
   useEffect(() => {
     if (!editId) return;
 
@@ -258,7 +262,7 @@ const CreateRequisition = () => {
 
       // ⚪ NORMAL CREATE / EDIT
       else {
-        const payload = mapRequisitionToApi(formData);
+        const payload = mapRequisitionToApi(formData, dynamicFieldValues);
         await saveRequisition(payload);
 
         toast.success(editId ? t("update_success") : t("create_success"));
@@ -644,6 +648,21 @@ const CreateRequisition = () => {
                   </Row>
                 </Col>
               </Row>
+
+              {orgRequisitionSchema && (
+                <div className="mt-4">
+                  <DynamicFieldRenderer
+                    schema={orgRequisitionSchema}
+                    values={dynamicFieldValues}
+                    onChange={(fieldId, value) =>
+                      setDynamicFieldValues((prev) => ({
+                        ...prev,
+                        [fieldId]: value,
+                      }))
+                    }
+                  />
+                </div>
+              )}
 
               {apiError && (
                 <div className="mt-3">
