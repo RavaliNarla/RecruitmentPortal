@@ -6,8 +6,10 @@ import pana from "../../../assets/pana.png";
 
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../services/msalConfig";
-import loginOrganizations from "../config/loginOrganizations.json";
-import { getOrganizationTheme } from "../services/organizationThemeService";
+import {
+  getOrganizationTheme,
+  DEFAULT_ORGANIZATION_THEME,
+} from "../services/organizationThemeService";
 import {
   getOrganizationPath,
   normalizeOrganizationKey,
@@ -34,10 +36,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [organizationConfig, setOrganizationConfig] = useState(
-    loginOrganizations.default
-  );
-  const isOrganizationLogin = Boolean(
-    organizationKey && loginOrganizations[organizationKey]
+    DEFAULT_ORGANIZATION_THEME
   );
   const loginThemeStyles = {
     "--login-primary-color": organizationConfig.primaryColor,
@@ -46,10 +45,6 @@ const Login = () => {
     "--login-focus-color": organizationConfig.focusColor,
   };
 
-const logo =
-  organizationConfig.logo.startsWith("data:")
-    ? organizationConfig.logo
-    : `data:image/png;base64,${organizationConfig.logo}`;
   useEffect(() => {
     let isActive = true;
 
@@ -122,14 +117,15 @@ const logo =
       </div>
 
       <div className="right-panel">
+        {/* <div className="logo">
+          <img src={organizationConfig.logo} alt={organizationConfig.logoAlt} />
+        </div> */}
+
+     
         <div className="logo">
-          <img src={logo} alt={organizationConfig.logoAlt} />
-          {/* <h4>{organizationConfig.appTitle}</h4>
-          {isOrganizationLogin && (
-            <p className="organization-name">
-              {organizationConfig.organizationName}
-            </p>
-          )} */}
+           <img src={organizationConfig.logo} alt={organizationConfig.logoAlt} />
+           <h4>Recruitment Management System</h4>
+         
         </div>
 
         {isPasswordLogin ? (

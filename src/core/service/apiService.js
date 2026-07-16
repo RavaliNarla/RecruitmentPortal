@@ -16,6 +16,7 @@ const API_BASE_URLS = process.env.REACT_APP_API_BASE_URLS;
 const NODE_API_URL = process.env.REACT_APP_NODE_API_URL;
 const CANDIDATE_API_URL = process.env.REACT_APP_CANDIDATE_API_URL;
 const MASTER_DROPDOWN_URL = process.env.REACT_APP_MASTER_DROPDOWN_URL;
+const SUPER_ADMIN_API_URL = process.env.REACT_APP_SUPER_ADMIN_API_URL;
 
 let isRefreshing = false;
 let refreshSubscribers = [];
@@ -123,6 +124,14 @@ const publicNodeApi = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+// Called from the login page, before the user is authenticated — no auth
+// header/refresh interceptor, same reasoning as publicNodeApi above.
+const publicSuperAdminApi = axios.create({
+  baseURL: SUPER_ADMIN_API_URL,
+  headers: { "Content-Type": "application/json" },
+});
+publicSuperAdminApi.interceptors.response.use((response) => response.data);
+
 const masterDropdownApi = axios.create({
   baseURL: MASTER_DROPDOWN_URL,
   headers: { "Content-Type": "application/json" },
@@ -200,4 +209,5 @@ export {
   nodeApi,
   publicNodeApi,
   masterDropdownApi,
+  publicSuperAdminApi,
 };

@@ -4,8 +4,8 @@ import { useMsal } from "@azure/msal-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setOrganizationTheme } from "../../../app/providers/userSlice";
+import { getOrganizationTheme } from "./organizationThemeService";
 import {
-  getOrganizationConfig,
   getLoginPath,
   getSavedLoginOrganization,
   saveLoginOrganization,
@@ -22,7 +22,9 @@ export default function PrivateRoute() {
     // Only save organization from URL when user is not authenticated.
     if (orgSlug && !authUser) {
       const organizationKey = saveLoginOrganization(orgSlug);
-      dispatch(setOrganizationTheme(getOrganizationConfig(organizationKey)));
+      getOrganizationTheme(organizationKey).then((theme) => {
+        dispatch(setOrganizationTheme(theme));
+      });
     }
   }, [dispatch, orgSlug]);
 

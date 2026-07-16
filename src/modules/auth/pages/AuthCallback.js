@@ -10,10 +10,10 @@ import {
 } from "../../../app/providers/userSlice";
 import { getDefaultRoute } from "../../../shared/utils/user-validations";
 import loginApi from "../services/loginService";
+import { getOrganizationTheme } from "../services/organizationThemeService";
 import {
   getLoginPath,
   getOrganizationPath,
-  getOrganizationConfig,
   getSavedLoginOrganization,
 } from "../services/organizationContextService";
 
@@ -28,7 +28,8 @@ export default function AuthCallback() {
       const loginPath = getLoginPath(organizationKey);
 
       try {
-        dispatch(setOrganizationTheme(getOrganizationConfig(organizationKey)));
+        const theme = await getOrganizationTheme(organizationKey);
+        dispatch(setOrganizationTheme(theme));
 
         // Get active account directly from instance (may be loaded before accounts array)
         let account = instance.getActiveAccount();

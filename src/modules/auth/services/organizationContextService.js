@@ -1,21 +1,12 @@
-import loginOrganizations from "../config/loginOrganizations.json";
-
 const STORAGE_KEY = "loginOrganization";
-const DEFAULT_ORG = "sagarsoft";
+const DEFAULT_ORG = "default";
 
+// No longer validated against a fixed static list — any org code is valid;
+// whether it actually exists is determined by the real API lookup in
+// organizationThemeService.js, not here.
 export const normalizeOrganizationKey = (orgSlug) => {
-  const organizationKey = orgSlug?.toLowerCase();
-
-  if (organizationKey && loginOrganizations[organizationKey]) {
-    return organizationKey;
-  }
-
-  return DEFAULT_ORG;
-};
-
-export const getOrganizationConfig = (orgSlug) => {
-  const organizationKey = normalizeOrganizationKey(orgSlug);
-  return loginOrganizations[organizationKey] || loginOrganizations.default;
+  const organizationKey = orgSlug?.toLowerCase().trim();
+  return organizationKey || DEFAULT_ORG;
 };
 
 export const saveLoginOrganization = (orgSlug) => {

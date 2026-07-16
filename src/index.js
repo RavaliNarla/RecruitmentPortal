@@ -18,7 +18,6 @@ import LanguageSync from "./i18n/LanguageSync";
 import SessionManager from "./modules/auth/services/SessionManager";
 import {
   normalizeOrganizationKey,
-  getOrganizationConfig,
   getSavedLoginOrganization,
 } from "./modules/auth/services/organizationContextService";
 

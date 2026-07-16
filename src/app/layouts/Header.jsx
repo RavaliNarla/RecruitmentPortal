@@ -34,11 +34,7 @@ const Header = () => {
     (state) => state.user.organizationTheme
   );
 
-  const currentLogo = organizationTheme?.headerlogo
-    ? organizationTheme.headerlogo.startsWith("data:")
-      ? organizationTheme.headerlogo
-      : `data:image/png;base64,${organizationTheme.headerlogo}`
-    : logo;
+  const currentLogo = organizationTheme?.headerlogo || logo;
   const user = userSlice?.user;
 
   /* ===================== USER DROPDOWN STATE ===================== */
