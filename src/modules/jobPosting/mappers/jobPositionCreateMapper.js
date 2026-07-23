@@ -21,6 +21,7 @@ export const mapAddPositionToCreateDto = ({
   isAgeRelWdsWomen,
   dynamicFields,
   orgDynamicFieldValues,
+  applicableInclusionIds = [],
   jobPositionExclusion = [],
 }) => {
   /* ================= SAFE NORMALIZATION ================= */
@@ -215,6 +216,7 @@ export const mapAddPositionToCreateDto = ({
     indentOthers: indentOthers?.trim() || null,
     dynamicFields,
     orgDynamicFieldValues,
+    applicableInclusionIds,
 
     // backend expects this
     cibilScore: 0,

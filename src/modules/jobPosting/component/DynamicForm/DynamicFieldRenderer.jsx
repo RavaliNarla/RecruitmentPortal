@@ -1,14 +1,20 @@
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
+import Select from "react-select";
 
-const DynamicFieldRenderer = ({ schema, values, onChange }) => {
+const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) => {
   if (!schema?.fields?.length) return null;
 
   return (
-    <Row className="gy-3">
-      {schema.fields.map((field) => (
-        <Col md={6} key={field.id}>
-          <Form.Group>
+    <Row className="g-4">
+      {schema.fields.map((field) => {
+        const options = (field.options || []).map((option) => ({
+          value: option,
+          label: option,
+        }));
+
+        return (
+          <Col md={4} key={field.id}>
             <Form.Label>
               {field.label}
               {field.required && <span className="text-danger"> *</span>}
@@ -20,23 +26,45 @@ const DynamicFieldRenderer = ({ schema, values, onChange }) => {
                 placeholder={field.placeholder}
                 maxLength={field.maxLength}
                 required={field.required}
+                disabled={isViewMode}
                 onChange={(e) => onChange(field.id, e.target.value)}
               />
             )}
 
             {field.type === "dropdown" && (
-              <Form.Select
-                value={values[field.id] ?? ""}
-                required={field.required}
-                onChange={(e) => onChange(field.id, e.target.value)}
-              >
-                <option value="">Select...</option>
-                {field.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </Form.Select>
+              <Select
+                classNamePrefix="react-select"
+                isDisabled={isViewMode}
+                menuPortalTarget={document.body}
+                menuPosition="fixed"
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                value={
+                  options.find((option) => option.value === values[field.id]) ||
+                  null
+                }
+                options={options}
+                onChange={(selected) =>
+                  onChange(field.id, selected ? selected.value : "")
+                }
+              />
+            )}
+
+            {field.type === "multiselect" && (
+              <Select
+                classNamePrefix="react-select"
+                isDisabled={isViewMode}
+                isMulti
+                menuPortalTarget={document.body}
+                menuPosition="fixed"
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                value={options.filter((option) =>
+                  (values[field.id] || []).includes(option.value)
+                )}
+                options={options}
+                onChange={(selected) =>
+                  onChange(field.id, (selected || []).map((option) => option.value))
+                }
+              />
             )}
 
             {field.type === "date" && (
@@ -44,6 +72,7 @@ const DynamicFieldRenderer = ({ schema, values, onChange }) => {
                 type="date"
                 value={values[field.id] ?? ""}
                 required={field.required}
+                disabled={isViewMode}
                 onChange={(e) => onChange(field.id, e.target.value)}
               />
             )}
@@ -51,14 +80,16 @@ const DynamicFieldRenderer = ({ schema, values, onChange }) => {
             {field.type === "checkbox" && (
               <Form.Check
                 type="checkbox"
+                className="custom_checkbox"
                 checked={values[field.id] ?? false}
                 required={field.required}
+                disabled={isViewMode}
                 onChange={(e) => onChange(field.id, e.target.checked)}
               />
             )}
-          </Form.Group>
-        </Col>
-      ))}
+          </Col>
+        );
+      })}
     </Row>
   );
 };

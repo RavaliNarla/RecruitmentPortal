@@ -1883,7 +1883,11 @@ const ApplicationForm = ({
                       <td>
                         {field.type === "date"
                           ? formatDate(dynamicFormData?.[field.id])
-                          : (dynamicFormData?.[field.id] ?? "-")}
+                          : field.type === "checkbox"
+                            ? (dynamicFormData?.[field.id] ? "Yes" : "No")
+                            : Array.isArray(dynamicFormData?.[field.id])
+                              ? dynamicFormData[field.id].join(", ") || "-"
+                              : (dynamicFormData?.[field.id] ?? "-")}
                       </td>
                     </tr>
                   ))}

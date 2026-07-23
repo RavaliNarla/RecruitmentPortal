@@ -54,7 +54,7 @@ Same shape as the sibling `New_Recruitment_BOB` repo (see that repo's `SUPERADMI
 
 ## 5. API Layer (`src/core/service/apiService.js`)
 
-Seven axios instances, sharing one interceptor factory (`attachInterceptors`, applied to all but `masterDropdownApi`):
+Eight axios instances, sharing one interceptor factory (`attachInterceptors`, applied to all but `masterDropdownApi` and `publicSuperAdminApi`):
 
 | Instance | Base URL env var | Notes |
 |---|---|---|
@@ -65,6 +65,9 @@ Seven axios instances, sharing one interceptor factory (`attachInterceptors`, ap
 | `nodeApi` | `REACT_APP_NODE_API_URL` | Node auth backend, `withCredentials: true` |
 | `publicNodeApi` | `REACT_APP_NODE_API_URL` | same host, no credentials |
 | `masterDropdownApi` | `REACT_APP_MASTER_DROPDOWN_URL` | lighter interceptor |
+| `publicSuperAdminApi` | `REACT_APP_SUPER_ADMIN_API_URL` | calls the separate `SuperAdminPortal` backend directly (org-lookup-by-code, Dynamic Forms schemas, Inclusions — §10–§12). Deliberately **not** run through `attachInterceptors` — that attaches this app's own MSAL/`AzureAD` auth header and 401-refresh flow, which has no meaning against SuperAdminPortal's separate, unauthenticated backend. Just a plain `response.data`-unwrap interceptor. |
+
+`organizationApiService.js` (`src/modules/auth/services/`) — `getOrganizationByCode(code)`, the one method on `publicSuperAdminApi` used to resolve an `orgSlug` into SuperAdminPortal's own org record (used for login theming, and reused for Inclusions — §12).
 
 - **Auth header injection**: `acquireTokenSilent` → `Authorization: Bearer` + `X-Client: AzureAD`; falls back to `loginRedirect` on failure.
 - **401 handling**: single-flight refresh (`isRefreshing`/`refreshSubscribers` queue) against `/recruiter-auth/recruiter-refresh-token`; on failure → `clearUser()` + `logoutRedirect()`.
@@ -95,7 +98,7 @@ src/modules/<Module>/
 `component/` (incl. `DynamicForm/`), `config/requisitionConfig.js`, `hooks/`, `mappers/`, `pages/` (`JobPostingsList`, `CreateRequisition`, `AddPosition`), `services/`, `validations/`.
 
 - **`component/DynamicForm/FormBuilder.jsx` + `DynamicField.jsx` + `FormBuilderModal.jsx`** — the original, per-position ad-hoc field builder: a recruiter can add `text`/`dropdown`/`date` fields while creating one specific position (`AddPosition.jsx`), saved as a JSON schema (`{formId, title, fields}`) into that position's `dynamicFields`. This only ever *defines field labels*, it doesn't separately collect entered values against a saved schema.
-- **`component/DynamicForm/DynamicFieldRenderer.jsx`** *(new)* — a distinct, simpler **value-collecting** renderer (not a builder): given a schema and a `values`/`onChange` pair, renders bound `text`/`dropdown`/`date` inputs. This is the piece added for the org-level dynamic-fields feature — see §11.
+- **`component/DynamicForm/DynamicFieldRenderer.jsx`** *(new)* — a distinct, simpler **value-collecting** renderer (not a builder): given a schema and a `values`/`onChange` pair, renders bound `text` / `dropdown` / `multiselect` / `date` / `checkbox` inputs (`multiselect`/`checkbox` added alongside the corresponding types in SuperAdminPortal's `FieldListEditor.js`, so the two stay in sync). This is the piece used for the org-level dynamic-fields feature — see §10. It briefly gained an `inclusion` field type during an early, incorrect attempt at the Inclusions feature (§12) and was reverted back to this state once that approach was corrected — Inclusions ended up as a separate mechanism entirely, not a `DynamicFieldRenderer` field type.
 - `requisitionApiService.js` — requisition workflow REST surface (create/update/delete/list/submit-for-approval/draft-edit/publish/reinitialize/approval-history).
 
 ## 8. Shared Layer (`src/shared/`)
@@ -113,17 +116,33 @@ Two overlapping concepts, same as the sibling repo:
 - **`privileges`** (`state.user.privileges`, flat boolean map) — the real authorization mechanism, checked by **`PrivilegeRoute.js`** (single `privilege` prop, or `privilegesRequired` array with OR semantics), gating every route in `AppRoutes.js`. Distinct privilege strings in use: `JobPostings`, `Admin`, `View Position`, `Candidate Pool`, `Verification`, `Interview`, `Compensation Pool`, `ExaminationCutoffConfiguration`, `Committee Management`, `Messages`, `Interview Pool`, `L1 Approval`, `L2 Approval`.
 - **`Header.jsx` independently re-derives** its own `canDashboard`/`canJobPost`/`canAdmin`/etc. booleans from the same `privileges` object rather than sharing logic with `AppRoutes.js`/`PrivilegeRoute.js` — a second place encoding the same gates, and it includes a `Dashboard` privilege check that `AppRoutes.js` doesn't actually use (that route is gated on `JobPostings` instead) — a latent mismatch worth resolving if privileges are ever reworked.
 
-## 10. Org-Level Dynamic Form Fields (added on top of this architecture)
+## 10. Org-Level Dynamic Form Fields — verified, working contract
 
-A feature was added to let a SuperAdmin (in the separate `SuperAdminPortal` app) define extra fields per organization for two forms here, without a code change/redeploy on this side:
+A feature lets a SuperAdmin (in the separate `SuperAdminPortal` app) define extra fields per organization for forms here, without a code change/redeploy on this side. **The contract described in an earlier version of this doc was wrong and has been fixed** — it guessed at a `/{portal}/form-schema/{formKey}` path on the `apis` (master-portal) instance, which 500'd in practice. The real, verified contract (confirmed against SuperAdminPortal's Swagger + Network tab — see `SuperAdminPortal/ARCHITECTURE.md` §7):
 
-- **`Requisition` form** (`CreateRequisition.jsx`) and **`Job Posting` form** (`AddPosition.jsx`, i.e. the "Add Position" screen) each independently fetch an org-scoped field schema and render it via `DynamicFieldRenderer.jsx`, appended below their existing static fields.
-- **`src/modules/jobPosting/hooks/useOrgFormSchema.js`** — reads the org key from `useParams().orgSlug` (per §2's routing model — no Redux/login-payload plumbing needed, unlike the equivalent feature built in the sibling `New_Recruitment_BOB` repo, which lacks this URL-based org system and had to add a placeholder field to its login flow instead).
-- **`src/modules/jobPosting/services/orgFormSchemaService.js`** — calls a not-yet-implemented backend endpoint (`GET /organizations/{orgSlug}/recruitment/form-schema/{formKey}`; the `recruitment` segment distinguishes this app's forms from the Candidate Portal's, which will use the same SuperAdminPortal feature under a `candidate` segment); until that exists, falls back to a small hardcoded `DEMO_SCHEMAS` object keyed by the `"bob"` org slug (clearly marked `TEMPORARY`, to be deleted once the real endpoint is live). Because of the <500-swallowing interceptor behavior noted in §5, the fallback logic checks the *shape* of the response (a non-empty `fields` array) rather than relying on a thrown error alone.
-- Captured values are added to each form's submit payload as `dynamicFieldValues` (Requisition) / `orgDynamicFieldValues` (Add Position) — new, additive keys alongside the existing `dynamicFields` key (the older, unrelated per-position ad-hoc builder from §7.2), which are passed through untouched in `createRequisitionMapper.js`, `jobPositionCreateMapper.js`, and `positionUpdate.mapper.js`.
-- On the SuperAdminPortal side, organizations were given a new **`slug`** field (e.g. `"bob"`) specifically so its schema storage key matches this repo's real `orgSlug` — the org named "Public Sector Banking Consortium" there is currently mapped to slug `"bob"` for end-to-end testability.
+```
+GET /organizations/{organizationCode}/form-schemas?screen={screenId}
+```
+on `publicSuperAdminApi` (§5), not `apis`/master-portal. `organizationCode` is this repo's `orgSlug`. `screenId` is a **uuid**, not the screen's string key (`"jobPosting"`) — it has to be resolved first via `GET /portalScreens` (also on `publicSuperAdminApi`), matching `{ portal: "recruitment", screenKey: formKey }`.
 
-## 11. Summary — Notable Things to Know
+- **`Requisition` form** (`CreateRequisition.jsx`) and **`Job Posting` form** (`AddPosition.jsx`) each independently fetch an org-scoped field schema and render it via `DynamicFieldRenderer.jsx`, appended below their existing static fields.
+- **`src/modules/jobPosting/hooks/useOrgFormSchema.js`** — reads the org key from `useParams().orgSlug` (per §2's routing model), calls `getOrgFormSchema(orgSlug, formKey)`. Unchanged by the fix below — only the service internals changed.
+- **`src/modules/jobPosting/services/orgFormSchemaService.js`** — `getOrgFormSchema(organizationCode, formKey)`: resolves `screenId` via `/portalScreens`, then calls the real form-schemas endpoint above, parsing `data.fields` defensively (handles both a real array and, in case it's ever sent that way, a JSON-encoded string). Falls back to a small hardcoded `DEMO_SCHEMAS` object (keyed by the `"sagarsoft"` org slug) if the screen isn't found or the call fails — local-dev-only fallback, not shared with SuperAdminPortal's own separate mock fallback.
+- Captured values are added to each form's submit payload under **different key names depending on the form** — `dynamicFieldValues` for Requisition (`createRequisitionMapper.js`), `orgDynamicFieldValues` for Job Posting (`jobPositionCreateMapper.js`, `positionUpdate.mapper.js`) — an inconsistency that predates this doc's most recent pass and hasn't been unified; both are additive alongside the existing `dynamicFields` key (the older, unrelated per-position ad-hoc builder from §7.2). **A real bug was found and fixed here**: a *third* new key on Job Posting, `applicableInclusionIds` (§12), was being silently dropped by `jobPositionCreateMapper.js`/`positionUpdate.mapper.js` because they didn't destructure/re-include it in their output DTO — `AddPosition.jsx` built it correctly but it never reached the network request. Worth remembering as a checklist item any time a new top-level payload key is added to `AddPosition.jsx`: it has to be added to the mapper too, or it silently never leaves the browser.
+- On the SuperAdminPortal side, organizations were given a **`code`** field (e.g. matching this repo's org slug) specifically so its schema storage key matches this repo's real `orgSlug`.
+
+## 12. Applicable Inclusions — recruiter side of the Inclusions feature
+
+A separate feature from §10 — do not conflate the two, despite both being SuperAdminPortal-fed data landing on `AddPosition.jsx`. Full business flow (Super Admin defines an Inclusion's own field schema → Recruiter picks which apply to a job → Candidate claims one and fills its schema → optional recruiter verification) is documented in `SuperAdminPortal/ARCHITECTURE.md` §9; this repo's role is **only the middle step** — a plain checklist, name only, no dynamic fields.
+
+- **`AddPosition.jsx`** — "Applicable Inclusions" section: checkbox per Active Inclusion in the org, backed by `useOrgInclusions()`. Selected ids saved as `applicableInclusionIds` (a plain array of Inclusion ids — numeric in practice, e.g. `1784293414104`, not uuids) via `jobPositionCreateMapper.js` / `positionUpdate.mapper.js` (see the dropped-field bug noted in §10).
+- **`src/modules/jobPosting/services/orgInclusionsApiService.js`** — thin, one method (`getInclusions(organizationId)`), matches the established thin-`*ApiService.js` convention (`jobPositionApiService.js`, `organizationApiService.js`).
+- **`src/modules/jobPosting/services/orgInclusionsService.js`** — orchestration: resolves `organizationId` via `organizationApiService.getOrganizationByCode(orgSlug)` (§5, §8) — this repo has no direct `organizationId`, only `orgSlug`/`organizationCode` — then calls `orgInclusionsApiService`, filters to `status === "Active"`.
+- **`src/modules/jobPosting/hooks/useOrgInclusions.js`** — hook, same `useParams()`-driven pattern as `useOrgFormSchema`.
+- **Explicitly not built here**: an Inclusion's own candidate-facing fields are never rendered or collected in this repo — that's `CandidatePortal`'s job (`InclusionClaims.js` there). Recruiter verification (Approve/Reject/Remarks of what a candidate submitted) is also not built anywhere yet, confirmed not required for the current phase.
+- **History**: an earlier, incorrect implementation attached Inclusions as an `inclusion` field type *inside* `DynamicFieldRenderer.jsx`/§10's mechanism, gated to hypothetical `candidate`-portal screens rendered here. This was wrong on two counts — Inclusions need their own structured per-inclusion schema (not a flat string), and recruiters were never supposed to see inclusion fields at all, only the checklist. Fully reverted before the current §12 implementation was built; see `SuperAdminPortal/ARCHITECTURE.md` §9.4 for the fuller story.
+
+## 13. Summary — Notable Things to Know
 
 1. **The `/:orgSlug` multi-org system is real and load-bearing** — it's not a stub, and it's the correct source of "current organization" for any new org-scoped feature in this repo (unlike the sibling `New_Recruitment_BOB` repo, which has no equivalent and no organization concept at all).
 2. **`persistConfig.blacklist: ["resume"]`** and the `rootReducer` comment referencing a `job` slice are both stale/dead — no such reducers exist.
@@ -131,3 +150,5 @@ A feature was added to let a SuperAdmin (in the separate `SuperAdminPortal` app)
 4. **Three near-identical `HeaderWithBack*` components** and a **`Header.jsx` that re-implements privilege gating separately from `PrivilegeRoute.js`** are both copy-paste-drift risks worth cleaning up before adding more nav items or shared headers.
 5. **`role` vs `privileges`**: only `privileges` gate anything; `role` is legacy/display-only. Two dead route-guard files still reference `role` but are unused.
 6. This checkout currently has only a `dev` env active (single `.env`, others commented out) and no `env-cmd` multi-environment build scripts — confirm with the team whether that's intentional for this checkout or whether it should match the `New_Recruitment_BOB` repo's fuller `start:<env>`/`build:<env>` setup.
+7. **New top-level fields added to `AddPosition.jsx`'s payload must also be added to `jobPositionCreateMapper.js` and `positionUpdate.mapper.js`, or they're silently dropped** — bit `applicableInclusionIds` (§12) on the way in; check both mappers whenever adding another one.
+8. `REACT_APP_SUPER_ADMIN_API_URL` + `publicSuperAdminApi` (§5) are the pattern to follow for any future call into SuperAdminPortal's backend — resolve the org by code first (`organizationApiService.getOrganizationByCode`) if the target endpoint needs SuperAdminPortal's internal `organizationId` rather than `orgSlug`/`organizationCode` (§10 vs §12 need different identifiers from the same lookup for exactly this reason).

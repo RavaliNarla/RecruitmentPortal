@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Container, Form, Button, Card } from "react-bootstrap";
+import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "../../../style/css/AddPosition.css";
+import ErrorMessage from "../../../shared/components/ErrorMessage";
 import import_Icon from "../../../assets/import_Icon.png";
 import ImportModal from "../component/ImportModal";
 import masterApiService from "../../master/services/masterApiService";
@@ -29,6 +30,7 @@ import jobPositionApiService from "../services/jobPositionApiService";
 import FormBuilderModal from "../component/DynamicForm/FormBuilderModal";
 import DynamicFieldRenderer from "../component/DynamicForm/DynamicFieldRenderer";
 import useOrgFormSchema from "../hooks/useOrgFormSchema";
+import useOrgInclusions from "../hooks/useOrgInclusions";
 const AddPosition = () => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx"];
@@ -63,6 +65,16 @@ const AddPosition = () => {
   const [additionalForm, setAdditionalForm] = useState(null);
   const { schema: orgPositionSchema } = useOrgFormSchema("jobPosting");
   const [orgDynamicFieldValues, setOrgDynamicFieldValues] = useState({});
+  const { inclusions: orgInclusions, loading: inclusionsLoading, error: inclusionsError } = useOrgInclusions();
+  const [applicableInclusionIds, setApplicableInclusionIds] = useState([]);
+
+  const toggleApplicableInclusion = (inclusionId) => {
+    setApplicableInclusionIds((prev) =>
+      prev.includes(inclusionId)
+        ? prev.filter((id) => id !== inclusionId)
+        : [...prev, inclusionId]
+    );
+  };
 
   useEffect(() => {
     if (requisitionId) {
@@ -322,6 +334,7 @@ const AddPosition = () => {
     if (existingPosition?.dynamicFields) {
       setAdditionalForm(existingPosition.dynamicFields);
     }
+    setApplicableInclusionIds(existingPosition.applicableInclusionIds || []);
     setApprovedBy(existingPosition.approvedBy || "");
     setIndentOthers(existingPosition.indentOthers || "");
     setApprovedOn(existingPosition.approvedOn || "");
@@ -933,6 +946,7 @@ const AddPosition = () => {
       isAgeRelWdsWomen,
        dynamicFields: additionalForm,
       orgDynamicFieldValues,
+      applicableInclusionIds,
 
       jobPositionExclusion: exclusions.map((item) => {
         const existingExclusion = existingPosition?.jobPositionExclusions?.find(
@@ -1127,19 +1141,63 @@ const AddPosition = () => {
               onOpenDynamicForm={() => setShowFormBuilder(true)}
             />
 
+            <Row className="g-4 mt-1">
+              <Col xs={12}>
+                <Form.Label>Applicable Inclusions:</Form.Label>
+                <p className="text-muted small mb-2">
+                  Select which inclusions candidates can claim for this position. Candidates
+                  fill in the supporting details themselves when they apply.
+                </p>
+
+                {inclusionsLoading && (
+                  <p className="text-muted small mb-0">Loading inclusions…</p>
+                )}
+
+                {!inclusionsLoading && inclusionsError && (
+                  <ErrorMessage>{inclusionsError}</ErrorMessage>
+                )}
+
+                {!inclusionsLoading && !inclusionsError && orgInclusions.length === 0 && (
+                  <p className="text-muted small mb-0">
+                    No active inclusions configured for this organization yet.
+                  </p>
+                )}
+
+                {!inclusionsLoading && orgInclusions.length > 0 && (
+                  <div className="ms-2">
+                    {orgInclusions.map((inclusion) => (
+                      <Form.Check
+                        key={inclusion.id}
+                        type="checkbox"
+                        id={`inclusion-${inclusion.id}`}
+                        label={inclusion.name}
+                        disabled={isViewMode}
+                        checked={applicableInclusionIds.includes(inclusion.id)}
+                        onChange={() => toggleApplicableInclusion(inclusion.id)}
+                        className="custom_checkbox mb-2"
+                      />
+                    ))}
+                  </div>
+                )}
+              </Col>
+            </Row>
+
             {orgPositionSchema && (
-              <div className="mt-4">
-                <DynamicFieldRenderer
-                  schema={orgPositionSchema}
-                  values={orgDynamicFieldValues}
-                  onChange={(fieldId, value) =>
-                    setOrgDynamicFieldValues((prev) => ({
-                      ...prev,
-                      [fieldId]: value,
-                    }))
-                  }
-                />
-              </div>
+              <Row className="g-4 mt-1">
+                <Col xs={12}>
+                  <DynamicFieldRenderer
+                    schema={orgPositionSchema}
+                    values={orgDynamicFieldValues}
+                    isViewMode={isViewMode}
+                    onChange={(fieldId, value) =>
+                      setOrgDynamicFieldValues((prev) => ({
+                        ...prev,
+                        [fieldId]: value,
+                      }))
+                    }
+                  />
+                </Col>
+              </Row>
             )}
 
             <div className="form-footer mt-4 mb-4">

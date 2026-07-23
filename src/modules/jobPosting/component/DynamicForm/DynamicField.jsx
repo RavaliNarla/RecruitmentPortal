@@ -13,7 +13,7 @@ const DynamicField = ({
 }) => {
   const { t } = useTranslation("jobPostingsList");
   return (
-    <Card className="mb-3 shadow-sm">
+    <Card className="mb-4 shadow-sm">
       <Card.Body>
         <Row className="align-items-center">
           <Col md={5}>

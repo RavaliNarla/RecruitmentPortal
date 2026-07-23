@@ -1,12 +1,9 @@
-import { apis } from "../../../core/service/apiService";
+import { publicSuperAdminApi } from "../../../core/service/apiService";
 
-// TEMPORARY DEMO DATA — remove once the backend endpoint below is live.
-// Mirrors the schema an admin can configure in SuperAdminPortal for the "bob"
-// organization (Organizations > [org with slug "bob"] > Dynamic Forms >
-// Recruitment Portal).
-// Keyed by the same organization slug used in the URL (/:orgSlug/...) and in
-// SuperAdminPortal's organization "slug" field, then by the "recruitment"
-// portal segment (this app only ever reads its own portal's forms).
+// TEMPORARY DEMO DATA — local fallback only, used when the real call fails
+// (e.g. no screen configured yet, network issue). Mirrors the schema an
+// admin can configure in SuperAdminPortal for the "sagarsoft" organization
+// (Organizations > Dynamic Forms > Recruitment Portal).
 const DEMO_SCHEMAS = {
   sagarsoft: {
     recruitment: {
@@ -45,26 +42,45 @@ const DEMO_SCHEMAS = {
   },
 };
 
-// Backend team: this endpoint doesn't exist yet. Once it's live and returns
-// real data (an object with a non-empty `fields` array), that response is used
-// and the DEMO_SCHEMAS fallback below never triggers — remove DEMO_SCHEMAS and
-// this fallback logic at that point.
-//
-// Note: the shared axios interceptor treats any <500 response (e.g. a 404 for
-// a route that doesn't exist yet) as a resolved call, not a thrown error, so
-// the fallback below checks the response shape rather than relying on catch
-// alone — otherwise a 404 today would resolve to a non-schema object instead
-// of falling back to the demo data.
-export async function getOrgFormSchema(organizationKey, formKey) {
-  if (!organizationKey || !formKey) return null;
+// Real contract (verified against SuperAdminPortal's Swagger + Network tab,
+// see SuperAdminPortal/ARCHITECTURE.md §7):
+//   GET /organizations/{organizationCode}/form-schemas?screen={screenId}
+// on the super-admin backend (publicSuperAdminApi) — NOT master-portal, and
+// NOT the old guessed /{portal}/form-schema/{formKey} path. screenId is a
+// uuid resolved from GET /portalScreens by matching {portal, screenKey}, not
+// formKey itself.
+async function resolveScreenId(portal, formKey) {
+  const body = await publicSuperAdminApi.get("/portalScreens");
+  const screen = (body?.data || []).find(
+    (item) => item.portal === portal && item.screenKey === formKey && item.isActive
+  );
+  return screen?.id || null;
+}
+
+export async function getOrgFormSchema(organizationCode, formKey) {
+  if (!organizationCode || !formKey) return null;
 
   try {
-    const response = await apis.get(
-      `/organizations/${organizationKey}/recruitment/form-schema/${formKey}`
+    const screenId = await resolveScreenId("recruitment", formKey);
+    if (!screenId) {
+      return DEMO_SCHEMAS[organizationCode]?.recruitment?.[formKey] || null;
+    }
+
+    const body = await publicSuperAdminApi.get(
+      `/organizations/${encodeURIComponent(organizationCode)}/form-schemas`,
+      { params: { screen: screenId } }
     );
-    if (response?.fields?.length) return response;
-    return DEMO_SCHEMAS[organizationKey]?.recruitment?.[formKey] || null;
+
+    const rawFields = body?.data?.fields;
+    const fields = Array.isArray(rawFields)
+      ? rawFields
+      : typeof rawFields === "string" && rawFields
+        ? JSON.parse(rawFields)
+        : null;
+
+    if (fields?.length) return { fields };
+    return DEMO_SCHEMAS[organizationCode]?.recruitment?.[formKey] || null;
   } catch {
-    return DEMO_SCHEMAS[organizationKey]?.recruitment?.[formKey] || null;
+    return DEMO_SCHEMAS[organizationCode]?.recruitment?.[formKey] || null;
   }
 }

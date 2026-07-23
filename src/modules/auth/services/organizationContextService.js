@@ -1,5 +1,5 @@
 const STORAGE_KEY = "loginOrganization";
-const DEFAULT_ORG = "default";
+const DEFAULT_ORG = "sagarsoft";
 
 // No longer validated against a fixed static list — any org code is valid;
 // whether it actually exists is determined by the real API lookup in

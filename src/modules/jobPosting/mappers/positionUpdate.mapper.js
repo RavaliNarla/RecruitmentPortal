@@ -184,6 +184,7 @@ export const mapAddPositionToUpdateDto = ({
   isAgeRelWdsWomen,
   dynamicFields,
   orgDynamicFieldValues,
+  applicableInclusionIds = [],
   jobPositionExclusion = [],
 }) => {
   const dto = {
@@ -259,6 +260,7 @@ export const mapAddPositionToUpdateDto = ({
     isAgeRelWdsWomen: !!isAgeRelWdsWomen,
     dynamicFields,
     orgDynamicFieldValues,
+    applicableInclusionIds,
 
     approvedBy,
     approvedOn,
