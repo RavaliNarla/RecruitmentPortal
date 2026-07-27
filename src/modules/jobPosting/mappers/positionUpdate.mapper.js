@@ -259,8 +259,13 @@ export const mapAddPositionToUpdateDto = ({
     isAgeRelRiotVictimFamily: !!isAgeRelRiotVictimFamily,
     isAgeRelWdsWomen: !!isAgeRelWdsWomen,
     dynamicFields,
-    orgDynamicFieldValues,
-    applicableInclusionIds,
+    // Backend DTO only exposes `dynamicData` (string) — every org-configured
+    // element from SuperAdminPortal (dynamic form fields + inclusions) must
+    // travel as a single JSON string inside it, not as separate top-level keys.
+    dynamicData: JSON.stringify({
+      orgDynamicFieldValues: orgDynamicFieldValues || {},
+      applicableInclusionIds: applicableInclusionIds || [],
+    }),
 
     approvedBy,
     approvedOn,

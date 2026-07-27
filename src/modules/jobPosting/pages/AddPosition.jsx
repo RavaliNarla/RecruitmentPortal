@@ -334,7 +334,22 @@ const AddPosition = () => {
     if (existingPosition?.dynamicFields) {
       setAdditionalForm(existingPosition.dynamicFields);
     }
-    setApplicableInclusionIds(existingPosition.applicableInclusionIds || []);
+    let parsedDynamicData = null;
+    if (existingPosition?.dynamicData) {
+      try {
+        parsedDynamicData = JSON.parse(existingPosition.dynamicData);
+      } catch {
+        parsedDynamicData = null;
+      }
+    }
+    setOrgDynamicFieldValues(parsedDynamicData?.orgDynamicFieldValues || {});
+    // Fall back to the legacy top-level field for records saved before
+    // applicableInclusionIds moved inside dynamicData.
+    setApplicableInclusionIds(
+      parsedDynamicData?.applicableInclusionIds ||
+        existingPosition.applicableInclusionIds ||
+        []
+    );
     setApprovedBy(existingPosition.approvedBy || "");
     setIndentOthers(existingPosition.indentOthers || "");
     setApprovedOn(existingPosition.approvedOn || "");
