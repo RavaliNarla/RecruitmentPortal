@@ -47,6 +47,8 @@ const ReservationSection = ({
   setSelectedExclusions,
   onOpenDynamicForm,
   dynamicFields,
+  categoryDistributionEnabled = true,
+  stateDistributionEnabled = true,
 }) => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const renderError = (e) => {
@@ -146,61 +148,66 @@ const ReservationSection = ({
       <fieldset disabled={isViewMode}>
       {/* Reservation Section */}
       <Col xs={12} className="mt-4">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div
-            className="d-flex gap-5 align-items-center catfonts"
-            style={{ width: "49%" }}
-          >
-            <div>
-              <h6 className="mb-0 catfont">
-                {" "}
-                {formData.enableStateDistribution
-                  ? t("addPosition:state_wise_reservation")
-                  : t("addPosition:category_wise_reservation")}
-                <span className="text-danger">*</span>
-              </h6>
-              <small className="text-muted">
-                {t("addPosition:enable_state_distribution_help")}
-              </small>
-            </div>
-            <Form.Check
-              type="switch"
-              name="enableStateDistribution"
-              checked={formData.enableStateDistribution}
-              disabled={
-                isViewMode || isFieldDisabled("enableStateDistribution")
-              }
-              onChange={(e) => {
-                handleInputChange(e);
+        {(categoryDistributionEnabled || stateDistributionEnabled) && (
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div
+              className="d-flex gap-5 align-items-center catfonts"
+              style={{ width: "49%" }}
+            >
+              <div>
+                <h6 className="mb-0 catfont">
+                  {" "}
+                  {formData.enableStateDistribution
+                    ? t("addPosition:state_wise_reservation")
+                    : t("addPosition:category_wise_reservation")}
+                  <span className="text-danger">*</span>
+                </h6>
+                <small className="text-muted">
+                  {t("addPosition:enable_state_distribution_help")}
+                </small>
+              </div>
+              {stateDistributionEnabled && categoryDistributionEnabled && (
+                <Form.Check
+                  type="switch"
+                  name="enableStateDistribution"
+                  checked={formData.enableStateDistribution}
+                  disabled={
+                    isViewMode || isFieldDisabled("enableStateDistribution")
+                  }
+                  onChange={(e) => {
+                    handleInputChange(e);
 
-                //  CLEAR NATIONAL DISTRIBUTION ERROR
-                setErrors((prev) => ({ ...prev, nationalDistribution: "" }));
-              }}
-              className="mb-2"
-            />
-          </div>
-          {formData.enableStateDistribution && (
-            <div>
-              <Form.Check
-                type="checkbox"
-                label={t("addPosition:is_local_language_required")}
-                checked={!!isProficientInLocalLanguage}
-                onChange={(e) => {
-                  if (isControlledEdit && !isProficientInLocalLanguage) return;
-                  setIsProficientInLocalLanguage(e.target.checked);
-                }}
-                disabled={
-                  isViewMode ||
-                  (isControlledEdit && !isProficientInLocalLanguage)
-                }
-                className="custom_checkbox mb-3"
-              />
+                    //  CLEAR NATIONAL DISTRIBUTION ERROR
+                    setErrors((prev) => ({ ...prev, nationalDistribution: "" }));
+                  }}
+                  className="mb-2"
+                />
+              )}
             </div>
-          )}
-        </div>
+            {formData.enableStateDistribution && (
+              <div>
+                <Form.Check
+                  type="checkbox"
+                  label={t("addPosition:is_local_language_required")}
+                  checked={!!isProficientInLocalLanguage}
+                  onChange={(e) => {
+                    if (isControlledEdit && !isProficientInLocalLanguage) return;
+                    setIsProficientInLocalLanguage(e.target.checked);
+                  }}
+                  disabled={
+                    isViewMode ||
+                    (isControlledEdit && !isProficientInLocalLanguage)
+                  }
+                  className="custom_checkbox mb-3"
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         {!formData.enableStateDistribution ? (
           <Row className="g-4">
+            {categoryDistributionEnabled && (
             <Col md={7}>
               <Card className="p-3 genfonts">
                 <h6 className="text-primary mb-3">
@@ -264,6 +271,8 @@ const ReservationSection = ({
                 </Row>
               </Card>
             </Col>
+            )}
+            {categoryDistributionEnabled && (
             <Col md={5}>
               <Card className="p-3 genfonts">
                 <h6 className="text-primary mb-3">
@@ -321,6 +330,7 @@ const ReservationSection = ({
                 </Row>
               </Card>
             </Col>
+            )}
           </Row>
         ) : (
           <>
@@ -507,6 +517,7 @@ const ReservationSection = ({
               </Col>
             </Row>
             <Row className="g-4 mt-3">
+              {categoryDistributionEnabled && (
               <Col md={7}>
                 <Card className="p-3 h-100 genfonts">
                   <h6 className="text-primary mb-3">
@@ -590,6 +601,8 @@ const ReservationSection = ({
                   </Row>
                 </Card>
               </Col>
+              )}
+              {categoryDistributionEnabled && (
               <Col md={5}>
                 <Card className="p-3 h-100 genfonts">
                   <h6 className="text-primary mb-3">
@@ -667,6 +680,7 @@ const ReservationSection = ({
                   </Row>
                 </Card>
               </Col>
+              )}
             </Row>
             <ErrorMessage>{renderError(errors.stateDistribution)}</ErrorMessage>
 
@@ -695,19 +709,25 @@ const ReservationSection = ({
                     <th>{t("addPosition:vacancies")}</th>
                     <th>{t("addPosition:local_language_of_state")}</th>
 
-                    {reservationCategories.map((c) => (
-                      <th key={c.code}>{c.code}</th>
-                    ))}
+                    {categoryDistributionEnabled && (
+                      <>
+                        {reservationCategories.map((c) => (
+                          <th key={c.code}>{c.code}</th>
+                        ))}
 
-                    <th>{t("common:total")}</th>
+                        <th>{t("common:total")}</th>
+                      </>
+                    )}
 
                     {/* GROUP HEADER */}
-                    <th
-                      colSpan={disabilityCategories.length + 1}
-                      className="text-center bgcol"
-                    >
-                      {t("addPosition:out_of_which")}
-                    </th>
+                    {categoryDistributionEnabled && (
+                      <th
+                        colSpan={disabilityCategories.length + 1}
+                        className="text-center bgcol"
+                      >
+                        {t("addPosition:out_of_which")}
+                      </th>
+                    )}
 
                     <th className="text-center">{t("common:actions")}</th>
                   </tr>
@@ -715,16 +735,27 @@ const ReservationSection = ({
                   {/* ===== HEADER ROW 2 ===== */}
                   <tr>
                     {/* Skip earlier columns */}
-                    <th colSpan={5 + reservationCategories.length + 1} />
+                    <th
+                      colSpan={
+                        5 +
+                        (categoryDistributionEnabled
+                          ? reservationCategories.length + 1
+                          : 0)
+                      }
+                    />
 
-                    {disabilityCategories.map((d) => (
-                      <th key={d.disabilityCode} className="text-left">
-                        {d.disabilityCode}
-                      </th>
-                    ))}
+                    {categoryDistributionEnabled && (
+                      <>
+                        {disabilityCategories.map((d) => (
+                          <th key={d.disabilityCode} className="text-left">
+                            {d.disabilityCode}
+                          </th>
+                        ))}
 
-                    {/* Disability TOTAL (belongs to Out of Which) */}
-                    <th className="text-left">{t("common:total")}</th>
+                        {/* Disability TOTAL (belongs to Out of Which) */}
+                        <th className="text-left">{t("common:total")}</th>
+                      </>
+                    )}
 
                     {/* Actions column */}
                     <th />
@@ -750,28 +781,36 @@ const ReservationSection = ({
                           </td>
                           <td>{row.vacancies}</td>
                           <td>{getLanguagesByState(row.state)}</td>
-                          {reservationCategories.map((c) => (
-                            <td key={c.code}>
-                              {row.categories?.[c.code] ?? 0}
-                            </td>
-                          ))}
-                          <td>
-                            {Object.values(row.categories || {}).reduce(
-                              (a, b) => a + Number(b || 0),
-                              0
-                            )}
-                          </td>
-                          {disabilityCategories.map((d) => (
-                            <td key={d.disabilityCode}>
-                              {row.disabilities?.[d.disabilityCode] ?? 0}
-                            </td>
-                          ))}
-                          <td>
-                            {Object.values(row.disabilities || {}).reduce(
-                              (a, b) => a + Number(b || 0),
-                              0
-                            )}
-                          </td>
+                          {categoryDistributionEnabled && (
+                            <>
+                              {reservationCategories.map((c) => (
+                                <td key={c.code}>
+                                  {row.categories?.[c.code] ?? 0}
+                                </td>
+                              ))}
+                              <td>
+                                {Object.values(row.categories || {}).reduce(
+                                  (a, b) => a + Number(b || 0),
+                                  0
+                                )}
+                              </td>
+                            </>
+                          )}
+                          {categoryDistributionEnabled && (
+                            <>
+                              {disabilityCategories.map((d) => (
+                                <td key={d.disabilityCode}>
+                                  {row.disabilities?.[d.disabilityCode] ?? 0}
+                                </td>
+                              ))}
+                              <td>
+                                {Object.values(row.disabilities || {}).reduce(
+                                  (a, b) => a + Number(b || 0),
+                                  0
+                                )}
+                              </td>
+                            </>
+                          )}
                           <td className="text-center">
                             <Button
                               size="sm"

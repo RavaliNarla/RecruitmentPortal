@@ -31,6 +31,7 @@ import FormBuilderModal from "../component/DynamicForm/FormBuilderModal";
 import DynamicFieldRenderer from "../component/DynamicForm/DynamicFieldRenderer";
 import useOrgFormSchema from "../hooks/useOrgFormSchema";
 import useOrgInclusions from "../hooks/useOrgInclusions";
+import useOrgVacancyDistribution from "../hooks/useOrgVacancyDistribution";
 const AddPosition = () => {
   const { t } = useTranslation(["addPosition", "common", "validation"]);
   const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx"];
@@ -67,6 +68,27 @@ const AddPosition = () => {
   const [orgDynamicFieldValues, setOrgDynamicFieldValues] = useState({});
   const { inclusions: orgInclusions, loading: inclusionsLoading, error: inclusionsError } = useOrgInclusions();
   const [applicableInclusionIds, setApplicableInclusionIds] = useState([]);
+  const {
+    categoryDistribution: categoryDistributionEnabled,
+    stateDistribution: stateDistributionEnabled,
+  } = useOrgVacancyDistribution();
+
+  // National/category mode has nothing to show once category-wise
+  // distribution is org-disabled (its own Category+Disability cards are
+  // hidden), so it's never a valid mode in that case — default straight into
+  // state-wise instead of leaving the recruiter looking at an empty section
+  // behind a toggle. Never forces the reverse (state -> national): an
+  // existing position already saved as state-wise keeps its real per-state
+  // data on screen even if the org later disables state distribution.
+  useEffect(() => {
+    if (!categoryDistributionEnabled && stateDistributionEnabled) {
+      setFormData((prev) =>
+        prev.enableStateDistribution
+          ? prev
+          : { ...prev, enableStateDistribution: true }
+      );
+    }
+  }, [categoryDistributionEnabled, stateDistributionEnabled]);
 
   const toggleApplicableInclusion = (inclusionId) => {
     setApplicableInclusionIds((prev) =>
@@ -829,6 +851,7 @@ const AddPosition = () => {
       currentState,
       stateDistributions,
       editingIndex,
+      categoryDistributionEnabled,
     });
 
     if (Object.keys(newErrors).length > 0) {
@@ -914,6 +937,7 @@ const AddPosition = () => {
       existingPositions: positionsByReq[reqKey] || [],
       positionId,
       isContractEmployment,
+      categoryDistributionEnabled,
     });
 
     if (Object.keys(validationErrors).length > 0) {
@@ -1154,6 +1178,8 @@ const AddPosition = () => {
               selectedExclusions={selectedExclusions}
               setSelectedExclusions={setSelectedExclusions}
               onOpenDynamicForm={() => setShowFormBuilder(true)}
+              categoryDistributionEnabled={categoryDistributionEnabled}
+              stateDistributionEnabled={stateDistributionEnabled}
             />
 
             <Row className="g-4 mt-1">

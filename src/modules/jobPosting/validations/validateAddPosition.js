@@ -205,6 +205,7 @@ const validateDistribution = ({
   stateDistributions,
   nationalCategories,
   nationalDisabilities,
+  categoryDistributionEnabled = true,
   errors
 }) => {
   if (formData.enableStateDistribution) {
@@ -228,7 +229,7 @@ const validateDistribution = ({
         params: { stateTotal, vacancies }
       };
     }
-  } else {
+  } else if (categoryDistributionEnabled) {
     const categoryTotal = Object.values(nationalCategories || {})
       .reduce((sum, v) => sum + Number(v || 0), 0);
 
@@ -251,6 +252,9 @@ const validateDistribution = ({
       };
     }
   }
+  // categoryDistributionEnabled === false, national mode: no category
+  // breakdown is collected — formData.vacancies (validated in
+  // validateNumbers) is the sole source of truth, nothing more to check.
 };
 
 
@@ -268,7 +272,8 @@ export const validateAddPosition = (params) => {
     stateDistributions,
     existingPositions,
     positionId,
-    isContractEmployment
+    isContractEmployment,
+    categoryDistributionEnabled
   } = params;
 
   const errors = {};
@@ -300,6 +305,7 @@ export const validateAddPosition = (params) => {
     stateDistributions,
     nationalCategories,
     nationalDisabilities,
+    categoryDistributionEnabled,
     errors
   });
 
@@ -309,7 +315,8 @@ export const validateAddPosition = (params) => {
 export const validateStateDistribution = ({
   currentState,
   stateDistributions,
-  editingIndex
+  editingIndex,
+  categoryDistributionEnabled = true
 }) => {
   const errors = {};
 
@@ -327,26 +334,28 @@ export const validateStateDistribution = ({
   //   errors.stateLanguage = "validation:required";
   // }
 
-  const catTotal = Object.values(currentState.categories || {})
-    .reduce((a, b) => a + Number(b || 0), 0);
+  if (categoryDistributionEnabled) {
+    const catTotal = Object.values(currentState.categories || {})
+      .reduce((a, b) => a + Number(b || 0), 0);
 
-  const disTotal = Object.values(currentState.disabilities || {})
-    .reduce((a, b) => a + Number(b || 0), 0);
+    const disTotal = Object.values(currentState.disabilities || {})
+      .reduce((a, b) => a + Number(b || 0), 0);
 
-  const vacancies = Number(currentState.vacancies || 0);
+    const vacancies = Number(currentState.vacancies || 0);
 
-  if (catTotal !== vacancies) {
-    errors.stateDistribution = {
-      key: "validation:category_total_mismatch",
-      params: { categoryTotal: catTotal, vacancies }
-    };
+    if (catTotal !== vacancies) {
+      errors.stateDistribution = {
+        key: "validation:category_total_mismatch",
+        params: { categoryTotal: catTotal, vacancies }
+      };
 
-  }
-  else if (disTotal > catTotal) {
-    errors.stateDistribution = {
-      key: "validation:disability_exceeds_category",
-      params: { disabilityTotal: disTotal, categoryTotal: catTotal }
-    };
+    }
+    else if (disTotal > catTotal) {
+      errors.stateDistribution = {
+        key: "validation:disability_exceeds_category",
+        params: { disabilityTotal: disTotal, categoryTotal: catTotal }
+      };
+    }
   }
 
 
