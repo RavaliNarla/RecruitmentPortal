@@ -57,6 +57,19 @@ async function resolveScreenId(portal, formKey) {
   return screen?.id || null;
 }
 
+// Reserved field id SuperAdminPortal's FormFieldsBuilder.js uses to smuggle a
+// section title through the `fields` JSONB array (no dedicated `title`
+// column on the backend yet — see SuperAdminPortal's
+// docs/dynamic-forms-backend-spec.md). Must match SECTION_TITLE_FIELD_ID
+// there exactly.
+const SECTION_TITLE_FIELD_ID = "__section_title__";
+
+function splitSectionTitle(fields) {
+  const titleField = fields.find((field) => field.id === SECTION_TITLE_FIELD_ID);
+  const rest = fields.filter((field) => field.id !== SECTION_TITLE_FIELD_ID);
+  return { title: titleField?.label || "", fields: rest };
+}
+
 export async function getOrgFormSchema(organizationCode, formKey) {
   if (!organizationCode || !formKey) return null;
 
@@ -78,7 +91,7 @@ export async function getOrgFormSchema(organizationCode, formKey) {
         ? JSON.parse(rawFields)
         : null;
 
-    if (fields?.length) return { fields };
+    if (fields?.length) return splitSectionTitle(fields);
     return DEMO_SCHEMAS[organizationCode]?.recruitment?.[formKey] || null;
   } catch {
     return DEMO_SCHEMAS[organizationCode]?.recruitment?.[formKey] || null;
