@@ -6,10 +6,7 @@ import pana from "../../../assets/pana.png";
 
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../services/msalConfig";
-import {
-  getOrganizationTheme,
-  DEFAULT_ORGANIZATION_THEME,
-} from "../services/organizationThemeService";
+import { getOrganizationTheme } from "../services/organizationThemeService";
 import {
   getOrganizationPath,
   normalizeOrganizationKey,
@@ -35,10 +32,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [organizationConfig, setOrganizationConfig] = useState(
-    DEFAULT_ORGANIZATION_THEME
-  );
-  const loginThemeStyles = {
+  // Starts null (not DEFAULT_ORGANIZATION_THEME) so the page never paints
+  // with the generic orange fallback theme before the real org theme has
+  // loaded — that briefly-visible orange flash was the bug. Nothing themed
+  // renders until getOrganizationTheme() resolves (falling back to
+  // DEFAULT_ORGANIZATION_THEME itself only if that call actually fails).
+  const [organizationConfig, setOrganizationConfig] = useState(null);
+  const loginThemeStyles = organizationConfig && {
     "--login-primary-color": organizationConfig.primaryColor,
     "--login-secondary-color": organizationConfig.secondaryColor,
     "--login-link-color": organizationConfig.linkColor,
@@ -107,6 +107,25 @@ const Login = () => {
       setIsLoggingIn(false);
     }
   };
+
+  if (!organizationConfig) {
+    // Neutral placeholder while the real org theme loads. Login.css's
+    // --login-primary-color falls back to --app-primary-color, whose own
+    // App.css :root default is the orange (#ff6a00) DEFAULT_ORGANIZATION_THEME
+    // color — so without this explicit override, even a theme-less div here
+    // would still paint orange via plain CSS cascade, not just via JS state.
+    return (
+      <div
+        className="login-container"
+        style={{
+          "--login-primary-color": "transparent",
+          "--login-secondary-color": "transparent",
+          "--login-link-color": "transparent",
+          "--login-focus-color": "transparent",
+        }}
+      />
+    );
+  }
 
   const isPasswordLogin = organizationConfig.loginType === "password";
 
