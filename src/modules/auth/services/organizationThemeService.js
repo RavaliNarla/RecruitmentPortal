@@ -20,15 +20,20 @@ export const DEFAULT_ORGANIZATION_THEME = {
   allowedPrivileges: { JobPostings: true },
   // Raw config, kept around so later pages (e.g. Add User) don't need to
   // guess field names — see recruitmentLogin.defaultLoginMethod below.
+  // (This is our own internal field name - the wire format nests it under
+  // authenticationJson.recruitmentPortal.login, see resolveLoginType below.)
   recruitmentLogin: null,
 };
 
 const EMAIL_PASSWORD = "EMAIL_PASSWORD";
 
-// data.login.authenticationJson.recruitmentLogin.defaultLoginMethod is
+// data.login.authenticationJson.recruitmentPortal.login.defaultLoginMethod is
 // "ENTRA_ID" or "EMAIL_PASSWORD" — see super-admin-portal's
+// AuthenticationConfiguration#buildSavePayload (writes this shape) and
 // OrganizationController#getByCodeWithLogin / OrganizationWithLoginResponse
-// (field is named "login", not "authentication").
+// (field is named "login", not "authentication"). Login/session/password/
+// twoFactor now live nested per-portal (recruitmentPortal vs candidatePortal)
+// rather than shared flat keys.
 const resolveLoginType = (recruitmentLogin) =>
   recruitmentLogin?.defaultLoginMethod === EMAIL_PASSWORD ? "password" : "entra";
 
@@ -40,7 +45,7 @@ export const getOrganizationTheme = async (orgCode) => {
     const organization = response?.data?.organization;
     const details = organization?.organizationDetailsJson;
     const recruitmentLogin =
-      response?.data?.login?.authenticationJson?.recruitmentLogin || null;
+      response?.data?.login?.authenticationJson?.recruitmentPortal?.login || null;
 
     if (!details) {
       return { ...DEFAULT_ORGANIZATION_THEME, recruitmentLogin };
