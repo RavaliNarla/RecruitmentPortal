@@ -67,6 +67,22 @@ async function getToken() {
   }
 }
 const addAuthHeader = async (config) => {
+  const { authUser } = store.getState().user;
+
+  // EMAIL_PASSWORD orgs authenticate via Auth0, not MSAL/Entra — use the
+  // access token obtained at login (see Login.js#handlePasswordLogin) instead
+  // of acquiring an MSAL token. Backend matches this via X-Client: EmailPassword
+  // (see SecurityConfig#emailPasswordChain).
+  if (authUser?.loginMethod === "EMAIL_PASSWORD") {
+    if (!authUser.access_token) {
+      redirectToLogin();
+      return Promise.reject("No token available");
+    }
+    config.headers.Authorization = `Bearer ${authUser.access_token}`;
+    config.headers["X-Client"] = "EmailPassword";
+    return config;
+  }
+
   const token = await getToken();
 
   if (!token) {
@@ -82,11 +98,21 @@ const addAuthHeader = async (config) => {
 };
 
 const redirectToLogin = () => {
+  const { authUser } = store.getState().user;
+  const postLoginRedirectUri = `${window.location.origin}${getLoginPath(
+    getSavedLoginOrganization()
+  )}`;
+
   store.dispatch(clearUser());
+
+  if (authUser?.loginMethod === "EMAIL_PASSWORD") {
+    // No MSAL session exists for these users — just send them back to login.
+    window.location.href = postLoginRedirectUri;
+    return;
+  }
+
   msalInstance.logoutRedirect({
-    postLogoutRedirectUri: `${window.location.origin}${getLoginPath(
-      getSavedLoginOrganization()
-    )}`,
+    postLogoutRedirectUri: postLoginRedirectUri,
   });
 };
 

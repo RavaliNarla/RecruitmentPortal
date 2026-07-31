@@ -78,7 +78,7 @@ export const validatePasswordConfirmation = (confirmPassword, password) => {
 
 export const validateUserForm = (formData = {}, options = {}) => {
   const {
-    // requirePassword = true,
+    requirePassword = false,
     existing = [],
     currentId = null,
     skipEmailCheck = false,
@@ -115,6 +115,12 @@ export const validateUserForm = (formData = {}, options = {}) => {
         errors.email = i18n.t("validation:email_exists");
       }
     }
+  }
+
+  // Password — only required for orgs whose defaultLoginMethod is EMAIL_PASSWORD
+  if (requirePassword) {
+    const passwordError = validateUserPassword(formData.password, true);
+    if (passwordError) errors.password = passwordError;
   }
 
   return {

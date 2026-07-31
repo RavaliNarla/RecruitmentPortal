@@ -88,6 +88,7 @@ export default function AuthCallback() {
           setAuthUser({
             token: accessToken,
             email: account.username,
+            loginMethod: "ENTRA_ID",
           })
         );
 
@@ -100,6 +101,9 @@ export default function AuthCallback() {
             name: data.name,
             email: data.email,
             role: data.role,
+            // The user's own real org code - used to detect URL org != actual
+            // org (see PrivateRoute.js). Never trust anything else for this.
+            orgCode: data.orgCode ?? null,
           })
         );
 

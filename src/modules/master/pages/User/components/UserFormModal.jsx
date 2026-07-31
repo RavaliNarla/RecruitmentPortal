@@ -15,6 +15,7 @@ const EMPTY_FORM = {
   fullName: "",
   email: "",
   interviewCenterId: "",
+  password: "",
 };
 
 const UserFormModal = ({
@@ -29,6 +30,9 @@ const UserFormModal = ({
   bulkAddUsers,
   downloadUserTemplate,
   loading,
+  // Only orgs configured with defaultLoginMethod = EMAIL_PASSWORD need this;
+  // Entra orgs keep working exactly as before (no password field/requirement).
+  requirePassword = false,
 }) => {
   const { t } = useTranslation(["user", "validation"]);
 
@@ -48,6 +52,7 @@ const UserFormModal = ({
         fullName: selectedUser?.name || "",
         email: selectedUser?.email || "",
         interviewCenterId: selectedUser?.interviewCenterId || "",
+        password: "",
       });
     } else {
       setFormData(EMPTY_FORM);
@@ -88,6 +93,7 @@ const UserFormModal = ({
       existing: existingUsers,
       currentId: selectedUser?.userId,
       skipEmailCheck: mode === "edit",
+      requirePassword: requirePassword && mode === "add",
     });
 
     if (!valid) {
@@ -210,6 +216,23 @@ const UserFormModal = ({
                 />
                 <ErrorMessage>{errors.email}</ErrorMessage>
               </Col>
+
+              {requirePassword && mode === "add" && (
+                <Col md={6}>
+                  <Form.Label>
+                    {t("password")} <span className="text-danger">*</span>
+                  </Form.Label>
+
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    autoComplete="new-password"
+                    onChange={handleInputChange}
+                  />
+                  <ErrorMessage>{errors.password}</ErrorMessage>
+                </Col>
+              )}
 
               {formData.role === "Zonal_HR" && (
                 <Col md={6}>

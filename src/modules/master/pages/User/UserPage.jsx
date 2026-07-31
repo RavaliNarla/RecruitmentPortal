@@ -1,15 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Search, Plus } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "../../../../style/css/user.css";
 import { useUsers } from "./hooks/useUsers";
 import UserTable from "./components/UserTable";
 import UserFormModal from "./components/UserFormModal";
 import DeleteConfirmModal from "./components/DeleteConfirmModal";
+import {
+  getDefaultLoginMethod,
+} from "../../../auth/services/organizationThemeService";
+import { normalizeOrganizationKey } from "../../../auth/services/organizationContextService";
+
+const EMAIL_PASSWORD = "EMAIL_PASSWORD";
 
 const UserPage = () => {
   const { t } = useTranslation(["user", "validation"]);
+  const { orgSlug } = useParams();
+  const organizationTheme = useSelector((state) => state.user.organizationTheme);
+  const [isEmailPasswordOrg, setIsEmailPasswordOrg] = useState(
+    organizationTheme?.recruitmentLogin?.defaultLoginMethod === EMAIL_PASSWORD
+  );
+
+  useEffect(() => {
+    let isActive = true;
+    // Safety net: organizationTheme may be missing (store cleared, direct
+    // navigation, etc) — re-fetch the org's login config in that case.
+    getDefaultLoginMethod(normalizeOrganizationKey(orgSlug), organizationTheme).then(
+      (method) => {
+        if (isActive) setIsEmailPasswordOrg(method === EMAIL_PASSWORD);
+      }
+    );
+    return () => {
+      isActive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orgSlug]);
+
   const {
     users,
     loading,
@@ -114,6 +143,7 @@ const UserPage = () => {
         bulkAddUsers={bulkAddUsers}
         downloadUserTemplate={downloadUserTemplate}
         loading={loading}
+        requirePassword={isEmailPasswordOrg}
       />
 
       <DeleteConfirmModal

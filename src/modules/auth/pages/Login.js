@@ -21,6 +21,7 @@ import {
 } from "../../../app/providers/userSlice";
 import { mapAuthApiToState } from "../mappers/auth.mapper";
 import { mapUserApiToState } from "../mappers/user.mapper";
+import { getDefaultRoute } from "../../../shared/utils/user-validations";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -71,33 +72,50 @@ const Login = () => {
   const handlePasswordLogin = async (event) => {
     event.preventDefault();
     setIsLoggingIn(true);
+    // Same as handleEntraLogin — keeps sessionStorage's org in sync so
+    // PrivateRoute's fallback check (used before the real orgCode is known)
+    // doesn't compare against a stale/default org.
+    saveLoginOrganization(organizationKey);
 
     try {
+      // recruiterLogin uses publicNodeApi, which (unlike every other axios
+      // instance here) has no response interceptor unwrapping response.data -
+      // so authApiRes is the full axios response, not the JSON body itself.
       const authApiRes = await loginApi.recruiterLogin(email, password);
-      dispatch(setAuthUser(mapAuthApiToState(authApiRes)));
+      dispatch(
+        setAuthUser({
+          ...mapAuthApiToState(authApiRes.data),
+          loginMethod: "EMAIL_PASSWORD",
+        })
+      );
 
+      // getRecruiterDetails goes through nodeApi, which unwraps axios's own
+      // response.data - but the backend endpoint wraps its payload in an
+      // ApiResponse envelope ({success, message, data}), unlike the Entra
+      // equivalent (GET /getdetails/user) which returns GetUserResponse
+      // directly. So the real user/privileges are one level deeper here.
+      let privileges = organizationConfig.allowedPrivileges || { JobPostings: true };
       try {
         const userApiRes = await loginApi.getRecruiterDetails(email);
-        dispatch(setUser(mapUserApiToState(userApiRes)));
+        const userData = userApiRes.data;
+        dispatch(setUser(mapUserApiToState(userData)));
+        privileges = userData.privileges || privileges;
       } catch {
         dispatch(
           setUser({
             email,
             name: email.split("@")[0],
             role: organizationConfig.organizationName,
+            // Best-effort fallback if getRecruiterDetails itself fails for
+            // some other reason — assume the org they logged in through.
+            orgCode: organizationKey,
           })
         );
       }
 
-      dispatch(
-        setPrivileges(
-          organizationConfig.allowedPrivileges || {
-            JobPostings: true,
-          }
-        )
-      );
+      dispatch(setPrivileges(privileges));
       dispatch(setOrganizationTheme(organizationConfig));
-      navigate(getOrganizationPath("/job-posting", organizationKey), {
+      navigate(getOrganizationPath(getDefaultRoute(privileges), organizationKey), {
         replace: true,
       });
     } catch (error) {

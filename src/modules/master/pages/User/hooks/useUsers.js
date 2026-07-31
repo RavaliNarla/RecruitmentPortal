@@ -57,6 +57,9 @@ export const useUsers = () => {
       name: payload.fullName,
       email: payload.email,
       interviewCenterId: payload.interviewCenterId,
+      // Only present for EMAIL_PASSWORD orgs (see UserFormModal); backend
+      // ignores/rejects it appropriately based on the org's own config.
+      ...(payload.password ? { password: payload.password } : {}),
     };
 
     try {

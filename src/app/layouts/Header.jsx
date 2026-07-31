@@ -19,6 +19,7 @@ import {
   getOrganizationPath,
   getSavedLoginOrganization,
 } from "../../modules/auth/services/organizationContextService";
+import loginApi from "../../modules/auth/services/loginService";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ const Header = () => {
   const organizationTheme = useSelector(
     (state) => state.user.organizationTheme
   );
+  const authUser = useSelector((state) => state.user.authUser);
 
   const currentLogo = organizationTheme?.headerlogo || logo;
   const user = userSlice?.user;
@@ -66,39 +68,42 @@ const Header = () => {
       : "");
 
   /* ===================== LOGOUT ===================== */
+  const clearSessionState = async () => {
+    dispatch(clearUser());
+    dispatch(setRankEnabled(false));
+    dispatch(setLanguage("en"));
+    i18n.changeLanguage("en");
+    await persistor.purge();
+  };
+
   const handleLogout = async () => {
-  const activeAccount =
-    instance.getActiveAccount() ||
-    instance.getAllAccounts()[0];
+    const loginPath = `${window.location.origin}${getLoginPath(
+      getSavedLoginOrganization()
+    )}`;
 
-  console.log("Logout started");
+    // EMAIL_PASSWORD orgs never had an MSAL/Entra session to begin with -
+    // there's nothing for Microsoft to sign out of. Just invalidate the
+    // Auth0 cookies server-side, clear local state, and go back to login.
+    if (authUser?.loginMethod === "EMAIL_PASSWORD") {
+      try {
+        await loginApi.recruiterLogout();
+      } catch {
+        // Best-effort - still proceed to clear the local session either way.
+      }
+      await clearSessionState();
+      window.location.href = loginPath;
+      return;
+    }
 
-  await instance.logoutRedirect({
-    account: activeAccount,
-    postLogoutRedirectUri:
-      `${window.location.origin}${getLoginPath(
-        getSavedLoginOrganization()
-      )}`,
-  });
-
-  console.log("This should never execute");
-};
-  // const handleLogout = async () => {
-  //   dispatch(clearUser());
-  //   dispatch(setRankEnabled(false));
-  //   dispatch(setLanguage("en"));
-  //   i18n.changeLanguage("en");
-  //   await persistor.purge();
-
-  //   const activeAccount =
-  //     instance.getActiveAccount() || instance.getAllAccounts()[0];
-  //   await instance.logoutRedirect({
-  //     account: activeAccount,
-  //     postLogoutRedirectUri: `${window.location.origin}${getLoginPath(
-  //       getSavedLoginOrganization()
-  //     )}`,
-  //   });
-  // };
+    // Entra orgs: clear local state first, then let MSAL sign out of the
+    // actual Microsoft session too.
+    await clearSessionState();
+    const activeAccount = instance.getActiveAccount() || instance.getAllAccounts()[0];
+    await instance.logoutRedirect({
+      account: activeAccount,
+      postLogoutRedirectUri: loginPath,
+    });
+  };
   //Privileges
   const privileges = useSelector((state) => state.user.privileges);
 
