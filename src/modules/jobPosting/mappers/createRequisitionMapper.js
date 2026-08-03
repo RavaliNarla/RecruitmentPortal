@@ -4,5 +4,8 @@ export const mapRequisitionToApi = (uiData, dynamicFieldValues = {}) => ({
   startDate: uiData.startDate,
   endDate: uiData.endDate,
   cutoffDate: uiData.cutoffDate,
-  dynamicFieldValues,
+  // Backend entity/DTO field is `dynamicData` (JobRequisitionsEntity.java) —
+  // sending `dynamicFieldValues` gets silently dropped by Jackson since it
+  // doesn't match any DTO property.
+  dynamicData: dynamicFieldValues,
 });

@@ -6,7 +6,7 @@ import { publicSuperAdminApi } from "../../../core/service/apiService";
 // applies to it. This lives on the SuperAdminPortal backend, keyed by its
 // internal organizationId — an id this app never receives directly (it only
 // knows the org by :orgSlug/its code) — so resolve that id the same way
-// orgInclusionsService.js does (organizationApiService.getOrganizationByCode)
+// orgInclusionsService.js does (organizationApiService.getOrganizationWithLogin)
 // before calling the eligibilityConfiguration endpoint.
 // Defaults to both true (today's behavior, matches SuperAdminPortal's own
 // `?? true` default in VacancyBreakdown.js) when unconfigured or unreachable.
@@ -17,8 +17,8 @@ export async function getOrgVacancyDistributionConfig(orgCode) {
 
   let organizationId;
   try {
-    const orgResponse = await organizationApiService.getOrganizationByCode(orgCode);
-    organizationId = orgResponse?.data?.id;
+    const orgResponse = await organizationApiService.getOrganizationWithLogin(orgCode);
+    organizationId = orgResponse?.data?.organization?.id;
   } catch {
     return DEFAULT_CONFIG;
   }

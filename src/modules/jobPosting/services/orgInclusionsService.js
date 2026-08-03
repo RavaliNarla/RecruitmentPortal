@@ -6,15 +6,15 @@ import orgInclusionsApiService from "./orgInclusionsApiService";
 // is keyed by SuperAdminPortal's internal organizationId — an id this app
 // never receives directly (it only knows the org by :orgSlug/its code).
 // Resolve that id the same way organizationThemeService.js does for login
-// theming (organizationApiService.getOrganizationByCode), then call
+// theming (organizationApiService.getOrganizationWithLogin), then call
 // orgInclusionsApiService with the id from that response.
 export async function getOrgInclusions(orgCode) {
   if (!orgCode) return { inclusions: [], error: null };
 
   let organizationId;
   try {
-    const orgResponse = await organizationApiService.getOrganizationByCode(orgCode);
-    organizationId = orgResponse?.data?.id;
+    const orgResponse = await organizationApiService.getOrganizationWithLogin(orgCode);
+    organizationId = orgResponse?.data?.organization?.id;
   } catch (err) {
     return { inclusions: [], error: `Could not resolve organization "${orgCode}": ${err?.message || err}` };
   }

@@ -1,8 +1,35 @@
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
+import { useTranslation } from "react-i18next";
+import ErrorMessage from "../../../../shared/components/ErrorMessage";
 
-const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) => {
+const DYNAMIC_ERROR_PREFIX = "dynamic_";
+
+export const dynamicFieldErrorKey = (fieldId) => `${DYNAMIC_ERROR_PREFIX}${fieldId}`;
+
+const isEmptyFieldValue = (field, value) => {
+  if (field.type === "multiselect") return !value || value.length === 0;
+  if (field.type === "checkbox") return !value;
+  return value === undefined || value === null || value === "";
+};
+
+// Field configs come from the org's form schema (super-admin-portal), so
+// `required` has to be enforced here explicitly — there is no shared Yup/RHF
+// schema generated from it, and the native HTML `required` attribute this
+// component sets is inert because the parent forms call preventDefault().
+export const validateDynamicFieldValues = (schema, values = {}) => {
+  const errors = {};
+  (schema?.fields || []).forEach((field) => {
+    if (field.required && isEmptyFieldValue(field, values[field.id])) {
+      errors[dynamicFieldErrorKey(field.id)] = "validation:required";
+    }
+  });
+  return errors;
+};
+
+const DynamicFieldRenderer = ({ schema, values, onChange, errors = {}, isViewMode = false }) => {
+  const { t } = useTranslation(["validation"]);
   if (!schema?.fields?.length) return null;
 
   return (
@@ -14,6 +41,7 @@ const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) 
             value: option,
             label: option,
           }));
+          const fieldError = errors[dynamicFieldErrorKey(field.id)];
 
           return (
             <Col md={4} key={field.id}>
@@ -28,6 +56,7 @@ const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) 
                   placeholder={field.placeholder}
                   maxLength={field.maxLength}
                   required={field.required}
+                  isInvalid={!!fieldError}
                   disabled={isViewMode}
                   onChange={(e) => onChange(field.id, e.target.value)}
                 />
@@ -39,7 +68,13 @@ const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) 
                   isDisabled={isViewMode}
                   menuPortalTarget={document.body}
                   menuPosition="fixed"
-                  styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  styles={{
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                    control: (base) => ({
+                      ...base,
+                      borderColor: fieldError ? "#dc3545" : base.borderColor,
+                    }),
+                  }}
                   value={
                     options.find((option) => option.value === values[field.id]) ||
                     null
@@ -58,7 +93,13 @@ const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) 
                   isMulti
                   menuPortalTarget={document.body}
                   menuPosition="fixed"
-                  styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  styles={{
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                    control: (base) => ({
+                      ...base,
+                      borderColor: fieldError ? "#dc3545" : base.borderColor,
+                    }),
+                  }}
                   value={options.filter((option) =>
                     (values[field.id] || []).includes(option.value)
                   )}
@@ -74,6 +115,7 @@ const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) 
                   type="date"
                   value={values[field.id] ?? ""}
                   required={field.required}
+                  isInvalid={!!fieldError}
                   disabled={isViewMode}
                   onChange={(e) => onChange(field.id, e.target.value)}
                 />
@@ -85,10 +127,13 @@ const DynamicFieldRenderer = ({ schema, values, onChange, isViewMode = false }) 
                   className="custom_checkbox"
                   checked={values[field.id] ?? false}
                   required={field.required}
+                  isInvalid={!!fieldError}
                   disabled={isViewMode}
                   onChange={(e) => onChange(field.id, e.target.checked)}
                 />
               )}
+
+              {fieldError && <ErrorMessage>{t(fieldError)}</ErrorMessage>}
             </Col>
           );
         })}

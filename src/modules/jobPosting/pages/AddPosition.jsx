@@ -28,7 +28,10 @@ import { useTranslation } from "react-i18next";
 import SelectIndentModal from "../component/SelectIndentModal";
 import jobPositionApiService from "../services/jobPositionApiService";
 import FormBuilderModal from "../component/DynamicForm/FormBuilderModal";
-import DynamicFieldRenderer from "../component/DynamicForm/DynamicFieldRenderer";
+import DynamicFieldRenderer, {
+  validateDynamicFieldValues,
+  dynamicFieldErrorKey,
+} from "../component/DynamicForm/DynamicFieldRenderer";
 import useOrgFormSchema from "../hooks/useOrgFormSchema";
 import useOrgInclusions from "../hooks/useOrgInclusions";
 import useOrgVacancyDistribution from "../hooks/useOrgVacancyDistribution";
@@ -940,8 +943,14 @@ const AddPosition = () => {
       categoryDistributionEnabled,
     });
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    const dynamicFieldErrors = validateDynamicFieldValues(
+      orgPositionSchema,
+      orgDynamicFieldValues
+    );
+    const combinedErrors = { ...validationErrors, ...dynamicFieldErrors };
+
+    if (Object.keys(combinedErrors).length > 0) {
+      setErrors(combinedErrors);
       submitRef.current = false;
       setSubmitting(false);
       return;
@@ -1182,46 +1191,42 @@ const AddPosition = () => {
               stateDistributionEnabled={stateDistributionEnabled}
             />
 
-            <Row className="g-4 mt-1">
-              <Col xs={12}>
-                <Form.Label>Applicable Inclusions:</Form.Label>
-                <p className="text-muted small mb-2">
-                  Select which inclusions candidates can claim for this position. Candidates
-                  fill in the supporting details themselves when they apply.
-                </p>
-
-                {inclusionsLoading && (
-                  <p className="text-muted small mb-0">Loading inclusions…</p>
-                )}
-
-                {!inclusionsLoading && inclusionsError && (
-                  <ErrorMessage>{inclusionsError}</ErrorMessage>
-                )}
-
-                {!inclusionsLoading && !inclusionsError && orgInclusions.length === 0 && (
-                  <p className="text-muted small mb-0">
-                    No active inclusions configured for this organization yet.
+            {(inclusionsLoading || inclusionsError || orgInclusions.length > 0) && (
+              <Row className="g-4 mt-1">
+                <Col xs={12}>
+                  <Form.Label>Applicable Inclusions:</Form.Label>
+                  <p className="text-muted small mb-2">
+                    Select which inclusions candidates can claim for this position. Candidates
+                    fill in the supporting details themselves when they apply.
                   </p>
-                )}
 
-                {!inclusionsLoading && orgInclusions.length > 0 && (
-                  <div className="ms-2">
-                    {orgInclusions.map((inclusion) => (
-                      <Form.Check
-                        key={inclusion.id}
-                        type="checkbox"
-                        id={`inclusion-${inclusion.id}`}
-                        label={inclusion.name}
-                        disabled={isViewMode}
-                        checked={applicableInclusionIds.includes(inclusion.id)}
-                        onChange={() => toggleApplicableInclusion(inclusion.id)}
-                        className="custom_checkbox mb-2"
-                      />
-                    ))}
-                  </div>
-                )}
-              </Col>
-            </Row>
+                  {inclusionsLoading && (
+                    <p className="text-muted small mb-0">Loading inclusions…</p>
+                  )}
+
+                  {!inclusionsLoading && inclusionsError && (
+                    <ErrorMessage>{inclusionsError}</ErrorMessage>
+                  )}
+
+                  {!inclusionsLoading && !inclusionsError && orgInclusions.length > 0 && (
+                    <div className="ms-2">
+                      {orgInclusions.map((inclusion) => (
+                        <Form.Check
+                          key={inclusion.id}
+                          type="checkbox"
+                          id={`inclusion-${inclusion.id}`}
+                          label={inclusion.name}
+                          disabled={isViewMode}
+                          checked={applicableInclusionIds.includes(inclusion.id)}
+                          onChange={() => toggleApplicableInclusion(inclusion.id)}
+                          className="custom_checkbox mb-2"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            )}
 
             {orgPositionSchema && (
               <Row className="g-4 mt-1">
@@ -1229,13 +1234,18 @@ const AddPosition = () => {
                   <DynamicFieldRenderer
                     schema={orgPositionSchema}
                     values={orgDynamicFieldValues}
+                    errors={errors}
                     isViewMode={isViewMode}
-                    onChange={(fieldId, value) =>
+                    onChange={(fieldId, value) => {
                       setOrgDynamicFieldValues((prev) => ({
                         ...prev,
                         [fieldId]: value,
-                      }))
-                    }
+                      }));
+                      setErrors((prev) => ({
+                        ...prev,
+                        [dynamicFieldErrorKey(fieldId)]: "",
+                      }));
+                    }}
                   />
                 </Col>
               </Row>

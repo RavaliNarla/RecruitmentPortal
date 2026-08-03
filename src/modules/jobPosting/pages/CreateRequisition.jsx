@@ -32,7 +32,10 @@ import {
 } from "../../auth/services/organizationContextService";
 import SinglePositionInfoModal from "../component/SinglePositionInfoModal";
 import { mapVacancyBreakdownByPosition } from "../../jobPosting/mappers/VacancyBreakdownBySinglePosition";
-import DynamicFieldRenderer from "../component/DynamicForm/DynamicFieldRenderer";
+import DynamicFieldRenderer, {
+  validateDynamicFieldValues,
+  dynamicFieldErrorKey,
+} from "../component/DynamicForm/DynamicFieldRenderer";
 import useOrgFormSchema from "../hooks/useOrgFormSchema";
 
 const CreateRequisition = () => {
@@ -86,6 +89,19 @@ const CreateRequisition = () => {
   const [errors, setErrors] = useState({});
   const { schema: orgRequisitionSchema } = useOrgFormSchema("requisition");
   const [dynamicFieldValues, setDynamicFieldValues] = useState({});
+
+  // requisitionData is fetched by useCreateRequisition but it only prefills
+  // formData. The backend entity/DTO field is `dynamicData`
+  // (JobRequisitionsEntity.java) — copy it into local state under its UI
+  // name so an existing requisition's dynamic fields repopulate on edit/view.
+  useEffect(() => {
+    if (isReinitializeMode) {
+      setDynamicFieldValues({});
+      return;
+    }
+    setDynamicFieldValues(requisitionData?.dynamicData || {});
+  }, [requisitionData, isReinitializeMode]);
+
   useEffect(() => {
     if (!editId) return;
 
@@ -193,9 +209,14 @@ const CreateRequisition = () => {
       { isCloneMode, isReinitializeMode },
       selectedPositions
     );
+    const dynamicFieldErrors = validateDynamicFieldValues(
+      orgRequisitionSchema,
+      dynamicFieldValues
+    );
+    const combinedErrors = { ...valErrors, ...dynamicFieldErrors };
 
-    if (!valid) {
-      setErrors(valErrors);
+    if (!valid || Object.keys(dynamicFieldErrors).length > 0) {
+      setErrors(combinedErrors);
       return;
     }
 
@@ -654,12 +675,17 @@ const CreateRequisition = () => {
                   <DynamicFieldRenderer
                     schema={orgRequisitionSchema}
                     values={dynamicFieldValues}
-                    onChange={(fieldId, value) =>
+                    errors={errors}
+                    onChange={(fieldId, value) => {
                       setDynamicFieldValues((prev) => ({
                         ...prev,
                         [fieldId]: value,
-                      }))
-                    }
+                      }));
+                      setErrors((prev) => ({
+                        ...prev,
+                        [dynamicFieldErrorKey(fieldId)]: "",
+                      }));
+                    }}
                   />
                 </div>
               )}
